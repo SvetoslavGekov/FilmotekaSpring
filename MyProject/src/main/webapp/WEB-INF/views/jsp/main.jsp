@@ -26,22 +26,24 @@
 <!-- Navbar -->
 <div id="navigation" class="w3-top">
   <div class="w3-bar w3-2017-lapis-blue  w3-card-4">
-	<button class="w3-bar-item w3-button w3-padding-large" onclick ="viewAllProducts()">FilmotekaBG</button>
+	<button class="w3-bar-item w3-button w3-padding-large" onclick="location.href='main'">FilmotekaBG</button>
 	<button class="w3-bar-item w3-button w3-padding-large" onclick ="viewAllProducts()">Browse</button>
 	<div class="w3-dropdown-hover">
 	  <button class="w3-padding-large w3-button" title="More">My Account <i class="fa fa-caret-down"></i></button>     
 	  <div class="w3-dropdown-content w3-bar-block w3-card-4">
-		<a class="w3-bar-item w3-button">Profile</a>
+		<a class="w3-bar-item w3-button" onclick="location.href='account'">Profile</a>
 		<a class="w3-bar-item w3-button">My Products</a>
 		<a class="w3-bar-item w3-button">My Favorites</a>
-		<a class="w3-bar-item w3-button">My Watchlist</a>
+		<a class="w3-bar-item w3-button">My WatchList</a>
 		<a class="w3-bar-item w3-button">My Cart</a>
-		<a class="w3-bar-item w3-button">Logout</a>
+		<a class="w3-bar-item w3-button" onclick="location.href='logout'">Logout</a>
 	  </div>
 	</div>
 	<div class="w3-bar-item w3-padding-large" style="width:30%">
-		<i class="fa fa-search"></i>
-		<input type="text" placeholder="Search..."></input>
+		<form method = "GET" action="search">
+			<i class="fa fa-search"></i>
+			<input type="search" placeholder="Search..." name="word" required></input>
+		</form>
 	</div>
 	<button class="w3-bar-item w3-button w3-padding-large w3-right w3-hover-green">Sign In</button>
   </div>

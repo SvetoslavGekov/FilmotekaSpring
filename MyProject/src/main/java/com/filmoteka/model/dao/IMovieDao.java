@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Movie;
+import com.filmoteka.model.Product;
 
 public interface IMovieDao {
 	void saveMovie(Movie m) throws SQLException, InvalidProductDataException;
@@ -13,5 +14,5 @@ public interface IMovieDao {
 	
 	Collection<Movie> getAllMovies() throws SQLException, InvalidProductDataException;
 	
-	Collection<Movie> getMoviesBySubstring(String substring) throws SQLException, InvalidProductDataException;
+	Collection<Product> getMoviesBySubstring(String substring) throws SQLException, InvalidProductDataException;
 }
