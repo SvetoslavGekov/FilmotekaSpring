@@ -35,8 +35,8 @@
 						<div>
 							<button float="left" onClick="addProductToFavorites(${product.id})">To Favorites</button>
 							<button  onClick="addProductToWatchList(${product.id})">To Watch list</button>
-							<button float="left" onClick="addProductToCart(${ product.id }, true)">Buy</button>
-							<button  onClick="addProductToCart(${ product.id }, false)">Rent</button>
+							<button float="left" onClick="addProductToCart(${product.id},true)">Buy</button>
+							<button  onClick="addProductToCart(${product.id},false)">Rent</button>
 						</div>
 					</td>
 					<td>
@@ -70,80 +70,6 @@
 	</div>
 </body>
 
-<script type="text/javascript">
-var dbError = "Sorry, an error occured while accessing the database. Please try again later!";
-var noSuchProduct = "Sorry, but you've made a request for a product that does not exist.";
-
-function addProductToFavorites(id) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText == 'true');
-			if(result === true){
-				alert("Product added to favorites.");
-			}
-			else{
-				alert("Product removed from favorites.");
-			}
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
-		}
-		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
-		}
-	};
-	
-	xhttp.open("POST", "tofavorites", true);
-	xhttp.setRequestHeader("Content-type",
-			"application/x-www-form-urlencoded");
-	xhttp.send("productID=" + id);
-}
-
-function addProductToWatchList(id) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText == 'true');
-			if(result === true){
-				alert("Product added to watchlist.");
-			}
-			else{
-				alert("Product removed from watchlist.");
-			}
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
-		}
-		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
-		}
-	};
-	
-	xhttp.open("POST", "towatchlist", true);
-	xhttp.setRequestHeader("Content-type",
-			"application/x-www-form-urlencoded");
-	xhttp.send("productID=" + id);
-}
-
-function addProductToCart(id, willBuy) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			alert("Product added to cart.");
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
-		}
-		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
-		}
-	};
-
-	xhttp.open("POST", "tocart", true);
-	xhttp.setRequestHeader("Content-type",
-			"application/x-www-form-urlencoded");
-	xhttp.send("productID="+ id +"&willBuy=" + willBuy);
-}
+<script src="js/userInteractions.js">
 </script>
 </html>
