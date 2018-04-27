@@ -31,7 +31,6 @@
 	<!-- Contents -->
 	<div id = "content" class="w3-container w3-right" style="margin-top:7%; margin-left:1%">
 			<c:forEach var="entry" items="${mainPageProducts}">
-	  			<p><c:out value="${entry.key}"/></p>
 	  			<div class="w3-panel w3-padding w3-border w3-round-xxlarge">
 	  				<div class="w3-row-padding">
 	  					<p class="w3-panel w3-text-blue w3-wide"><b>${entry.key}</b></p>

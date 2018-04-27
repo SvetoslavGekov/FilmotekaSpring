@@ -1,11 +1,9 @@
 package com.filmoteka.controller;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 
@@ -89,7 +87,7 @@ public class ProductController {
 			return "main";
 		}
 		
-		@RequestMapping(value = "/tofavorites", method = RequestMethod.POST)
+		@RequestMapping(value = "/auth/tofavorites", method = RequestMethod.POST)
 		public ResponseEntity<Boolean> addOrRemoveFavoriteProduct(HttpSession session, @RequestParam("productID") Integer productID){
 			try {
 				// Get user from session
@@ -115,7 +113,7 @@ public class ProductController {
 			}
 		}
 		
-		@RequestMapping(value = "/towatchlist", method = RequestMethod.POST)
+		@RequestMapping(value = "/auth/towatchlist", method = RequestMethod.POST)
 		public ResponseEntity<Boolean> addOrRemoveWatchlistProduct(HttpSession session, @RequestParam("productID") Integer productID){
 			try {
 				// Get user from session
@@ -136,40 +134,6 @@ public class ProductController {
 				return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
 			}
 			catch (SQLException | InvalidProductDataException e1) {
-				//Return an entity with a status code for Internal Server Error (handling is done via JS)
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		}
-		
-		@RequestMapping(value = "/addtocart", method = RequestMethod.POST)
-		public ResponseEntity<Boolean> addProductToCart(HttpSession session,
-				@RequestParam("productID") Integer productId,
-				@RequestParam("willBuy") Boolean willBuy){
-			try {
-				// Get user from session
-				User user = (User) session.getAttribute("USER");
-
-				// Get product from database
-				Product product = ProductDao.getInstance().getProductById(productId);
-				
-				// Check if the productId is valid
-				if (product == null) {
-					// If not --> return an HTTP code for no such product (400);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-				}
-				
-				// Add product to shopping cart
-				boolean isAddedToCart = UserManager.getInstance().addProductToShoppingCart(user, product, willBuy);
-				
-				System.out.println("\nAdded product to cart:");
-				for (Entry<Product,LocalDate> e: user.getShoppingCart().entrySet()) {
-					System.out.println(String.format("%s	%s", e.getKey().getName(), e.getValue()));
-				}
-				
-				//Return the result and an OK status
-				return new ResponseEntity<Boolean>(isAddedToCart, HttpStatus.OK);
-			}
-			catch (SQLException | InvalidProductDataException e) {
 				//Return an entity with a status code for Internal Server Error (handling is done via JS)
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}

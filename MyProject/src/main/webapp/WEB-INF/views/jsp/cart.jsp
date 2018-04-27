@@ -33,12 +33,12 @@
 		<c:when test="${not empty cart }">
 		
 			<c:forEach var="entry" items="${cart }">
+				<c:set var = "product" value = "${entry.key }"></c:set>
 				<c:set var = "validity" value = "${entry.value }"></c:set>
 				<c:set var = "price" value = "${product.buyCost }"></c:set>
 				<c:if test="${not empty validity }">
 					<c:set var = "price" value = "${product.rentCost }"></c:set>
 				</c:if>
-				<c:set var="totalPrice" value="${totalPrice + price }"></c:set>
 						<table cellspacing="0" cellpading="0" width="75%" border="1">
 							<tbody>
 								<tr>
@@ -54,13 +54,13 @@
 								<td valign="middle" halign="center" >${validity }</td>
 								<td valign="middle" halign="center" >${price }</td>
 								<td>
-									<button class="w3-button" onclick="location.href='removefromcart?productID=${product.id}'">Remove from cart</button>
+									<button class="w3-button" onclick="location.href='auth/removefromcart?productID=${product.id}'">Remove from cart</button>
 								</td>
 								</tr>
 							</tbody>
 						</table>
 			</c:forEach>	
-			<button onclick ="location.href='buycart'" >Buy items in cart</button></div>	
+			<button onclick ="location.href='auth/buycart'" >Buy items in cart</button>
 		</c:when>
 		<c:otherwise>
 			<h3>Your cart is currently empty!</h3>

@@ -9,11 +9,11 @@ function addProductToCart(id, willBuy) {
 	
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText == 'true');
-			if(result === true){
+			var result = (this.responseText);
+			if(result === 'true'){
 				alert("Product successfully added to cart.");
 			}
-			else{
+			else if (result === 'false'){
 				alert("Sorry, but you already own this product!");
 			}
 		}
@@ -23,10 +23,13 @@ function addProductToCart(id, willBuy) {
 		else if(this.readyState == 4 && this.status == 400){
 			alert(noSuchProduct);
 		}
+		else if(this.readyState == 4 && this.status == 401){
+			redirectToUnauthorizedPage();
+		}
 	};
 	
 	
-	xhttp.open("POST", "addtocart", true);
+	xhttp.open("POST", "auth/addtocart", true);
 	xhttp.setRequestHeader("Content-type",
 			"application/x-www-form-urlencoded");
 	xhttp.send("productID="+ id +"&willBuy=" + willBuy);
@@ -37,11 +40,11 @@ function addProductToFavorites(id) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText == 'true');
-			if(result === true){
+			var result = (this.responseText);
+			if(result === 'true'){
 				alert("Product added to favorites.");
 			}
-			else{
+			else if (result === 'false'){
 				alert("Product removed from favorites.");
 			}
 		}
@@ -51,9 +54,12 @@ function addProductToFavorites(id) {
 		else if(this.readyState == 4 && this.status == 400){
 			alert(noSuchProduct);
 		}
+		else if(this.readyState == 4 && this.status == 401){
+			redirectToUnauthorizedPage();
+		}
 	};
 	
-	xhttp.open("POST", "tofavorites", true);
+	xhttp.open("POST", "auth/tofavorites", true);
 	xhttp.setRequestHeader("Content-type",
 			"application/x-www-form-urlencoded");
 	xhttp.send("productID=" + id);
@@ -63,11 +69,11 @@ function addProductToWatchList(id) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText == 'true');
-			if(result === true){
+			var result = (this.responseText);
+			if(result === 'true'){
 				alert("Product added to watchlist.");
 			}
-			else{
+			else if (result === 'false'){
 				alert("Product removed from watchlist.");
 			}
 		}
@@ -77,10 +83,17 @@ function addProductToWatchList(id) {
 		else if(this.readyState == 4 && this.status == 400){
 			alert(noSuchProduct);
 		}
+		else if(this.readyState == 4 && this.status == 401){
+			redirectToUnauthorizedPage();
+		}
 	};
 	
-	xhttp.open("POST", "towatchlist", true);
+	xhttp.open("POST", "auth/towatchlist", true);
 	xhttp.setRequestHeader("Content-type",
 			"application/x-www-form-urlencoded");
 	xhttp.send("productID=" + id);
+}
+
+function redirectToUnauthorizedPage(){
+	window.location.href = "unauthorized";
 }
