@@ -289,7 +289,7 @@ public class User implements Comparable<User> {
 	public double getShoppingCartPrice() {
 		double totalCost = 0d;
 		for (Entry<Product, LocalDate> e : this.shoppingCart.entrySet()) {
-			if (e.getValue() == null) {
+			if (e.getValue() != null) {
 				totalCost += e.getKey().getRentCost();
 			}
 			else {

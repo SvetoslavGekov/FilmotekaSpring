@@ -28,7 +28,7 @@
 	<c:import url="/html/header.html"></c:import>
 
 	<!-- Contents -->
-	<div id = "content" class="w3-container w3-right" style="margin-top:7%">
+	<div id = "content" class="w3-container w3-right" style="margin-top:7%; margin-left:1%">
 			<c:forEach var="entry" items="${mainPageProducts}">
 	  			<p><c:out value="${entry.key}"/></p>
 	  			<div class="w3-panel w3-padding w3-border w3-round-xxlarge">
@@ -43,6 +43,12 @@
 			  						<div class="w3-display-middle w3-display-hover">
 			  							<button class="w3-button w3-indigo w3-tiny" onclick="location.href='product/${product.id}'">More Info</button>
 			  						</div>
+			  						<div class="w3-display-bottomleft w3-display-hover">
+			  							<button class="w3-button w3-indigo w3-tiny" onClick="addProductToCart(${product.id},true)">Buy</button>
+			  						</div>
+			  						<div class="w3-display-bottomright w3-display-hover">
+			  							<button class="w3-button w3-indigo w3-tiny" onClick="addProductToCart(${product.id},false)">Rent</button>
+			  						</div>
 			  					</div>
 			  				</div>
 			  			</div>
@@ -52,4 +58,7 @@
 			</c:forEach>
 	</div>
 </body>
+<script src="js/userInteractions.js">
+
+</script>
 </html>

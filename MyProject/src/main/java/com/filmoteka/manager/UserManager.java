@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.filmoteka.exceptions.InsufficientFundsException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
@@ -100,18 +101,20 @@ public class UserManager {
 		}
 	}
 
-	public void addProductToShoppingCart(User user, Product product, boolean willBuy) {
+	public boolean addProductToShoppingCart(User user, Product product, boolean willBuy) {
 		// Check if user does not own the product
 		if (!user.ownsProduct(product)) {
 			user.addProductToCart(product, willBuy);
+			return true;
 		}
+		return false;
 	}
 
 	public void removeProductFromShoppingCart(User user, Product product) {
 		user.removeProductFromCart(product);
 	}
 
-	public void buyProductsInCart(User user) throws SQLException, InvalidOrderDataException {
+	public void buyProductsInCart(User user) throws SQLException, InvalidOrderDataException, InsufficientFundsException {
 		Map<Product, LocalDate> shoppingCart = user.getShoppingCart();
 		// If there is nothing to be bought
 		if (shoppingCart.isEmpty()) {
@@ -137,7 +140,7 @@ public class UserManager {
 			user.cleanCart();
 		}
 		else {
-			// TODO --> throw exception or tell user he has no money
+			throw new InsufficientFundsException();
 		}
 	}
 
