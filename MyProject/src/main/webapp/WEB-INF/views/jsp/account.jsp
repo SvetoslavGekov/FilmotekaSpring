@@ -23,8 +23,8 @@
 <title>My Account</title>
 </head>
 <body>
-	<!-- Navbar -->
-	<%@ include file="header.jsp" %>
+	<!-- Include the header file via JSTL -->
+	<c:import url="/html/header.html"></c:import>
 	
 	<!-- Content -->
 	<div id = "content" class="w3-container w3-left" style="margin-top:7%">

@@ -1,37 +1,29 @@
 package com.filmoteka.controller;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.filmoteka.exceptions.InvalidFormDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.manager.UserManager;
-import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
-import com.filmoteka.model.dao.ProductDao;
+
 import com.filmoteka.model.dao.UserDao;
 import com.filmoteka.validation.BCrypt;
 
 
 @Controller
 public class UserController {
-	private static final String dbError = "Ann error occured while accessing the database. Please try again later!";
+	private static final String dbError = "An error occured while accessing the database. Please try again later!";
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showHomePage() {
@@ -42,13 +34,20 @@ public class UserController {
 	public String myAccount(){
 		return "account";
 	}
-
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String userLogin(@RequestParam("username") String username, @RequestParam("password") String password,
-			HttpServletRequest request) throws InvalidProductDataException, SQLException, InvalidUserDataException, InvalidOrderDataException {
+			HttpServletRequest request) throws SQLException {
 
 		// Check if the credentials are valid
-		User user = UserManager.getInstance().logIn(username, password);
+		User user;
+		try {
+			user = UserManager.getInstance().logIn(username, password);
+		}
+		catch (InvalidProductDataException | SQLException | InvalidUserDataException | InvalidOrderDataException e) {
+			//If an error occurs while loading the user --> throw a DB exception
+			throw new SQLException(dbError, e);
+		}
 
 		if (user != null) {
 			// Get a new session
@@ -75,6 +74,7 @@ public class UserController {
 		//Invalidate the session
 		session.invalidate();
 		
+		//Return to the index page
 		return "index";
 	}
 	

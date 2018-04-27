@@ -16,7 +16,6 @@ import com.filmoteka.model.Product;
 import com.filmoteka.model.SimpleUserFactory;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.UserDao;
-import com.filmoteka.util.WebSite;
 import com.filmoteka.validation.Supp;
 
 public class UserManager {
@@ -56,7 +55,7 @@ public class UserManager {
 		User u = this.dao.getUserByLoginCredentials(username, password);
 		if (u != null) {
 			u.setLastLogin(LocalDateTime.now());
-			dao.updateUser(u);
+			this.dao.updateUser(u);
 		}
 		return u;
 	}
@@ -70,14 +69,15 @@ public class UserManager {
 			// Remove product from user's favorites in the DB and in the POJO
 			this.dao.removeProductFromFavorites(user, product);
 			user.removeFavoriteProduct(product.getId());
+			return false;
 		}
 		// If the user doesn't have the product in his favorites
 		else {
 			// Add product to user's favorites in the DB and in the POJO
 			this.dao.addProductToFavorites(user, product);
 			user.addFavoriteProduct(product.getId());
+			return true;
 		}
-		return true;
 	}
 
 	public boolean addOrRemoveProductFromWatchlist(User user, Product product) throws SQLException {
@@ -89,15 +89,15 @@ public class UserManager {
 			// Remove product from user's watchlist in the DB and in the POJO
 			this.dao.removeProductFromWatchlist(user, product);
 			user.removeWatchlistProduct(product.getId());
+			return false;
 		}
 		// If the user doesn't have the product in his watchlist
 		else {
 			// Add product to user's watchlist in the DB and in the POJO
 			this.dao.addProductToWatchlist(user, product);
 			user.addWatchlistProduct(product.getId());
+			return true;
 		}
-
-		return true;
 	}
 
 	public void addProductToShoppingCart(User user, Product product, boolean willBuy) {
