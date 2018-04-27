@@ -17,6 +17,8 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import com.filmoteka.interceptors.AuthorizationInterceptor;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.filmoteka")
@@ -61,6 +63,9 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		LocaleChangeInterceptor changeInterceptor = new LocaleChangeInterceptor();
 		changeInterceptor.setParamName("language");
 		registry.addInterceptor(changeInterceptor);
+		
+		//Add custom interceptors
+		registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/auth/**").excludePathPatterns("/admin/**");
 	}
 	
 }

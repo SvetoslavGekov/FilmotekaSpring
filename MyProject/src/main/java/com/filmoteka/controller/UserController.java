@@ -3,6 +3,7 @@ package com.filmoteka.controller;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,12 @@ import com.filmoteka.validation.BCrypt;
 public class UserController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
 
+	@RequestMapping(value = "/unauthorized", method = RequestMethod.GET)
+	public String redirectToHome(HttpServletResponse response) {
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		return "unauthorized";
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showHomePage() {
 		return "index";
