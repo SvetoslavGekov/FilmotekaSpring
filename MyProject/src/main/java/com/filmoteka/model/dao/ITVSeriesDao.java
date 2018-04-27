@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import com.filmoteka.exceptions.InvalidProductDataException;
+import com.filmoteka.model.Product;
 import com.filmoteka.model.TVSeries;
 
 public interface ITVSeriesDao {
@@ -13,5 +14,5 @@ public interface ITVSeriesDao {
 	
 	Collection<TVSeries> getAllTVSeries() throws SQLException, InvalidProductDataException;
 	
-	Collection<TVSeries> getTVSeriesBySubstring(String substring) throws SQLException, InvalidProductDataException;
+	Collection<Product> getTVSeriesBySubstring(String substring) throws SQLException, InvalidProductDataException;
 }

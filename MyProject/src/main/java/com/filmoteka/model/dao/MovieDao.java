@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Movie;
+import com.filmoteka.model.Product;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 import com.filmoteka.util.WebSite;
@@ -144,7 +145,7 @@ public final class MovieDao implements IMovieDao {
 	}
 	
 	@Override
-	public Collection<Movie> getMoviesBySubstring(String substring) throws SQLException, InvalidProductDataException {
+	public Collection<Product> getMoviesBySubstring(String substring) throws SQLException, InvalidProductDataException {
 		
 		String sql = "SELECT m.director, p.product_id, p.name, p.category_id, p.release_year, "
 							+ "p.pg_rating, p.duration, p.rent_cost, "
@@ -156,7 +157,7 @@ public final class MovieDao implements IMovieDao {
 					+ "ON m.product_id = p.product_id "
 					+ "WHERE p.name LIKE ?;";
 		
-		Collection<Movie> allMoviesBySubStr = new ArrayList<Movie>();
+		Collection<Product> allMoviesBySubStr = new ArrayList<Product>();
 		try(PreparedStatement ps = con.prepareStatement(sql)){
 			ps.setString(1, '%'+substring+'%');
 			try(ResultSet rs = ps.executeQuery();){

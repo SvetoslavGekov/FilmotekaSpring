@@ -16,6 +16,7 @@ import java.util.TreeMap;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidProductDataException;
+import com.filmoteka.model.Product;
 import com.filmoteka.model.TVSeries;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
@@ -155,7 +156,7 @@ public final class TVSeriesDao implements ITVSeriesDao {
 	}
 
 	@Override
-	public Collection<TVSeries> getTVSeriesBySubstring(String substring)
+	public Collection<Product> getTVSeriesBySubstring(String substring)
 			throws SQLException, InvalidProductDataException {
 
 		String sql = "SELECT tv.season, tv.finished_airing, "
@@ -167,7 +168,7 @@ public final class TVSeriesDao implements ITVSeriesDao {
 					+ "FROM tvseries AS tv " + "JOIN products AS p "
 					+ "ON tv.product_id = p.product_id " + "WHERE p.name LIKE ?;";
 
-		Collection<TVSeries> allTVSeriesBySubstring = new ArrayList<TVSeries>();
+		Collection<Product> allTVSeriesBySubstring = new ArrayList<Product>();
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1,'%'+substring+'%');
