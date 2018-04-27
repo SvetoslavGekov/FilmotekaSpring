@@ -31,12 +31,6 @@ public class UserController {
 	public String myAccount(){
 		return "account";
 	}
-
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public String userLogout() {
-		
-		return "index";
-	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String userLogin(@RequestParam("username") String username, @RequestParam("password") String password,
@@ -70,6 +64,7 @@ public class UserController {
 		//Invalidate the session
 		session.invalidate();
 		
+		//Return to the index page
 		return "index";
 	}
 	
