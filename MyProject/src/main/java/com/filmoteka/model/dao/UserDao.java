@@ -281,7 +281,7 @@ public class UserDao implements IUserDao {
 	@Override
 	public Set<Order> getUserOrdersById(int userId) throws SQLException, InvalidOrderDataException, InvalidProductDataException {
 		Set<Order> orders = new HashSet<Order>();
-		try (PreparedStatement ps = connection.prepareStatement("SELECT 	order_id FROM orders WHERE user_id = ?")) {
+		try (PreparedStatement ps = connection.prepareStatement("SELECT order_id FROM orders WHERE user_id = ? ORDER BY date DESC;")) {
 			ps.setInt(1, userId);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {

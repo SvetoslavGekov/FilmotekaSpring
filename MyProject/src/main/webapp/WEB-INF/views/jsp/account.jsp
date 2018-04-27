@@ -12,13 +12,9 @@
 <!--<link rel="import" href="../menus/menus.html">
 
 <!-- Color Libraries -->
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-metro.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-highway.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2017.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-food.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
-<link rel="stylesheet" href="css/color-theme.css">
-<link rel="stylesheet" href="css/html_slider.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
 
 <title>My Account</title>
@@ -27,21 +23,53 @@
 	<!-- Include the header file via JSTL -->
 	<c:import url="header.jsp"></c:import>
 	
+	
 	<!-- Content -->
-	<div id = "content" class="w3-container w3-left" style="margin-top:7%">
-		First name: ${ sessionScope.USER.firstName }<br>
-		Last name: ${ sessionScope.USER.lastName }<br>
-		UserName: ${ sessionScope.USER.username }<br>
-		Email: ${ sessionScope.USER.email }<br>
-		Phone: ${ sessionScope.USER.phone }<br>
-		Date of registration: ${ sessionScope.USER.registrationDate }<br>
-		Last login: ${ sessionScope.USER.lastLogin}<br>
-		Money: ${ sessionScope.USER.money }<br>
-		<input type="button" value="Edit" onclick="document.getElementById('editAccount').style.display = 'block'"><br>
-	</div>
+    <div class="container" style="margin-top:7%">    
+          <div class="row">
+               <div class="panel panel-default">
+                <div class="panel-heading">  <h4 >User Profile</h4></div>
+                 <div class="panel-body">
+	                <div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+	                 <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive"> 
+	               
+	           
+	                </div>
+	                <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
+	                    <div class="container" >
+	                      <h2>${ sessionScope.USER.firstName } ${ sessionScope.USER.lastName }</h2>
+	                      <p>Date Of Joining: <b>
+	                      	${ sessionScope.USER.registrationDate.dayOfMonth} 
+		                    ${ sessionScope.USER.registrationDate.month} 
+		                    ${ sessionScope.USER.registrationDate.year}
+	                      </b></p>
+	                    
+	                     
+	                    </div>
+	                     <hr>
+	                    <ul class="container details" >
+	                      <li><p><span class="glyphicon glyphicon-user one" style="width:50px;"></span>${ sessionScope.USER.username }</p></li>
+	                      <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span>${ sessionScope.USER.email }</p></li>
+	                      <li><p><span class="glyphicon glyphicon-phone one" style="width:50px;"></span>${ sessionScope.USER.phone } </p></li>
+	                      <li><p><span class="glyphicon glyphicon-euro one" style="width:50px;"></span>${ sessionScope.USER.money }</p></li>
+	                    </ul>
+	                    <hr>
+	                    <div class="col-sm-5 col-xs-6 tital " >last login: 
+	                      ${ sessionScope.USER.lastLogin.dayOfWeek}<br>
+	                      ${ sessionScope.USER.lastLogin.dayOfMonth} 
+	                      ${ sessionScope.USER.lastLogin.month} 
+	                      ${ sessionScope.USER.lastLogin.year} at 
+	                      ${ sessionScope.USER.lastLogin.hour}:${ sessionScope.USER.lastLogin.minute}
+	                    </div>
+	                    <input type="button" value="Edit Profile" onclick="document.getElementById('editAccount').style.display = 'block'"><br>
+	                </div>
+          		</div>
+      		</div>
+      	</div>
+    </div>
 	
 	<!-- Edit Profile -->
-	<div id="editAccount" style="display:none" class="modal">
+	<div id="editAccount" style="display:none" class="container">
    		 	<span onclick="document.getElementById('editAccount').style.display='none'" class="close" title="Close Modal">&times;</span>
 			<form method= "POST" action="updateProfile" class="modal-content">
 			<div class="container">

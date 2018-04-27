@@ -25,7 +25,7 @@
 			<a class="w3-bar-item w3-button">My Products</a>
 			<a class="w3-bar-item w3-button">My Favorites</a>
 			<a class="w3-bar-item w3-button">My WatchList</a>
-			<a class="w3-bar-item w3-button" onclick="location.href='cart'">My Cart</a>
+			<a class="w3-bar-item w3-button" onclick="location.href='auth/cart'">My Cart</a>
 			<a class="w3-bar-item w3-button" onclick="location.href='orders'">My Order History</a>
 			<a class="w3-bar-item w3-button" onclick="location.href='logout'">Logout</a>
 		  </div>

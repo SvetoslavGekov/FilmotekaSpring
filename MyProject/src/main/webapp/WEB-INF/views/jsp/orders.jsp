@@ -52,7 +52,7 @@ a:hover {
 			  <tr>
 			    <td>${ order.id }</td>
 			    <td>${ order.date }</td>
-			    <td>${ order.totalCost }</td>
+			    <td>${ order.totalCost } &euro;</td>
 			    <td><a onclick="location.href='order/${order.id}'">VIEW DETAILS</a></td>
 			  </tr>
 		  </c:forEach>

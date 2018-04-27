@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
 <link rel="stylesheet" href="css/color-theme.css">
 <link rel="stylesheet" href="css/html_slider.css">
-<title>Order ${ order.id }</title>
+<title>My Orders</title>
 
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
@@ -28,17 +28,17 @@
 	<c:import url="/html/header.html"></c:import>
 	
 	<div id = "content" class="w3-container" style="margin-top:7%; margin-left:1%">
-	<h3>Order ${ order.id }</h3>
+	<h3>Order &numero;${ order.id }</h3>
 	<c:choose>
 		<c:when test="${not empty order.shoppingCart }">
 		
-			<c:forEach var="entry" items="${ order.shoppingCart }">
+			<c:forEach var="entry" items="${order.shoppingCart }">
+				<c:set var = "product" value = "${entry.key }"></c:set>
 				<c:set var = "validity" value = "${entry.value }"></c:set>
 				<c:set var = "price" value = "${product.buyCost }"></c:set>
 				<c:if test="${not empty validity }">
-					<c:set var = "price" value = "${product.rentCost }"></c:set>
+					<c:set var = "price" value = "${ product.rentCost }"></c:set>
 				</c:if>
-				<c:set var="totalPrice" value="${totalPrice + price }"></c:set>
 						<table cellspacing="0" cellpading="0" width="75%" border="1">
 							<tbody>
 								<tr>
@@ -52,16 +52,15 @@
 								</td>
 								<td valign="middle"><span class="cartItem">${product.name} ${product.releaseDate.year}</span></td>
 								<td valign="middle" halign="center" >${validity }</td>
-								<td valign="middle" halign="center" >${price }</td>
+								<td valign="middle" halign="center" >${price } &euro;</td>
 								</tr>
 							</tbody>
 						</table>
-			</c:forEach>		
+			</c:forEach>	
 		</c:when>
 		<c:otherwise>
 			<h3>Empty order!</h3>
 		</c:otherwise>
-		
 	</c:choose>
 	</div>
 </body>
