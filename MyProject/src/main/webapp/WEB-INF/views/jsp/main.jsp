@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="css/html_slider.css">
 
 <title>Welcome to FilmotekaBG</title>
+<base href="http://localhost:8080/FilmotekaSpring/">
 </head>
 <body>
 	<!-- Include the header file via JSTL -->
@@ -40,7 +41,7 @@
 			  					<div class="w3-display-container w3-white">
 			  					<img src="getPic?pic=${product.poster}" class="w3-hover-opacity" style="width:100%; height:250px;">
 			  						<div class="w3-display-middle w3-display-hover">
-			  							<button class="w3-button w3-indigo w3-tiny">More Info</button>
+			  							<button class="w3-button w3-indigo w3-tiny" onclick="location.href='product/${product.id}'">More Info</button>
 			  						</div>
 			  					</div>
 			  				</div>
