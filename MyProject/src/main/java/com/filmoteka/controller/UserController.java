@@ -31,7 +31,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
-	public String myAccount(){
+	public String myAccount(HttpSession session){
+		
+		if((User) session.getAttribute("USER") == null) {
+			return "index";
+		}
+		
 		return "account";
 	}
 	

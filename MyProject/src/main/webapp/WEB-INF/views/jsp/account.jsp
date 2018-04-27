@@ -20,11 +20,12 @@
 <link rel="stylesheet" href="css/color-theme.css">
 <link rel="stylesheet" href="css/html_slider.css">
 
+
 <title>My Account</title>
 </head>
 <body>
 	<!-- Include the header file via JSTL -->
-	<c:import url="/html/header.html"></c:import>
+	<c:import url="header.jsp"></c:import>
 	
 	<!-- Content -->
 	<div id = "content" class="w3-container w3-left" style="margin-top:7%">

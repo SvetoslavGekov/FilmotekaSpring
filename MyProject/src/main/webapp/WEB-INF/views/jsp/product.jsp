@@ -35,8 +35,8 @@
 						<div>
 							<button float="left" onClick="addProductToFavorites(${product.id})">To Favorites</button>
 							<button  onClick="addProductToWatchList(${product.id})">To Watch list</button>
-							<button float="left" onClick="buy?productID=${product.id}">Buy</button>
-							<button  onClick="rent?productID=${product.id}">Rent</button>
+							<button float="left" onClick="addProductToCart(${ product.id }, true)">Buy</button>
+							<button  onClick="addProductToCart(${ product.id }, false)">Rent</button>
 						</div>
 					</td>
 					<td>
@@ -124,6 +124,26 @@ function addProductToWatchList(id) {
 	xhttp.setRequestHeader("Content-type",
 			"application/x-www-form-urlencoded");
 	xhttp.send("productID=" + id);
+}
+
+function addProductToCart(id, willBuy) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			alert("Product added to cart.");
+		}
+		else if(this.readyState == 4 && this.status == 500){
+			alert(dbError);
+		}
+		else if(this.readyState == 4 && this.status == 400){
+			alert(noSuchProduct);
+		}
+	};
+
+	xhttp.open("POST", "tocart", true);
+	xhttp.setRequestHeader("Content-type",
+			"application/x-www-form-urlencoded");
+	xhttp.send("productID="+ id +"&willBuy=" + willBuy);
 }
 </script>
 </html>
