@@ -56,7 +56,7 @@ public class ProductController {
 			m.addAttribute("mainPageProducts", productsBySearch);
 		}
 		catch (SQLException |InvalidProductDataException e) {
-			throw new Exception("An error occured while loading the movies from the database. Please try again!");
+			throw new Exception("An error occured while searching movies from the database. Please try again!");
 		}
 		return "main";
 	}

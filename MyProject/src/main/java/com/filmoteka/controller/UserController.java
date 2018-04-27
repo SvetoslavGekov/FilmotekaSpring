@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.filmoteka.exceptions.InvalidFormDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
@@ -24,6 +25,8 @@ import com.filmoteka.manager.UserManager;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.ProductDao;
+import com.filmoteka.model.dao.UserDao;
+import com.filmoteka.validation.BCrypt;
 
 
 @Controller
@@ -100,5 +103,55 @@ public class UserController {
 		catch (SQLException e) {
 			throw new Exception(dbError);
 		}
+	}
+	
+	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
+	public String updateProfile(HttpSession session, 
+								@RequestParam("firstname") String firstName,
+								@RequestParam("lastname") String lastName,
+								@RequestParam("email") String email,
+								@RequestParam("phone") String phone,
+								HttpServletRequest request) throws Exception{
+		
+		User user = (User) session.getAttribute("USER");
+		
+		String currentPass = request.getParameter("currentPass");
+		String newPass1 = request.getParameter("newPass1");
+		String newPass2 = request.getParameter("newPass2");
+		
+		//If all three password fields are empty set all of them as the users's password
+		if(currentPass.isEmpty() && newPass1.isEmpty() && newPass2.isEmpty()){
+			currentPass = user.getPassword();
+			newPass1 = currentPass;
+			newPass2 = currentPass;
+		}
+		//Otherwise check if current coincides with users's
+		else if(BCrypt.checkpw(currentPass, user.getPassword())){
+			//Check if newPass1 isn't equals to newPass2
+			if(!newPass1.equals(newPass2)){
+				throw new InvalidUserDataException("New passwords didn't match!");
+			}
+			
+			//If everything has passed successfully, hash the new password to be set to the user
+			newPass1 = BCrypt.hashpw(newPass1, BCrypt.gensalt());
+		}
+		else{
+			throw new InvalidUserDataException("This is not your current password!");
+		}
+		
+		//Test if can create user with these data (Will throw an exception if cannot)
+		User test = new User(firstName, lastName, user.getUsername(), newPass1 , email);
+		if(phone.isEmpty()) phone = null;
+		test.setPhone(phone);
+		
+		//Update current user
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setEmail(email);
+		user.setPhone(phone);
+		user.setPassword(newPass1);
+		UserDao.getInstance().updateUser(user);
+	
+		return "account";
 	}
 }
