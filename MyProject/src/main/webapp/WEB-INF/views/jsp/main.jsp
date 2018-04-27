@@ -24,6 +24,7 @@
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
 <body>
+
 	<!-- Include the header file via JSTL -->
 	<c:import url="/html/header.html"></c:import>
 
