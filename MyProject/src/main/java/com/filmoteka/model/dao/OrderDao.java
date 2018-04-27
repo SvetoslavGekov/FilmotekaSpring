@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidOrderDataException;
@@ -18,6 +19,7 @@ import com.filmoteka.model.Order;
 import com.filmoteka.model.Product;
 
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public final class OrderDao implements IOrderDao {
 	//Fields

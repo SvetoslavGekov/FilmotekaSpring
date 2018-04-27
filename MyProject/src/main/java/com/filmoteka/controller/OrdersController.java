@@ -1,0 +1,61 @@
+package com.filmoteka.controller;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.filmoteka.exceptions.InvalidProductDataException;
+import com.filmoteka.model.Order;
+import com.filmoteka.model.Product;
+import com.filmoteka.model.User;
+import com.filmoteka.model.dao.OrderDao;
+import com.filmoteka.model.dao.ProductDao;
+
+@Controller
+public class OrdersController {
+	private static final String dbError = "An error occured while accessing the database. Please try again later!";
+	
+	@RequestMapping(value = "/orders", method = RequestMethod.GET)
+	public String loadCartPage(Model m, HttpSession session) {
+		// Get user from session
+		User user = (User) session.getAttribute("USER");
+
+		// Get user's orders
+		Set<Order> orders = user.getOrdersHistory();
+
+
+		m.addAttribute("orders", orders);
+
+		// Return the orders JSP
+		return "orders";
+	}
+	
+	@RequestMapping(value = "/order/{id}", method = RequestMethod.GET)
+	public String loadProductPage(Model m, @PathVariable("id") Integer orderId ) throws Exception {
+		//Grab the order from the database
+		try {
+			Order order = OrderDao.getInstance().getOrderById(orderId);
+			
+			//Add the order to the model
+			m.addAttribute("order", order);
+		}
+		catch (SQLException | InvalidProductDataException e) {
+			//Error while reading the order from the database
+			throw new Exception(dbError,e);
+		}
+		
+		//Return the product view
+		return "order";
+	}
+
+}
