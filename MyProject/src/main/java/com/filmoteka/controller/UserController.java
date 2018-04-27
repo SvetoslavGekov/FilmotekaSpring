@@ -34,10 +34,17 @@ public class UserController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String userLogin(@RequestParam("username") String username, @RequestParam("password") String password,
-			HttpServletRequest request) throws InvalidProductDataException, SQLException, InvalidUserDataException, InvalidOrderDataException {
+			HttpServletRequest request) throws SQLException {
 
 		// Check if the credentials are valid
-		User user = UserManager.getInstance().logIn(username, password);
+		User user;
+		try {
+			user = UserManager.getInstance().logIn(username, password);
+		}
+		catch (InvalidProductDataException | SQLException | InvalidUserDataException | InvalidOrderDataException e) {
+			//If an error occurs while loading the user --> throw a DB exception
+			throw new SQLException(dbError, e);
+		}
 
 		if (user != null) {
 			// Get a new session
