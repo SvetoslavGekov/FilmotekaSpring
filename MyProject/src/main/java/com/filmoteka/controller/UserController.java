@@ -6,12 +6,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,12 +27,14 @@ import com.filmoteka.model.dao.ProductDao;
 
 @Controller
 public class UserController {
-	private static final String dbError = "Ann error occured while accessing the database. Please try again later!";
+	private static final String dbError = "An error occured while accessing the database. Please try again later!";
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showHomePage() {
 		return "index";
 	}
+	
+
 	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String loadMainPage(Model m) throws Exception {
@@ -56,6 +57,12 @@ public class UserController {
 		return "main";
 	}
 
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public String userLogout() {
+		
+		return "index";
+	}
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String userLogin(@RequestParam("username") String username, @RequestParam("password") String password,
 			HttpServletRequest request) throws InvalidProductDataException, SQLException, InvalidUserDataException, InvalidOrderDataException {

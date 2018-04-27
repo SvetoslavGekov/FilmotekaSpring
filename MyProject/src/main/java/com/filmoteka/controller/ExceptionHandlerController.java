@@ -10,7 +10,7 @@ public class ExceptionHandlerController {
 	public static final String DEFAULT_ERROR_VIEW = "error";
 
 	@ExceptionHandler(value = Exception.class)
-	public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+	public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e){
 			
 		// Catch the exception and redirect it to the errors page.
 		ModelAndView mav = new ModelAndView();

@@ -220,7 +220,7 @@ public class UserDao implements IUserDao {
 				//Check if user has any products at all
 				if(!productIDs.isEmpty()) {
 					//Get all products as 1 query and put them in the map
-					List<Product> products = new ArrayList<>(ProductDao.getInstance().getProducts(productIDs));
+					List<Product> products = new ArrayList<>(ProductDao.getInstance().getProductsByIdentifiers(productIDs));
 					for(int i = 0; i < products.size(); i++) {
 						Date validity = validities.get(i);
 						userProducts.put(products.get(i), validity != null ? validity.toLocalDate() : null);
@@ -407,7 +407,7 @@ public class UserDao implements IUserDao {
 						expiringProducts.put(user, new ArrayList<Product>());
 					}
 					//Put the user and his list of products
-					expiringProducts.get(user).addAll(ProductDao.getInstance().getProducts(products));
+					expiringProducts.get(user).addAll(ProductDao.getInstance().getProductsByIdentifiers(products));
 				}
 			}
 		}

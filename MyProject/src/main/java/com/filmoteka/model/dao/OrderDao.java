@@ -77,7 +77,7 @@ public final class OrderDao implements IOrderDao {
 //					products.put(pr, validity != null ? validity.toLocalDate() : null);
 				}
 				//Grab a list of products
-				List<Product> products = new ArrayList<>(ProductDao.getInstance().getProducts(productIDs));
+				List<Product> products = new ArrayList<>(ProductDao.getInstance().getProductsByIdentifiers(productIDs));
 				
 				//Fill the final collection
 				for(int i = 0; i < products.size(); i++){

@@ -17,30 +17,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class FilesController {
-	private static final String NO_IMAGE = "C:\\images\\no-photo.jpg";
+	private static final String POSTERS_FILEPATH = "C:\\images";
+	private static final String NO_IMAGE = "no-photo.jpg";
 
 	@RequestMapping(value = "/getPic", method = RequestMethod.GET,produces = MediaType.IMAGE_JPEG_VALUE)
 	@ResponseBody
 	public byte[] getPicture(@RequestParam("pic") String pic) throws FileNotFoundException, IOException {
 		//Grab the file where the picture is saved at
-		File f = new File("C:\\images\\"+pic);
+		File f = new File(POSTERS_FILEPATH + File.separator + pic);
 		
 		//Check if the file exists
 		if(!f.exists()) {
 			//Assign the no image photo to the product without an image
-			f = new File(NO_IMAGE);
+			f = new File(POSTERS_FILEPATH + File.separator + NO_IMAGE);
 		}
 		
 		byte[] byteArray = new byte[(int) f.length()];
 		//Write the picture in a byte array and return it
 		try(BufferedInputStream is = new BufferedInputStream(new FileInputStream(f));){
 			is.read(byteArray);
-//			OutputStream os = resp.getOutputStream();
-//			int b = is.read();
-//			while(b != -1) {
-//				os.write(b);
-//				b = is.read();
-//			}
 		}
 		
 		return byteArray;

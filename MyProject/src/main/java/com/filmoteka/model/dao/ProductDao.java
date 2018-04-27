@@ -202,123 +202,53 @@ public final class ProductDao implements IProductDao {
 	
 	@Override
 	public Collection<Product> getAllProducts() throws SQLException, InvalidProductDataException{
-		return getProducts(null);
+		//Create a collection of all products
+		Collection<Product> allProducts = new ArrayList<>();
+		
+		//Query to select all products
+		String sql = "SELECT product_id FROM products;";
+		
+		try(PreparedStatement ps = con.prepareStatement(sql)){
+			try(ResultSet rs = ps.executeQuery()){
+				while(rs.next()) {
+					allProducts.add(getProductById(rs.getInt("product_id")));
+				}
+			}
+		}	
+		return allProducts;
 	}
 	
 	@Override
-	public Collection<Product> getProducts(List<Integer> identifiers) throws SQLException, InvalidProductDataException {
-		Collection<Product> allProducts = new ArrayList<>();
+	public Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException {
+		Collection<Product> selectedProducts = new ArrayList<>();
 		
-		//Building the query
-		StringBuilder sql = new StringBuilder(
-				"SELECT  p.product_id, p.name, p.category_id, p.release_year, p.pg_rating,p.duration, p.rent_cost, " + 
-				"p.buy_cost, p.description, p.poster, p.trailer, p.writers, p.actors, p.sale_percent, " + 
-				"p.sale_validity, m.director, tv.season, tv.finished_airing " + 
-				"FROM products AS p " + 
-				"LEFT JOIN movies AS m USING (product_id) " + 
-				"LEFT JOIN tvseries AS tv USING (product_id) ");
-		
-		//Check if the given list is not null or empty
+		//Check if the collection is not null or empty
 		if(identifiers != null && !identifiers.isEmpty()) {
-			sql.append(" WHERE product_id IN(");
+			//Building the query
+			StringBuilder sql = new StringBuilder(
+					"SELECT product_id FROM products WHERE product_id IN(");
+			
+			//Append the identifiers in the in clause
 			Supp.inClauseAppender(sql, identifiers);
-		}
-		
-		sql.append("ORDER BY product_id ASC;");
-		
-		//Product data lists
-		List<String> names = new ArrayList<>();
-		List<ProductCategory> categories = new ArrayList<>();
-		List<LocalDate> releaseYears = new ArrayList<>();
-		List<String> pgRatings = new ArrayList<>();
-		List<Integer> durations = new ArrayList<>();
-		List<Double> rentCosts = new ArrayList<>();
-		List<Double> buyCosts = new ArrayList<>();
-		List<String> descriptions = new ArrayList<>();
-		List<String> posters = new ArrayList<>();
-		List<String> trailers = new ArrayList<>();
-		List<String> writers = new ArrayList<>();
-		List<String> actors = new ArrayList<>();
-		List<Double> salePercents = new ArrayList<>();
-		List<LocalDate> saleValidities = new ArrayList<>();
-		List<String> directors = new ArrayList<>();
-		List<Integer> seasons = new ArrayList<>();
-		List<LocalDate> finishedAirings = new ArrayList<>();
-		
-
-		try(PreparedStatement ps = con.prepareStatement(sql.toString())){
-			//Fill the parameters if the list isn't empty or null
+			
 			int paramCounter = 1;
-			
-			if(identifiers != null && !identifiers.isEmpty()) {
-				for (Integer id : identifiers) {
-					ps.setInt(paramCounter++, id);
-				}
-			}
-			//Reset the identifiers collection
-			identifiers = new ArrayList<>();
-			
-			try(ResultSet rs = ps.executeQuery()){
-				//Collect the data for each product in a separate list
-				while(rs.next()) {
-					Date saleValidity = rs.getDate("sale_validity");
-					Date finishedAiring = rs.getDate("finished_airing");
-					
-					identifiers.add(rs.getInt("product_id"));
-					names.add(rs.getString(DEFAULT_FILTER_ORDERED_BY));
-					categories.add(WebSite.getProductCategoryById(rs.getInt("category_id")));
-					releaseYears.add(rs.getDate("release_year").toLocalDate());
-					pgRatings.add(rs.getString("pg_rating"));
-					durations.add(rs.getInt("duration"));
-					rentCosts.add(rs.getDouble("rent_cost"));
-					buyCosts.add(rs.getDouble("buy_cost"));
-					descriptions.add(rs.getString("description"));
-					posters.add(rs.getString("poster"));
-					trailers.add(rs.getString("trailer"));
-					writers.add(rs.getString("writers"));
-					actors.add(rs.getString("actors"));
-					salePercents.add(rs.getDouble("sale_percent"));
-					saleValidities.add(saleValidity != null ? saleValidity.toLocalDate() : null);
-					directors.add(rs.getString("director"));
-					seasons.add(rs.getInt("season"));
-					finishedAirings.add(finishedAiring != null ? finishedAiring.toLocalDate() : null);
-				}
-			}
-			//Collect the genres and raters
-			Map<Integer, Collection<Genre>> productsGenres = getProductGenresById(identifiers);//Map<ProductId, Collection<Genre>>;
-			Map<Integer, Map<Integer, Double>> productsRaters = getProductRatersById(identifiers);//Map<ProductId,Map<UserId,UserRating>>
-			
-			//Fill the collection of products
-			for(int i = 0; i < identifiers.size(); i++ ) {
-				Integer productId = identifiers.get(i);
-				Set<Genre> genres = new HashSet<>(productsGenres.get(productId));
-				Map<Integer, Double> raters = productsRaters.get(productId);
+			//Create the prepared statement
+			try(PreparedStatement ps = con.prepareStatement(sql.toString())){
 				
-				Product product = SimpleProductFactory.createProduct(productId, //Product name
-						names.get(i),
-						categories.get(i),
-						releaseYears.get(i),
-						pgRatings.get(i),
-						durations.get(i),
-						rentCosts.get(i),
-						buyCosts.get(i),
-						descriptions.get(i),
-						posters.get(i),
-						trailers.get(i),
-						writers.get(i),
-						actors.get(i),
-						genres,
-						raters,
-						salePercents.get(i),
-						saleValidities.get(i),
-						directors.get(i),
-						seasons.get(i),
-						finishedAirings.get(i));
+				//Set the parameters for each id
+				for (Integer productId : identifiers) {
+					ps.setInt(paramCounter++, productId);
+				}
 				
-				allProducts.add(product);
+				try(ResultSet rs = ps.executeQuery()){
+					//Collect all the products and fill the returning collection
+					while(rs.next()) {
+						selectedProducts.add(getProductById(rs.getInt("product_id")));
+					}
+				}
 			}
 		}
-		return allProducts;
+		return selectedProducts;
 	}
 
 	public Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException{
@@ -442,7 +372,7 @@ public final class ProductDao implements IProductDao {
 		
 		//Get the list of cheapest products
 		String sql = "SELECT product_id FROM products " + 
-				"	WHERE sale_validity >= curdate()";
+				"	WHERE sale_validity >= curdate() ORDER BY sale_validity ASC ";
 		if(limit != null) {
 			sql = sql.concat("  LIMIT ?;");
 		}
@@ -458,7 +388,7 @@ public final class ProductDao implements IProductDao {
 			}
 		}
 		//Return the products
-		return getProducts(identifiers);
+		return getProductsByIdentifiers(identifiers);
 	}
 	
 	public Collection<Product> getMostPopularProducts(Integer limit) throws SQLException, InvalidProductDataException{
@@ -482,7 +412,7 @@ public final class ProductDao implements IProductDao {
 			}
 		}
 		//Return the products
-		return getProducts(identifiers);
+		return getProductsByIdentifiers(identifiers);
 	}
 	
 	public Collection<Product> getHighestRatedProducts(Integer limit) throws SQLException, InvalidProductDataException{
@@ -508,7 +438,7 @@ public final class ProductDao implements IProductDao {
 			}
 		}
 		//Return the products
-		return getProducts(identifiers);
+		return getProductsByIdentifiers(identifiers);
 	}
 	
 	public Collection<Product> getCheapestProducts(Integer limit) throws SQLException, InvalidProductDataException{
@@ -531,7 +461,7 @@ public final class ProductDao implements IProductDao {
 			}
 		}
 		//Return the products
-		return getProducts(identifiers);
+		return getProductsByIdentifiers(identifiers);
 	}
 	
 	@Override
