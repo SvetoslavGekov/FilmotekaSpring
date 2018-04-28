@@ -4,6 +4,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<!-- Style rating stars -->
+<style type="text/css">
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  text-align: center;
+}
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+.rating > span:hover,
+.rating > span:hover ~ span {
+  color: transparent;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+   left: 0; 
+   color: gold;
+}
+
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -37,6 +62,14 @@
 							<button  onClick="addProductToWatchList(${product.id})">To Watch list</button>
 							<button float="left" onClick="addProductToCart(${product.id},true)">Buy</button>
 							<button  onClick="addProductToCart(${product.id},false)">Rent</button>
+							<button float="left" onClick="document.getElementById('rate').style.display = 'block'">Add rating</button>
+							
+							<div id="rate" class="rating" style="display:none">
+							<c:forEach begin="1" end="10" varStatus="loop">
+   							 	<span onClick="rateProduct(${ product.id }, ${11 - loop.index})">&#9734;</span>
+							</c:forEach>
+							</div>
+							
 						</div>
 					</td>
 					<td>
@@ -71,5 +104,31 @@
 </body>
 
 <script src="js/userInteractions.js">
+</script>
+<script type="text/javascript">
+function rateProduct(id, rating) {
+	var xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			alert("Product successfully rated with rating = "+rating);
+		}
+		else if(this.readyState == 4 && this.status == 500){
+			alert(dbError);
+		}
+		else if(this.readyState == 4 && this.status == 400){
+			alert(noSuchProduct);
+		}
+		else if(this.readyState == 4 && this.status == 401){
+			redirectToUnauthorizedPage();
+		}
+	};
+	
+	
+	xhttp.open("POST", "auth/rateproduct", true);
+	xhttp.setRequestHeader("Content-type",
+			"application/x-www-form-urlencoded");
+	xhttp.send("productID="+ id +"&rating=" + rating);
+}
 </script>
 </html>
