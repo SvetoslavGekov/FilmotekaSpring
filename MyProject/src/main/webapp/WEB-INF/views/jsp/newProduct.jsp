@@ -15,6 +15,7 @@
       	  <tr>
 	      	  <td>
 	      	  	<input type="hidden" name="category" value="${category}">
+	      	  	<input type="hidden" name="productID" value="${product.id}">
 	      	  </td>
       	  </tr>
           <tr>
@@ -48,11 +49,17 @@
           </tr>
           <tr>
               <td>Poster:</td>
-              <td><input type="file" name="posterFile" /></td>
+              <td><input type="file" name="posterFile" accept=".jpg"/><br>
+              	${product.poster}
+              </td>
+              
           </tr>
           <tr>
               <td>Trailer:</td>
-              <td><input type="file" name="trailerFile" /></td>
+              <td><input type="file" name="trailerFile" accept=".avi"/>
+              	${product.trailer}
+              </td>
+              
           </tr>
           <tr>
               <td>Writers:</td>
