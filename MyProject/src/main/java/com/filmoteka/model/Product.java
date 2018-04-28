@@ -9,26 +9,30 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 import com.filmoteka.validation.Supp;
-
+@Component
 public abstract class Product implements Comparable<Product>{
 	//Mandatory fields
 	private static final double BASE_PERCENT = 100d;
 	private int id;
 	private ProductCategory productCategory;
 	private String name;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate releaseDate;
 	private String pgRating;
 	private int duration; //Product duration in minutes
-	private final double originalRentCost;
-	private final double originalBuyCost;
+	private double originalRentCost;
+	private double originalBuyCost;
 	private double rentCost;
 	private double buyCost;
-	private double salePercent;
-	private LocalDate saleValidity;
+
 	
 	//Optional fields
 	private String description;
@@ -37,11 +41,17 @@ public abstract class Product implements Comparable<Product>{
 	private String writers;
 	private String actors;
 	private double viewerRating;
+	private double salePercent;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate saleValidity;
 	private Set<Genre> genres = new HashSet<>();
 	private Map<Integer, Double> raters = new TreeMap<Integer,Double>();//Key: UserId -> Value: User rating
 
 
 	//Constructors
+	public Product() {
+	}
+	
 	//Constructor for creating a new product with the basic information
 	public Product(String name, ProductCategory productCategory, LocalDate releaseDate, String pgRating, int duration,
 			double rentCost, double buyCost) 
@@ -53,8 +63,8 @@ public abstract class Product implements Comparable<Product>{
 		setDuration(duration);
 		
 		//Setting the costs according to the product being on sale or not (validation is made in the setters);
-		this.originalBuyCost = buyCost;
-		this.originalRentCost = rentCost;
+		setOriginalBuyCost(buyCost);
+		setOriginalRentCost(rentCost);
 		setRentCost(rentCost);
 		setBuyCost(buyCost);
 	}
@@ -163,8 +173,26 @@ public abstract class Product implements Comparable<Product>{
 		}
 	}
 
+	public void setOriginalBuyCost(double originalBuyCost) throws InvalidProductDataException {
+		if(originalBuyCost >= 0) {
+			this.originalBuyCost = originalBuyCost;
+		}
+		else {
+			throw new InvalidProductDataException("Invalid product original buy cost.");
+		}
+	}
+	
+	public void setOriginalRentCost(double originalRentCost) throws InvalidProductDataException {
+		if(originalRentCost >= 0) {
+			this.originalRentCost = originalRentCost;
+		}
+		else {
+			throw new InvalidProductDataException("Invalid product original rent cost.");
+		}
+	}
+	
 	public void setRentCost(double rentCost) throws InvalidProductDataException {
-		if(rentCost > 0) {
+		if(rentCost >= 0) {
 			this.rentCost = rentCost;
 		}
 		else {
@@ -173,7 +201,7 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setBuyCost(double buyCost) throws InvalidProductDataException {
-		if(buyCost > 0) {
+		if(buyCost >= 0) {
 			this.buyCost = buyCost;
 		}
 		else {

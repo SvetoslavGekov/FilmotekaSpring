@@ -4,16 +4,23 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 import com.filmoteka.validation.Supp;
 
+@Component
 public class Movie extends Product {
 	//Optional fields
 	private String director;
 	
 	//Constructors
+	public Movie() {
+		
+	}
+	
 	//Constructor for creating a new movie
 	public Movie(String name, ProductCategory productCategory, LocalDate releaseDate, String pgRating, int duration, double rentCost, double buyCost)
 			throws InvalidProductDataException {
