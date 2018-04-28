@@ -4,16 +4,25 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 
+@Component
 public class TVSeries extends Product {
 	//Optional fields
-	private Integer season;
+	private int season;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate finishedAiring;
 	
 	//Constructors
+	public TVSeries() {
+		
+	};
+	
 	//Constructor for creating a new TV Series
 	public TVSeries(String name, ProductCategory productCategory, LocalDate releaseDate, String pgRating,
 			int duration, double rentCost, double buyCost)
@@ -24,7 +33,7 @@ public class TVSeries extends Product {
 	//Constructor for creating a new TV Series with all available information
 	public TVSeries( String name, ProductCategory productCategory, LocalDate releaseDate, String pgRating, int duration, double rentCost,
 			double buyCost, String description,String poster, String trailer, String writers, String actors,
-			Set<Genre> genres, double salePercent, LocalDate saleValidity, Integer season, LocalDate finishedAiring) 
+			Set<Genre> genres, double salePercent, LocalDate saleValidity, int season, LocalDate finishedAiring) 
 					throws InvalidProductDataException {
 		super(name, productCategory, releaseDate, pgRating, duration, rentCost, buyCost, description,poster, trailer, writers, actors,
 				genres, salePercent, saleValidity);
@@ -35,7 +44,7 @@ public class TVSeries extends Product {
 	//Constructor for loading a TV Series from the DB
 	public TVSeries(int id, String name, ProductCategory productCategory, LocalDate releaseDate, String pgRating, int duration, double rentCost,
 			double buyCost, String description,String poster, String trailer, String writers, String actors,
-			Set<Genre> genres, Map<Integer,Double> raters, double salePercent, LocalDate saleValidity, Integer season, LocalDate finishedAiring)
+			Set<Genre> genres, Map<Integer,Double> raters, double salePercent, LocalDate saleValidity, int season, LocalDate finishedAiring)
 					throws InvalidProductDataException {
 		super(id, name, productCategory,releaseDate, pgRating, duration, rentCost, buyCost, description,poster, trailer, writers,
 				actors, genres,raters, salePercent, saleValidity);
@@ -54,12 +63,12 @@ public class TVSeries extends Product {
 	}
 	
 	//Setters
-	public void setSeason(Integer season) {
-		if(season != null && season >= 0) {
+	public void setSeason(int season) {
+		if(season >= 0) {
 			this.season = season;
 		}
 		else {
-			this.season = null;
+			this.season = 0;
 		}
 	}
 	

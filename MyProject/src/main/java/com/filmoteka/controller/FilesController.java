@@ -19,9 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class FilesController {
 	private static final String IO_ERROR_MESSAGE = "An error occured while uploading your file. Please try again!";
+	
 	private static final String POSTERS_FILEPATH = "C:\\images";
-	private static final String NO_IMAGE = "no-photo.jpg";
 	private static final String USER_IMAGES_FILEPATH = "C:\\usersImages";
+	private static final String TRAILERS_FILEPATH = "C:\\trailers";
+	private static final String NO_IMAGE = "no-photo.jpg";
+	
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String showPictureUpload() {
@@ -40,7 +43,15 @@ public class FilesController {
 		return "pictureTest";
 	}
 	
-	public String uploadFile(MultipartFile uploadedFile, String filepath, String filename) throws IOException {
+	public static final String uploadTrailer(MultipartFile uploadedFile, String filename) throws IOException{
+		return uploadFile(uploadedFile, TRAILERS_FILEPATH, filename);
+	}
+	
+	public static final String uploadPoster(MultipartFile uploadedFile, String filename) throws IOException {
+		return uploadFile(uploadedFile, POSTERS_FILEPATH, filename);
+	}
+	
+	private static final String uploadFile(MultipartFile uploadedFile, String filepath, String filename) throws IOException {
 		try {
 			//Check if file is empty
 			if(uploadedFile.isEmpty()) {
