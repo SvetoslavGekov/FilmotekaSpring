@@ -12,6 +12,11 @@
 <body>
 	<form:form commandName="product" enctype="multipart/form-data">
       <table>
+      	  <tr>
+	      	  <td>
+	      	  	<input type="hidden" name="category" value="${category}">
+	      	  </td>
+      	  </tr>
           <tr>
               <td>Product Name:</td>
               <td><form:input path="name" type="text" required="required"/></td>

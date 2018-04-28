@@ -232,7 +232,10 @@ public class ProductController {
 		
 		//Pretty important code for instantiating abstract classes in MVC forms (acts like a factory class for the controller)
 		@ModelAttribute("product")
-		public Product getProduct(@PathVariable("category") int category) throws Exception {
+		public Product getProduct(@RequestParam(value = "category", required = false) Integer category) throws Exception {
+			if(category == null) {
+				return null;
+			}
 			switch(category){
 			case 1:	return new Movie();
 			case 2: return new TVSeries();
