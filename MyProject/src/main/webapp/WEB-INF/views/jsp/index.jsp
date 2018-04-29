@@ -14,7 +14,7 @@
 
 <form method ="POST" action= "login">
   <div class="imgcontainer">
-    <img src="icons/avatar.png" alt="Avatar" class="avatar">
+    <img src="img/avatar.png" alt="Avatar" class="avatar">
   </div>
 
   <div class="container">
