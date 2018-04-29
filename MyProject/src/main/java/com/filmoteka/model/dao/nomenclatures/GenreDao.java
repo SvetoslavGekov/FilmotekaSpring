@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.springframework.stereotype.Component;
-
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.model.nomenclatures.Genre;
@@ -70,5 +68,21 @@ public final class GenreDao implements IGenreDao {
 			}
 		}
 		return allGenres;
+	}
+
+	@Override
+	public Genre getGenreById(int id) throws SQLException, InvalidGenreDataException {
+		Genre genre = null;
+		try(PreparedStatement ps = con.prepareStatement("SELECT genre_id, value FROM genres WHERE genre_id = ?;")){
+			ps.setInt(1, id);
+			try(ResultSet rs = ps.executeQuery()){
+				//Check if there is anything returned from the query
+				if(rs.next()) {
+					//Create the genre
+					genre = new Genre(rs.getInt("genre_id"), rs.getString("value"));
+				}
+			}
+		}
+		return genre;
 	}
 }

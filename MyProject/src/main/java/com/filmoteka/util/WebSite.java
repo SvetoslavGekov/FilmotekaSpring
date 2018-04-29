@@ -1,9 +1,7 @@
 package com.filmoteka.util;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,15 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.filmoteka.exceptions.InvalidGenreDataException;
-import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
-import com.filmoteka.exceptions.InvalidProductDataException;
-import com.filmoteka.exceptions.InvalidUserDataException;
-import com.filmoteka.manager.MovieManager;
-import com.filmoteka.manager.TVSeriesManager;
-import com.filmoteka.model.Product;
-import com.filmoteka.model.TVSeries;
-import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
@@ -103,8 +93,7 @@ public final class WebSite {
 		return Collections.unmodifiableCollection(TASKS);
 	}
 
-	public static void main(String[] args) throws SQLException, InvalidGenreDataException, InvalidProductDataException,
-	InvalidUserDataException, InvalidOrderDataException, InvalidProductCategoryDataException {
+	public static void main(String[] args) throws SQLException, InvalidGenreDataException,InvalidProductCategoryDataException {
 		//Load all genres
 		GENRES.putAll(GenreDao.getInstance().getAllGenres());
 		

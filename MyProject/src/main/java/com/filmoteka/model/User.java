@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -96,7 +95,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setFirstName(String firstName) throws InvalidUserDataException {
-		if (Supp.isValidStr(firstName)) {
+		if (Supp.isNotNullOrEmpty(firstName)) {
 			this.firstName = firstName;
 		}
 		else {
@@ -109,7 +108,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setLastName(String lastName) throws InvalidUserDataException {
-		if (Supp.isValidStr(lastName)) {
+		if (Supp.isNotNullOrEmpty(lastName)) {
 			this.lastName = lastName;
 		}
 		else {
@@ -122,7 +121,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setUsername(String username) throws InvalidUserDataException {
-		if (Supp.isValidStr(username) && Supp.isValidUsername(username)) {
+		if (Supp.isNotNullOrEmpty(username) && Supp.isValidUsername(username)) {
 			this.username = username;
 		}
 		else {
@@ -135,7 +134,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setPassword(String password) throws InvalidUserDataException {
-		if (Supp.isValidStr(password)) {
+		if (Supp.isNotNullOrEmpty(password)) {
 			this.password = password;
 		}
 		else {
@@ -148,7 +147,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setEmail(String email) throws InvalidUserDataException {
-		if (Supp.isValidStr(email) && Supp.isValidEmail(email)) {
+		if (Supp.isNotNullOrEmpty(email) && Supp.isValidEmail(email)) {
 			this.email = email;
 		}
 		else {

@@ -17,16 +17,16 @@
 	<div id="navigation" class="w3-top">
 	  <div class="w3-bar w3-2017-lapis-blue  w3-card-4">
 		<button class="w3-bar-item w3-button w3-padding-large" onclick="location.href='main'">FilmotekaBG</button>
-		<button class="w3-bar-item w3-button w3-padding-large" onclick="location.href='main'">Browse</button>
+		<button class="w3-bar-item w3-button w3-padding-large" onclick="location.href='browse'">Browse</button>
 		<div class="w3-dropdown-hover">
 		  <button class="w3-padding-large w3-button" title="More">My Account <i class="fa fa-caret-down"></i></button>     
 		  <div class="w3-dropdown-content w3-bar-block w3-card-4">
-			<a class="w3-bar-item w3-button" onclick="location.href='account'">Profile</a>
+			<a class="w3-bar-item w3-button" onclick="location.href='auth/account'">Profile</a>
 			<a class="w3-bar-item w3-button">My Products</a>
 			<a class="w3-bar-item w3-button">My Favorites</a>
 			<a class="w3-bar-item w3-button">My WatchList</a>
 			<a class="w3-bar-item w3-button" onclick="location.href='auth/cart'">My Cart</a>
-			<a class="w3-bar-item w3-button" onclick="location.href='orders'">My Order History</a>
+			<a class="w3-bar-item w3-button" onclick="location.href='auth/orders'">My Order History</a>
 			<a class="w3-bar-item w3-button" onclick="location.href='logout'">Logout</a>
 		  </div>
 		</div>

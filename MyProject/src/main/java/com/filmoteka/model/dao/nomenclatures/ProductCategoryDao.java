@@ -60,15 +60,29 @@ public class ProductCategoryDao implements IProductCategoryDao {
 		TreeMap<Integer, ProductCategory> allCategories = new TreeMap<Integer, ProductCategory>();
 		try (PreparedStatement ps = con.prepareStatement("SELECT category_id, value FROM product_categories ORDER BY category_id;");) {
 			try (ResultSet rs = ps.executeQuery();) {
-				// While there are genres to be created
 				while (rs.next()) {
-					// Create next genre with full data
+					// Create product category
 					ProductCategory pc = new ProductCategory(rs.getInt("category_id"), rs.getString("value"));
 					allCategories.put(pc.getId(), pc);
 				}
 			}
 		}
 		return allCategories;
+	}
+
+	@Override
+	public ProductCategory getProductCategoryById(int id) throws SQLException, InvalidProductCategoryDataException {
+		ProductCategory productCategory = null;
+		try (PreparedStatement ps = con.prepareStatement("SELECT category_id, value FROM product_categories WHERE category_id = ?");) {
+			ps.setInt(1, id);
+			try (ResultSet rs = ps.executeQuery();) {
+				if (rs.next()) {
+					// Create product category
+					productCategory = new ProductCategory(rs.getInt("category_id"), rs.getString("value"));
+				}
+			}
+		}
+		return productCategory;
 	}
 
 }

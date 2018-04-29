@@ -31,6 +31,8 @@ a:hover {
     color: red;
 }
 </style>
+
+<base href="http://localhost:8080/FilmotekaSpring/">
 </head>
 <body>
 
@@ -53,7 +55,7 @@ a:hover {
 			    <td>${ order.id }</td>
 			    <td>${ order.date }</td>
 			    <td>${ order.totalCost } &euro;</td>
-			    <td><a onclick="location.href='order/${order.id}'">VIEW DETAILS</a></td>
+			    <td><a onclick="location.href='auth/order/${order.id}'">VIEW DETAILS</a></td>
 			  </tr>
 		  </c:forEach>
 		</table>

@@ -14,4 +14,5 @@ public interface IProductCategoryDao {
 
 	Map<Integer, ProductCategory> getAllProductCategories() throws SQLException, InvalidProductCategoryDataException;
 
+	ProductCategory getProductCategoryById(int id) throws SQLException, InvalidProductCategoryDataException;
 }

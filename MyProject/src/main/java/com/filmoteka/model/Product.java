@@ -138,7 +138,7 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setName(String name) throws InvalidProductDataException {
-		if(Supp.isValidStr(name)) {
+		if(Supp.isNotNullOrEmpty(name)) {
 			this.name = name;
 		}
 		else {
@@ -156,7 +156,7 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setPgRating(String pgRating) throws InvalidProductDataException {
-		if(Supp.isValidStr(pgRating)) {
+		if(Supp.isNotNullOrEmpty(pgRating)) {
 			this.pgRating = pgRating;
 		}
 		else {
@@ -210,31 +210,31 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setDescription(String description) {
-		if(Supp.isValidStr(description)) {
+		if(Supp.isNotNullOrEmpty(description)) {
 			this.description = description;
 		}
 	}
 
 	public void setPoster(String poster) {
-		if(Supp.isValidStr(poster)) {
+		if(Supp.isNotNullOrEmpty(poster)) {
 			this.poster = poster;
 		}
 	}
 	
 	public void setTrailer(String trailer) {
-		if(Supp.isValidStr(trailer)) {
+		if(Supp.isNotNullOrEmpty(trailer)) {
 			this.trailer = trailer;
 		}
 	}
 
 	public void setWriters(String writers) {
-		if(Supp.isValidStr(writers)) {
+		if(Supp.isNotNullOrEmpty(writers)) {
 			this.writers = writers;
 		}
 	}
 
 	public void setActors(String actors) {
-		if(Supp.isValidStr(actors)) {
+		if(Supp.isNotNullOrEmpty(actors)) {
 			this.actors = actors;
 		}
 	}

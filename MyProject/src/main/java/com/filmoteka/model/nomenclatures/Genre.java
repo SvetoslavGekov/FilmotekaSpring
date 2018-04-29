@@ -38,7 +38,7 @@ public class Genre {
 	}
 	
 	public void setValue(String value) throws InvalidGenreDataException {
-		if(Supp.isValidStr(value)) {
+		if(Supp.isNotNullOrEmpty(value)) {
 			this.value = value;
 		}
 		else {
