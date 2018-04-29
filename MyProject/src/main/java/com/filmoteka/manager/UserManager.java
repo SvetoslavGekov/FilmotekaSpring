@@ -16,7 +16,6 @@ import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Order;
 import com.filmoteka.model.Product;
-import com.filmoteka.model.SimpleUserFactory;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.UserDao;
 import com.filmoteka.validation.Supp;
@@ -43,7 +42,7 @@ public class UserManager {
 		User u = null;
 		// Create new user with the given information
 		boolean isAdmin = false;
-		u = SimpleUserFactory.createUser(isAdmin, firstName, lastName, username, password, email);
+		u = new User(isAdmin, firstName, lastName, username, password, email);
 
 		// Save user in the database
 		this.dao.saveUser(u);

@@ -155,7 +155,7 @@ public class UserController {
 		}
 		
 		//Test if can create user with these data (Will throw an exception if cannot)
-		User test = new User(firstName, lastName, user.getUsername(), newPass1 , email);
+		User test = new User(false,firstName, lastName, user.getUsername(), newPass1 , email);
 		if(phone.isEmpty()) phone = null;
 		test.setPhone(phone);
 		

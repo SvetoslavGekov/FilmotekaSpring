@@ -23,6 +23,7 @@ import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Movie;
 import com.filmoteka.model.Product;
+import com.filmoteka.model.SimpleProductFactory;
 import com.filmoteka.model.TVSeries;
 import com.filmoteka.model.dao.MovieDao;
 import com.filmoteka.model.dao.ProductDao;
@@ -122,18 +123,8 @@ public class AdministratorController {
 			ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(category);
 			
 			// Create a product based on the given category
-			Product product = null;
-			switch (productCategory.getId()) {
-			case 1:
-				product = new Movie();
-				break;
-			case 2:
-				product = new TVSeries();
-				break;
-			default:
-				throw new InvalidProductDataException("You've attempted to create a product from a category that does not exist."
-						+ " Please try again");
-			}
+			Product product = SimpleProductFactory.createProductStub(category);
+			
 			// Set the product's category
 			product.setProductCategory(productCategory);
 
@@ -216,9 +207,9 @@ public class AdministratorController {
 	public Product getProduct(@RequestParam(value = "category", required = false) Integer category,
 			@RequestParam(value = "productID", required = false) Integer productID,
 			HttpServletRequest req) throws Exception {
-		
+		Product product = null;
 		if (productID != null && productID != 0) {
-			Product product = ProductDao.getInstance().getProductById(productID);
+			product = ProductDao.getInstance().getProductById(productID);
 			if(product == null) {
 				throw new Exception("You've attempted to edit a product that does not exist!");
 			}
@@ -227,11 +218,7 @@ public class AdministratorController {
 		if (category == null) {
 			return null;
 		}
-		switch (category) {
-			case 1:return new Movie();
-			case 2:return new TVSeries();
-		default:
-			throw new Exception("You've attempted to create a product from a category that does not exist. Please try again");					
-		}
+		product = SimpleProductFactory.createProductStub(category);
+		return product;
 	}
 }

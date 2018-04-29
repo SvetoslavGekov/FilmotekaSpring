@@ -8,7 +8,9 @@ import java.util.Map;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
+import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.model.Product;
+import com.filmoteka.model.User;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.util.productFilters.ProductQueryInfo;
 
@@ -36,6 +38,24 @@ public interface IProductDao {
 	List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException;
 
-
+	ProductQueryInfo getFilterInfo() throws SQLException, InvalidProductQueryInfoException, InvalidGenreDataException;
+	
+	void rateProduct(User user, Product product, double rating) throws SQLException;
+	
+	Collection<Product> getCheapestProducts(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
+	
+	Collection<Product> getHighestRatedProducts(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
+	
+	Collection<Product> getMostPopularProducts(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
+	
+	Collection<Product> getProductsOnSale(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
+	
+	Map<Integer, Map<Integer, Double>> getProductRatersById(List<Integer> productIdentifiers) throws SQLException;
+	
+	Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException;
 	
 }

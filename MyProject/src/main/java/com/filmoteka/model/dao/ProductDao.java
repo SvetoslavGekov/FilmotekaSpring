@@ -260,6 +260,7 @@ public final class ProductDao implements IProductDao {
 		return selectedProducts;
 	}
 
+	@Override
 	public Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException{
 		Map<Integer, Collection<Genre>> productGenres = new HashMap<>();
 		
@@ -313,6 +314,7 @@ public final class ProductDao implements IProductDao {
 		return productGenres;
 	}
 	
+	@Override
 	public Map<Integer, Map<Integer, Double>> getProductRatersById(List<Integer> productIdentifiers) throws SQLException{
 		Map<Integer, Map<Integer, Double>> productRaters = new HashMap<>();
 		
@@ -376,9 +378,10 @@ public final class ProductDao implements IProductDao {
 		}
 	}
 
+	@Override
 	public Collection<Product> getProductsOnSale(Integer limit) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException{
-		List<Integer> identifiers = new ArrayList<>();
+		List<Product> productsOnSale = new ArrayList<>();
 		
 		//Get the list of cheapest products
 		String sql = "SELECT product_id FROM products " + 
@@ -393,17 +396,18 @@ public final class ProductDao implements IProductDao {
 			}
 			try(ResultSet rs = st.executeQuery()){
 				while(rs.next()) {
-					identifiers.add(rs.getInt("product_id"));
+					productsOnSale.add(getProductById(rs.getInt("product_id")));
 				}
 			}
 		}
 		//Return the products
-		return getProductsByIdentifiers(identifiers);
+		return productsOnSale;
 	}
 	
+	@Override
 	public Collection<Product> getMostPopularProducts(Integer limit) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException{
-		List<Integer> identifiers = new ArrayList<>();
+		List<Product> mostPopularProducts = new ArrayList<>();
 		
 		//Get the list of cheapest products
 		String sql = "SELECT product_id, COUNT(product_id) AS times_bought FROM order_has_products " + 
@@ -418,17 +422,18 @@ public final class ProductDao implements IProductDao {
 			}
 			try(ResultSet rs = st.executeQuery()){
 				while(rs.next()) {
-					identifiers.add(rs.getInt("product_id"));
+					mostPopularProducts.add(getProductById(rs.getInt("product_id")));
 				}
 			}
 		}
 		//Return the products
-		return getProductsByIdentifiers(identifiers);
+		return mostPopularProducts;
 	}
 	
+	@Override
 	public Collection<Product> getHighestRatedProducts(Integer limit) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException{
-		List<Integer> identifiers = new ArrayList<>();
+		List<Product> highestRatedProducts = new ArrayList<>();
 		
 		//Get the list of most rated products
 		String sql = "SELECT product_id, (SUM(rating)/COUNT(user_id)) AS rating" + 
@@ -445,17 +450,18 @@ public final class ProductDao implements IProductDao {
 			}
 			try(ResultSet rs = st.executeQuery()){
 				while(rs.next()) {
-					identifiers.add(rs.getInt("product_id"));
+					highestRatedProducts.add(getProductById(rs.getInt("product_id")));
 				}
 			}
 		}
 		//Return the products
-		return getProductsByIdentifiers(identifiers);
+		return highestRatedProducts;
 	}
 	
+	@Override
 	public Collection<Product> getCheapestProducts(Integer limit) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException{
-		List<Integer> identifiers = new ArrayList<>();
+		List<Product> cheapestProducts = new ArrayList<>();
 		
 		//Get the list of cheapest products
 		String sql = "SELECT product_id FROM products ORDER BY buy_cost ASC";
@@ -469,12 +475,12 @@ public final class ProductDao implements IProductDao {
 			}
 			try(ResultSet rs = st.executeQuery()){
 				while(rs.next()) {
-					identifiers.add(rs.getInt("product_id"));
+					cheapestProducts.add(getProductById(rs.getInt("product_id")));
 				}
 			}
 		}
 		//Return the products
-		return getProductsByIdentifiers(identifiers);
+		return cheapestProducts;
 	}
 	
 	@Override
@@ -540,6 +546,7 @@ public final class ProductDao implements IProductDao {
 		return filteredProducts;
 	}
 
+	@Override
 	public void rateProduct(User user, Product product, double rating) throws SQLException{
 		
 		// Useless checking but recommended
@@ -592,6 +599,7 @@ public final class ProductDao implements IProductDao {
 		System.out.println(testProduct.getName()+" with product_id "+productID+" has been deleted from the Database!");
 	}
 
+	@Override
 	public ProductQueryInfo getFilterInfo() throws SQLException, InvalidProductQueryInfoException, InvalidGenreDataException {
 		ProductQueryInfo filter = null;
 		//Create a query to select all necessary data

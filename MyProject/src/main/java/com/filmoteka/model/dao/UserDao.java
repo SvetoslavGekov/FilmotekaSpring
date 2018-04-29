@@ -26,7 +26,6 @@ import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Order;
 import com.filmoteka.model.Product;
-import com.filmoteka.model.SimpleUserFactory;
 import com.filmoteka.model.User;
 import com.filmoteka.validation.BCrypt;
 
@@ -69,8 +68,8 @@ public class UserDao implements IUserDao {
 				Set<Integer> favorites = new HashSet<>(getUserFavoritesById(userId));
 				Map<Product, LocalDate> products = new TreeMap<>(getUserProductsById(userId));
 
-				user =  SimpleUserFactory.createUser(isAdmin, //Admin flag
-						userId, // User Id
+				user =  new User(userId, // User Id
+						isAdmin, //Admin flag
 						rs.getString("first_name"), // First Name
 						rs.getString("last_name"), // Last Name
 						rs.getString("username"), // UserName
@@ -170,8 +169,8 @@ public class UserDao implements IUserDao {
 					Set<Integer> favorites = new HashSet<>(getUserFavoritesById(userId));
 					Map<Product, LocalDate> products = new HashMap<>(getUserProductsById(userId));
 
-					User user =  SimpleUserFactory.createUser(isAdmin, //Admin flag
-							userId, // User Id
+					User user =  new User(userId, // User Id,
+							isAdmin, //Admin flag
 							rs.getString("first_name"), // First Name
 							rs.getString("last_name"), // Last Name
 							rs.getString("username"), // UserName
@@ -379,7 +378,7 @@ public class UserDao implements IUserDao {
 	InvalidGenreDataException, InvalidProductCategoryDataException{
 		Map<User,List<Product>> expiringProducts = new TreeMap<>();
 		
-		String query = "SELECT up.user_id, up.product_id, up.validity, u.first_name, u.last_name, u.username, u.password, u.email" + 
+		String query = "SELECT up.is_admin,up.user_id, up.product_id, up.validity, u.first_name, u.last_name, u.username, u.password, u.email" + 
 				"	FROM user_has_products AS up" + 
 				"	JOIN users AS u USING (user_id)" + 
 				"	WHERE validity = DATE_ADD(curdate(), INTERVAL 1 DAY);";
@@ -392,7 +391,8 @@ public class UserDao implements IUserDao {
 					//Create user and product identifiers
 					
 					//Create user with his credentials (no need to make the DB select one)
-					User user = new User(rs.getString("first_name"), //First name
+					User user = new User(rs.getBoolean("is_admin"),//Is admin
+							rs.getString("first_name"), //First name
 							rs.getString("last_name"), //Last name 
 							rs.getString("username"), //Username 
 							rs.getString("password"), //Hashed password

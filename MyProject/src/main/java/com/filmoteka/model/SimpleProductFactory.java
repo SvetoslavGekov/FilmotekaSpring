@@ -16,6 +16,17 @@ public class SimpleProductFactory {
 	}
 
 	// Methods
+	//Create new stub instances for Spring MVC forms
+	public static final Product createProductStub(int category) throws InvalidProductDataException {
+		switch (category) {
+		case 1: return new Movie();
+		case 2: return new TVSeries();
+		default: throw new InvalidProductDataException("You've attempted to create a product from a category that does not exist."
+						+ " Please try again");
+		}
+	}
+	
+	
 	// Create new products for registering in the databases
 	public static final Product createProduct(String name, ProductCategory productCategory, LocalDate releaseDate,
 			String pgRating, int duration, double rentCost,	double buyCost, String description, String poster, String trailer,
