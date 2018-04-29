@@ -60,7 +60,7 @@ public class Movie extends Product {
 	
 	//Setters
 	public void setDirector(String director) {
-		if(Supp.isValidStr(director)) {
+		if(Supp.isNotNullOrEmpty(director)) {
 			this.director = director;
 		}
 	}

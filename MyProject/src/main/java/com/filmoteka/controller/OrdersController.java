@@ -1,9 +1,6 @@
 package com.filmoteka.controller;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -17,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Order;
-import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.OrderDao;
-import com.filmoteka.model.dao.ProductDao;
-import com.filmoteka.model.dao.UserDao;
 
 @Controller
+@RequestMapping(value="/auth")
 public class OrdersController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
 	

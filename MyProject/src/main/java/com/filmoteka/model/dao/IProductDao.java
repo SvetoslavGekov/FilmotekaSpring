@@ -28,7 +28,7 @@ public interface IProductDao {
 
 	void deleteExpiredProducts() throws SQLException;
 
-	List<Integer> getFilteredProducts(ProductQueryInfo filter) throws SQLException;
+	List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException;
 
 
 	

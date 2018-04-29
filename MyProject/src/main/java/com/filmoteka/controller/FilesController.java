@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.filmoteka.validation.Supp;
+
 @Controller
 public class FilesController {
 	private static final String IO_ERROR_MESSAGE = "An error occured while uploading your file. Please try again!";
@@ -83,7 +85,7 @@ public class FilesController {
 		File f = new File(POSTERS_FILEPATH + File.separator + pic);
 		
 		//Check if the file exists
-		if(!f.exists()) {
+		if(!f.exists() || !Supp.isNotNullOrEmpty(pic)) {
 			//Assign the no image photo to the product without an image
 			f = new File(POSTERS_FILEPATH + File.separator + NO_IMAGE);
 		}

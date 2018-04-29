@@ -47,16 +47,4 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 		// If the IP is the same as the one stored and there is a logged in user ->continue with the chain
 		return true;
 	}
-	
-	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception {
-		System.out.println("Post-handling");
-	}
-	
-	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception {
-		System.out.println("After completition handling");
-	}
 }

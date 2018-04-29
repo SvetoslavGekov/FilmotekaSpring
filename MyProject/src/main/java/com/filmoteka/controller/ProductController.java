@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
+import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.manager.UserManager;
 import com.filmoteka.model.Movie;
 import com.filmoteka.model.Product;
@@ -34,281 +37,203 @@ import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.TVSeriesDao;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.nomenclatures.Genre;
-import com.filmoteka.model.nomenclatures.ProductCategory;
 import com.filmoteka.util.WebSite;
+import com.filmoteka.util.productFilters.ProductQueryInfo;
+
 
 @Controller
 public class ProductController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
-	
-	
-		@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
-		public String loadProductPage(Model m, @PathVariable("id") Integer productId ) throws Exception {
-			//Grab the product from the database
-			try {
-				Product product = ProductDao.getInstance().getProductById(productId);
-				
-				//Add the product to the model
-				m.addAttribute("product", product);
-			}
-			catch (SQLException | InvalidProductDataException e) {
-				//Error while reading the product from the database
-				throw new Exception(dbError,e);
-			}
-			
-			//Return the product view
+
+	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
+	public String loadProductPage(Model m, @PathVariable("id") Integer productId) throws Exception {
+		try {
+			// Grab the product from the database
+			Product product = ProductDao.getInstance().getProductById(productId);
+
+			// Add the product to the model
+			m.addAttribute("product", product);
+
+			// Return the product view
 			return "product";
 		}
-		
-		@RequestMapping(value = "/main", method = RequestMethod.GET)
-		public String loadMainPage(Model m) throws Exception {
-			//Load the product categories in the main page
-			try {
-				//Create a map of: category --> list of products
-				Map<String,List<Product>> groupedProducts = new TreeMap<>();
-				//Get top 5 of
-				groupedProducts.put("On Sale", (List<Product>) ProductDao.getInstance().getProductsOnSale(new Integer(5))); //On sale
-				groupedProducts.put("Most Popular", (List<Product>) ProductDao.getInstance().getMostPopularProducts(new Integer(5))); //Most Popular
-				groupedProducts.put("Highest Rated", (List<Product>) ProductDao.getInstance().getHighestRatedProducts(new Integer(5))); //Highest rated
-				groupedProducts.put("Cheapest", (List<Product>) ProductDao.getInstance().getCheapestProducts(new Integer(5))); //Cheapest
-
-				//Set the products in the model
-				m.addAttribute("mainPageProducts", groupedProducts);
-			}
-			catch (SQLException |InvalidProductDataException e) {
-				throw new Exception("An error occured while loading the products from the database. Please try again!");
-			}
-			return "main";
+		catch (SQLException | InvalidProductDataException e) {
+			// Error while reading the product from the database
+			throw new Exception(dbError, e);
 		}
-		
-		@RequestMapping(value = "/search", method = RequestMethod.GET)
-		public String loadProductsBySearching(Model m, @RequestParam("word") String substring) throws Exception {
-			//Load the searched products in the main page
-			try {
-				//Create a map of: type --> list of products
-				Map<String,List<Product>> productsBySearch = new TreeMap<>();
+	}
 
-				productsBySearch.put("Movies", (List<Product>) MovieDao.getInstance().getMoviesBySubstring(substring)); //Movies
-				productsBySearch.put("TV Series", (List<Product>) TVSeriesDao.getInstance().getTVSeriesBySubstring(substring)); //TV Series
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	public String loadMainPage(Model m) throws Exception {
+		// Load the product categories in the main page
+		try {
+			// Create a map of: category --> list of products
+			Map<String, List<Product>> groupedProducts = new TreeMap<>();
+			// Get top 5 of
+			groupedProducts.put("On Sale", (List<Product>) ProductDao.getInstance().getProductsOnSale(new Integer(5))); // On
+																														// sale
+			groupedProducts.put("Most Popular",
+					(List<Product>) ProductDao.getInstance().getMostPopularProducts(new Integer(5))); // Most Popular
+			groupedProducts.put("Highest Rated",
+					(List<Product>) ProductDao.getInstance().getHighestRatedProducts(new Integer(5))); // Highest rated
+			groupedProducts.put("Cheapest",
+					(List<Product>) ProductDao.getInstance().getCheapestProducts(new Integer(5))); // Cheapest
 
-				//Set the products in the model
-				m.addAttribute("mainPageProducts", productsBySearch);
-			}
-			catch (SQLException |InvalidProductDataException e) {
-				throw new Exception("An error occured while loading the movies from the database. Please try again!");
-			}
-			return "main";
+			// Set the products in the model
+			m.addAttribute("mainPageProducts", groupedProducts);
 		}
-		
-		@RequestMapping(value = "/auth/tofavorites", method = RequestMethod.POST)
-		public ResponseEntity<Boolean> addOrRemoveFavoriteProduct(HttpSession session, @RequestParam("productID") Integer productID){
-			try {
-				// Get user from session
-				User user = (User) session.getAttribute("USER");
-
-				// Get product from database
-				Product product = ProductDao.getInstance().getProductById(productID);
-				
-				// Check if the productId is valid
-				if (product == null) {
-					// If not --> return an HTTP code for no such product (400);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-				}
-				//Check the result of adding or removing the product from the favorites
-				boolean isAdded = UserManager.getInstance().addOrRemoveProductFromFavorites(user, product);
-				
-				//Return the result and an OK status
-				return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
-			}
-			catch (SQLException | InvalidProductDataException e) {
-				//Return an entity with a status code for Internal Server Error (handling is done via JS)
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+		catch (SQLException | InvalidProductDataException e) {
+			throw new Exception("An error occured while loading the products from the database. Please try again!");
 		}
-		
-		@RequestMapping(value = "/auth/towatchlist", method = RequestMethod.POST)
-		public ResponseEntity<Boolean> addOrRemoveWatchlistProduct(HttpSession session, @RequestParam("productID") Integer productID){
-			try {
-				// Get user from session
-				User user = (User) session.getAttribute("USER");
+		return "main";
+	}
 
-				// Get product from database
-				Product product = ProductDao.getInstance().getProductById(productID);
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String loadProductsBySearching(Model m, @RequestParam("word") String substring) throws Exception {
+		// Load the searched products in the main page
+		try {
+			// Create a map of: type --> list of products
+			Map<String, List<Product>> productsBySearch = new TreeMap<>();
 
-				// Check if the productId is valid
-				if (product == null) {
-					// If not --> return an HTTP code for no such product (400);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-				}
-				//Check the result of adding or removing the product from the watchlist
-				boolean isAdded = UserManager.getInstance().addOrRemoveProductFromWatchlist(user, product);
-				
-				//Return the result and an OK status
-				return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
-			}
-			catch (SQLException | InvalidProductDataException e1) {
-				//Return an entity with a status code for Internal Server Error (handling is done via JS)
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+			productsBySearch.put("Movies", (List<Product>) MovieDao.getInstance().getMoviesBySubstring(substring)); // Movies
+			productsBySearch.put("TV Series",
+					(List<Product>) TVSeriesDao.getInstance().getTVSeriesBySubstring(substring)); // TV Series
+
+			// Set the products in the model
+			m.addAttribute("mainPageProducts", productsBySearch);
 		}
-		
-		@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.GET)
-		public String showFormForNewProduct(Model m, @PathVariable("category") Integer category) throws Exception{
-			//Grab the category of the product that's being created
-			ProductCategory productCategory = WebSite.getProductCategoryById(category);
-			
-			//Create a product based on the given category
-			Product product = null;
-			switch(productCategory.getId()){
-				case 1:	product = new Movie(); break;
-				case 2: product = new TVSeries(); break;
-				default:
-					throw new Exception("You've attempted to create a product from a category that does not exist. Please try again");
+		catch (SQLException | InvalidProductDataException e) {
+			throw new Exception("An error occured while loading the movies from the database. Please try again!");
+		}
+		return "main";
+	}
+
+	@RequestMapping(value = "/auth/tofavorites", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> addOrRemoveFavoriteProduct(HttpSession session,
+			@RequestParam("productID") Integer productID) {
+		try {
+			// Get user from session
+			User user = (User) session.getAttribute("USER");
+
+			// Get product from database
+			Product product = ProductDao.getInstance().getProductById(productID);
+
+			// Check if the productId is valid
+			if (product == null) {
+				// If not --> return an HTTP code for no such product (400);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
-			//Set the product's category
-			product.setProductCategory(productCategory);
-			
-			//Create the Collection of available product genres
+			// Check the result of adding or removing the product from the favorites
+			boolean isAdded = UserManager.getInstance().addOrRemoveProductFromFavorites(user, product);
+
+			// Return the result and an OK status
+			return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
+		}
+		catch (SQLException | InvalidProductDataException e) {
+			// Return an entity with a status code for Internal Server Error (handling is
+			// done via JS)
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@RequestMapping(value = "/auth/towatchlist", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> addOrRemoveWatchlistProduct(HttpSession session,
+			@RequestParam("productID") Integer productID) {
+		try {
+			// Get user from session
+			User user = (User) session.getAttribute("USER");
+
+			// Get product from database
+			Product product = ProductDao.getInstance().getProductById(productID);
+
+			// Check if the productId is valid
+			if (product == null) {
+				// If not --> return an HTTP code for no such product (400);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			// Check the result of adding or removing the product from the watchlist
+			boolean isAdded = UserManager.getInstance().addOrRemoveProductFromWatchlist(user, product);
+
+			// Return the result and an OK status
+			return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
+		}
+		catch (SQLException | InvalidProductDataException e1) {
+			// Return an entity with a status code for Internal Server Error (handling is
+			// done via JS)
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@RequestMapping(value = "/browse", method = RequestMethod.GET)
+	public String loadProductBrowsingPage(Model m) throws Exception {
+		try {
+			// Grab the default products filter from the database (1 for the default stats and 1 for the input)
+			ProductQueryInfo filter = ProductDao.getInstance().getFilterInfo();
+			ProductQueryInfo newFilter = ProductDao.getInstance().getFilterInfo();
+
+			// Grab the products from the database
+			List<Product> products = new ArrayList<>(ProductDao.getInstance().getAllProducts());
+
+			// Create the Collection of available product genres
 			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
-			
-			//Add the product and the genres to the model
-			m.addAttribute("product", product);
-			m.addAttribute("genres", genres);
-			
-			//Return the product view
-			return "newProduct";
-		}
-		
-		@RequestMapping(value = "/adm/editProduct/{productID}", method = RequestMethod.GET)
-		public String showExistingProduct(Model m,  @PathVariable("productID") Integer productID) throws Exception {
-			//Grab the product that's being edited
-			try {
-				Product product = ProductDao.getInstance().getProductById(productID);
-				
-				//Create the Collection of available product genres
-				ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
-				
-				//Add the product and it's genres to the model
-				m.addAttribute("product", product);
-				m.addAttribute("genres", genres);
-				
-				//Return the product view
-				return "newProduct";
-			}
-			catch (SQLException | InvalidProductDataException e) {
-				throw new Exception(dbError, e);
-			}
-		}
-		
-		@RequestMapping(value = "/adm/editProduct/{productID}", method = RequestMethod.POST)
-		public void editProduct(@ModelAttribute Product existingProduct,
-				BindingResult result,
-				@RequestParam("posterFile") MultipartFile posterFile,
-				@RequestParam("trailerFile") MultipartFile trailerFile) throws Exception {
-			try {
-				//Check for binding errors
-				if(result.hasErrors()) {
-					throw new InvalidProductDataException("Invalid form data was entered. Please follow the input hints.");
-				}
-				
-				//Upload poster and trailer if any
-				if(!posterFile.isEmpty() && FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("jpg")) {
-					String posterFilePath = FilesController.uploadPoster(posterFile, null);
-					existingProduct.setPoster(posterFilePath);
-				}
-				if(!trailerFile.isEmpty() && FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("avi")) {
-					String trailerFilePath = FilesController.uploadTrailer(trailerFile, null);
-					existingProduct.setTrailer(trailerFilePath);
-				}
-				
-				//Set genres
-				Set<Genre> newProductGenres = new HashSet<>();
-				System.out.println(existingProduct);
-				System.out.println(existingProduct.getGenres().size());
-				for (Genre genre : existingProduct.getGenres()) {
-					newProductGenres.add(WebSite.getGenreById(Integer.valueOf(genre.getValue())));
-				}
-				existingProduct.setGenres(newProductGenres);
-				
-				//Update in DAO
-				switch(existingProduct.getProductCategory().getId()){
-					case 1:	MovieDao.getInstance().updateMovie((Movie) existingProduct); break;
-					case 2: TVSeriesDao.getInstance().updateTVSeries((TVSeries) existingProduct); break;
-				default:
-					throw new Exception("You've attempted to update a product from a category that does not exist. Please try again");
-				}
-			}
-			catch (SQLException | InvalidProductDataException e) {
-				throw new Exception(dbError, e);
-			}
-		}
-		
-		@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.POST)
-		public void saveProduct(@ModelAttribute Product newProduct,
-				BindingResult result,
-				@RequestParam("posterFile") MultipartFile posterFile,
-				@RequestParam("trailerFile") MultipartFile trailerFile,
-				@PathVariable("category") int category) throws Exception{
-			try {
-				
-				//Check for binding errors
-				if(result.hasErrors()) {
-					throw new InvalidProductDataException("Invalid form data was entered. Please follow the input hints.");
-				}
-				
-				//Upload poster and trailer if any
-				if(!posterFile.isEmpty() && FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("jpg")) {
-					String posterFilePath = FilesController.uploadPoster(posterFile, null);
-					newProduct.setPoster(posterFilePath);
-				}
-				if(!trailerFile.isEmpty() && FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("avi")) {
-					String trailerFilePath = FilesController.uploadTrailer(trailerFile, null);
-					newProduct.setTrailer(trailerFilePath);
-				}
-				
-				//Set product category
-				newProduct.setProductCategory(WebSite.getProductCategoryById(category));
-				
-				//Set genres
-				Set<Genre> newProductGenres = new HashSet<>();
-				for (Genre genre : newProduct.getGenres()) {
-					newProductGenres.add(WebSite.getGenreById(Integer.valueOf(genre.getValue())));
-				}
-				newProduct.setGenres(newProductGenres);
-				
-				//Save in DAO
-				switch(newProduct.getProductCategory().getId()){
-					case 1:	MovieDao.getInstance().saveMovie((Movie) newProduct); break;
-					case 2: TVSeriesDao.getInstance().saveTVSeries((TVSeries) newProduct); break;
-				default:
-					throw new Exception("You've attempted to create a product from a category that does not exist. Please try again");
-				}
 
-			}
-			catch (SQLException e) {
-				throw new SQLException(dbError, e);
-			}
-			catch(NumberFormatException e) {
-				throw new Exception("Invalid form data entered. Please follow the form hints.",e);
-			}
+			// Add the filter and products to the model
+			m.addAttribute("genres", genres);
+			m.addAttribute("filter", filter);
+			m.addAttribute("newFilter", newFilter);
+			m.addAttribute("products", products);
+
+			// Return the browsing view
+			return "browseProducts";
 		}
-		
-		//Pretty important code for instantiating abstract classes in MVC forms (acts like a factory class for the controller)
-		@ModelAttribute("product")
-		public Product getProduct(@RequestParam(value = "category", required = false) Integer category,
-				@RequestParam(value="productID", required = false) Integer productID) throws Exception {
-			if(productID != null) {
-				return ProductDao.getInstance().getProductById(productID);
+		catch (SQLException | InvalidProductQueryInfoException e) {
+			// Error while accessing the database
+			throw new Exception(dbError, e);
+		}		
+		catch (NumberFormatException e) {
+			throw new Exception("Invalid form data entered. Please follow the form hints.", e);
+		}
+	}
+
+	@RequestMapping(value = "/browse", method = RequestMethod.POST)
+	public String filterBrowsingPage(@ModelAttribute("newFilter") ProductQueryInfo newFilter,
+			BindingResult result,
+			Model m) throws Exception {
+		try {
+			// Check for any binding errors
+			if (result.hasErrors()) {
+				throw new InvalidProductQueryInfoException(
+						"Invalid filter data was entered. Please follow the input hints.");
 			}
+
+			// Set genres
+			List<Genre> newFilterGenres = new ArrayList<>();
+			for (Genre genre : newFilter.getGenres()) {
+				newFilterGenres.add(WebSite.getGenreById(Integer.valueOf(genre.getValue())));
+			}
+			newFilter.setGenres(newFilterGenres);
+
+			System.out.println(newFilter);
+
+			//Get the static information again (genres and default filter)
+			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+			ProductQueryInfo filter = ProductDao.getInstance().getFilterInfo();
+			List<Product> products = ProductDao.getInstance().getFilteredProducts(newFilter);
 			
-			if(category == null) {
-				return null;
-			}
-			switch(category){
-			case 1:	return new Movie();
-			case 2: return new TVSeries();
-			default:
-				throw new Exception("You've attempted to create a product from a category that does not exist. Please try again");
-			}
+			// Add the filter and products to the model
+			m.addAttribute("genres", genres);
+			m.addAttribute("filter", filter);
+			m.addAttribute("newFilter", newFilter);
+			m.addAttribute("products", products);
+
+			// Return the browsing view
+			return "browseProducts";
 		}
+		catch (SQLException | InvalidGenreDataException | InvalidProductDataException e) {
+			// Error while accessing the database
+			throw new Exception(dbError, e);
+		}
+	}
+
+
 }

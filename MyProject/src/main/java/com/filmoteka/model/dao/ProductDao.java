@@ -465,8 +465,8 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public List<Integer> getFilteredProducts(ProductQueryInfo filter) throws SQLException{
-		List<Integer> filteredProducts = new ArrayList<>();
+	public List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException{
+		List<Product> filteredProducts = new ArrayList<>();
 		
 		//Building the query
 		StringBuilder query = new StringBuilder("SELECT p.product_id, p.release_year, p.duration, p.rent_cost,"
@@ -493,7 +493,7 @@ public final class ProductDao implements IProductDao {
 		}
 		
 		//Add the ordering part (
-		query.append("GROUP BY p.name ORDER BY "+filter.getOrderedBy()+" " + (filter.isAscending() ? "ASC" : "DESC"));
+		query.append("GROUP BY p.name ORDER BY "+filter.getOrderedBy()+" " + (filter.getIsAscending() ? "ASC" : "DESC"));
 		
 		
 		//Initialize a counter for setting the parameters
@@ -519,7 +519,7 @@ public final class ProductDao implements IProductDao {
 			
 			try(ResultSet rs = ps.executeQuery()){
 				while(rs.next()) {
-					filteredProducts.add(rs.getInt("product_id"));
+					filteredProducts.add(getProductById(rs.getInt("product_id")));
 				}
 			}
 		}

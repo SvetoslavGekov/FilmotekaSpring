@@ -37,7 +37,7 @@ public class UserController {
 		return "index";
 	}
 	
-	@RequestMapping(value = "/account", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/account", method = RequestMethod.GET)
 	public String myAccount(HttpSession session){
 		
 		if((User) session.getAttribute("USER") == null) {
@@ -117,7 +117,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/updateProfile", method = RequestMethod.POST)
 	public String updateProfile(HttpSession session, 
 								@RequestParam("firstname") String firstName,
 								@RequestParam("lastname") String lastName,

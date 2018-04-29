@@ -1,6 +1,7 @@
 package com.filmoteka.util.productFilters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.validation.Supp;
 
 public class ProductQueryInfo {
+	private static final String[] ORDERED_OPTIONS = {"name","duration","buy_cost","rent_cost"};
+	
 	// Fields
 	private String name;
 	private int minReleaseYear;
@@ -23,6 +26,10 @@ public class ProductQueryInfo {
 	private String orderedBy;
 	private boolean isAscending;
 
+	public ProductQueryInfo() {
+		
+	}
+	
 	public ProductQueryInfo(String name, int minReleaseYear, int maxReleaseYear, int minDuration, int maxDuration,
 			double minBuyCost, double maxBuyCost, double minRentCost, double maxRentCost, List<Genre> genres,
 			String orderedBy, boolean isAscending) throws InvalidProductQueryInfoException {
@@ -37,15 +44,15 @@ public class ProductQueryInfo {
 		setMaxRentCost(maxRentCost);
 		setGenres(genres);
 		setOrderedBy(orderedBy);
-		setAscending(isAscending);
+		setIsAscending(isAscending);
 	}
 
 	// Setters
-	private void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	private void setMinReleaseYear(int minReleaseYear) throws InvalidProductQueryInfoException {
+	public void setMinReleaseYear(int minReleaseYear) throws InvalidProductQueryInfoException {
 		if (minReleaseYear >= 0) {
 			this.minReleaseYear = minReleaseYear;
 		}
@@ -54,7 +61,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMaxReleaseYear(int maxReleaseYear) throws InvalidProductQueryInfoException {
+	public void setMaxReleaseYear(int maxReleaseYear) throws InvalidProductQueryInfoException {
 		if (maxReleaseYear >= 0) {
 			this.maxReleaseYear = maxReleaseYear;
 		}
@@ -63,7 +70,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMinDuration(int minDuration) throws InvalidProductQueryInfoException {
+	public void setMinDuration(int minDuration) throws InvalidProductQueryInfoException {
 		if (minDuration >= 0) {
 			this.minDuration = minDuration;
 		}
@@ -72,7 +79,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMaxDuration(int maxDuration) throws InvalidProductQueryInfoException {
+	public void setMaxDuration(int maxDuration) throws InvalidProductQueryInfoException {
 		if (maxDuration >= 0) {
 			this.maxDuration = maxDuration;
 		}
@@ -81,7 +88,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMinBuyCost(double minBuyCost) throws InvalidProductQueryInfoException {
+	public void setMinBuyCost(double minBuyCost) throws InvalidProductQueryInfoException {
 		if (minBuyCost >= 0d) {
 			this.minBuyCost = minBuyCost;
 		}
@@ -90,7 +97,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMaxBuyCost(double maxBuyCost) throws InvalidProductQueryInfoException {
+	public void setMaxBuyCost(double maxBuyCost) throws InvalidProductQueryInfoException {
 		if (maxBuyCost >= 0d) {
 			this.maxBuyCost = maxBuyCost;
 		}
@@ -99,7 +106,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMinRentCost(double minRentCost) throws InvalidProductQueryInfoException {
+	public void setMinRentCost(double minRentCost) throws InvalidProductQueryInfoException {
 		if (minRentCost >= 0d) {
 			this.minRentCost = minRentCost;
 		}
@@ -108,7 +115,7 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setMaxRentCost(double maxRentCost) throws InvalidProductQueryInfoException {
+	public void setMaxRentCost(double maxRentCost) throws InvalidProductQueryInfoException {
 		if (maxRentCost >= 0d) {
 			this.maxRentCost = maxRentCost;
 		}
@@ -117,14 +124,15 @@ public class ProductQueryInfo {
 		}
 	}
 
-	private void setGenres(List<Genre> genres) {
+	public void setGenres(List<Genre> genres) {
 		if (genres != null) {
 			this.genres = genres;
 		}
 	}
 
-	private void setOrderedBy(String orderedBy) throws InvalidProductQueryInfoException {
-		if (Supp.isValidStr(orderedBy)) {
+	public void setOrderedBy(String orderedBy) throws InvalidProductQueryInfoException {
+		ArrayList<String> validOptions = new ArrayList<String>(Arrays.asList(ORDERED_OPTIONS));
+		if (Supp.isNotNullOrEmpty(orderedBy) && validOptions.contains(orderedBy)) {
 			this.orderedBy = orderedBy;
 		}
 		else {
@@ -132,7 +140,7 @@ public class ProductQueryInfo {
 		}
 	}
 	
-	private void setAscending(boolean isAscending) {
+	public void setIsAscending(boolean isAscending) {
 		this.isAscending = isAscending;
 	}
 	
@@ -183,7 +191,7 @@ public class ProductQueryInfo {
 		return this.orderedBy;
 	}
 
-	public boolean isAscending() {
+	public boolean getIsAscending() {
 		return this.isAscending;
 	}
 

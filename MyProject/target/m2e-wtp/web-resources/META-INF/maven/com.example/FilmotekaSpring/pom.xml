@@ -102,21 +102,21 @@
 	  	<dependency>
 	    	<groupId>com.google.code.gson</groupId>
 	    	<artifactId>gson</artifactId>
-	    	<version>2.6.2</version>
+	    	<version>2.6.2</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 	
 		<!-- Javax mail library -->
 		<dependency>
 		    <groupId>com.sun.mail</groupId>
 		    <artifactId>javax.mail</artifactId>
-		    <version>1.5.0</version>
+		    <version>1.5.0</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 		<!-- Mysql connector -->
 		<dependency>
 	    	<groupId>mysql</groupId>
 	    	<artifactId>mysql-connector-java</artifactId>
-	    	<version>5.1.45</version>
+	    	<version>5.1.45</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>	
 	</dependencies>
 	<build>

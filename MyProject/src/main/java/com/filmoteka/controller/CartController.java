@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.filmoteka.exceptions.InsufficientFundsException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.manager.UserManager;

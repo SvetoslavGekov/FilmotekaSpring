@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -18,6 +18,8 @@
 
 
 <title>My Account</title>
+
+<base href="http://localhost:8080/FilmotekaSpring/">
 </head>
 <body>
 	<!-- Include the header file via JSTL -->
@@ -71,7 +73,7 @@
 	<!-- Edit Profile -->
 	<div id="editAccount" style="display:none" class="container">
    		 	<span onclick="document.getElementById('editAccount').style.display='none'" class="close" title="Close Modal">&times;</span>
-			<form method= "POST" action="updateProfile" class="modal-content">
+			<form method= "POST" action="auth/updateProfile" class="modal-content">
 			<div class="container">
 				 <label for="firstname"><b>First Name</b></label>
 				 <input type="text" placeholder="Enter your first name" name="firstname" value="${ sessionScope.USER.firstName }"

@@ -38,7 +38,7 @@ public final class ProductCategory {
 	}
 	
 	public void setValue(String value) throws InvalidProductCategoryDataException {
-		if(Supp.isValidStr(value)) {
+		if(Supp.isNotNullOrEmpty(value)) {
 			this.value = value;
 		}
 		else {

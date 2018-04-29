@@ -12,13 +12,13 @@ public final class Supp {
 	private static final int MIN_USERNAME_LENGTH = 4;
 	
 	//Methods
-	public static final boolean isValidStr(String str) {
+	public static final boolean isNotNullOrEmpty(String str) {
 		return str != null && !str.trim().isEmpty();
 	}
 	
 	public static final boolean isValidUsername(String username) {
 		//Check if username is a validString
-		if(!isValidStr(username)) {
+		if(!isNotNullOrEmpty(username)) {
 			return false;
 		}
 		
@@ -42,7 +42,7 @@ public final class Supp {
 	
 	public static final boolean isValidEmail(String email){
 		//Check if email is a valid string
-		if(!isValidStr(email)) {
+		if(!isNotNullOrEmpty(email)) {
 			return false;
 		}
 		
@@ -63,7 +63,7 @@ public final class Supp {
 	
 	//Validating for the profile pictures
 	public static final boolean isValidImagePath(String filePath) throws IOException {
-		if(!isValidStr(filePath)) {
+		if(!isNotNullOrEmpty(filePath)) {
 			return false;
 		}
 		File file = new File(filePath);

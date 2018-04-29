@@ -13,4 +13,6 @@ public interface IGenreDao {
 	void updateGenre(Genre g) throws SQLException;
 	
 	Map<Integer,Genre> getAllGenres() throws SQLException, InvalidGenreDataException;
+	
+	Genre getGenreById(int id) throws SQLException, InvalidGenreDataException;
 }
