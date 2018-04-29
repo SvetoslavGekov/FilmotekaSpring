@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.filmoteka.exceptions.InvalidGenreDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Movie;
 import com.filmoteka.model.Product;
@@ -26,9 +28,9 @@ import com.filmoteka.model.dao.MovieDao;
 import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.TVSeriesDao;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
+import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
-import com.filmoteka.util.WebSite;
 
 @Controller
 public class AdministratorController {
@@ -40,7 +42,11 @@ public class AdministratorController {
 		// Grab the product that's being edited
 		try {
 			Product product = ProductDao.getInstance().getProductById(productID);
-
+			//Check if product exists
+			if(product == null) {
+				throw new Exception("You've attempted to edit a product that does not exists!");
+			}
+			
 			// Create the Collection of available product genres
 			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
 
@@ -81,7 +87,7 @@ public class AdministratorController {
 			// Set genres
 			Set<Genre> newProductGenres = new HashSet<>();
 			for (Genre genre : existingProduct.getGenres()) {
-				newProductGenres.add(WebSite.getGenreById(Integer.valueOf(genre.getValue())));
+				newProductGenres.add(GenreDao.getInstance().getGenreById(Integer.valueOf(genre.getValue())));
 			}
 			existingProduct.setGenres(newProductGenres);
 
@@ -98,7 +104,7 @@ public class AdministratorController {
 						"You've attempted to update a product from a category that does not exist. Please try again");
 			}
 		}
-		catch (SQLException | InvalidProductDataException e) {
+		catch (SQLException | InvalidProductDataException | InvalidGenreDataException e) {
 			throw new Exception(dbError, e);
 		}
 	}
@@ -106,38 +112,45 @@ public class AdministratorController {
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.GET)
 	public String showFormForNewProduct(Model m,
 			@PathVariable("category") Integer category,
-			HttpServletRequest request) throws Exception {
-		//Set the category in the request
-		request.setAttribute("category", category);
-		
-		// Grab the category of the product that's being created
-		ProductCategory productCategory = WebSite.getProductCategoryById(category);
+			HttpServletRequest request) throws SQLException, InvalidProductDataException{
 
-		// Create a product based on the given category
-		Product product = null;
-		switch (productCategory.getId()) {
-		case 1:
-			product = new Movie();
-			break;
-		case 2:
-			product = new TVSeries();
-			break;
-		default:
-			throw new Exception(
-					"You've attempted to create a product from a category that does not exist. Please try again");
+		try {		
+			//Set the category in the request
+			request.setAttribute("category", category);
+			
+			// Grab the category of the product that's being created
+			ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(category);
+			
+			// Create a product based on the given category
+			Product product = null;
+			switch (productCategory.getId()) {
+			case 1:
+				product = new Movie();
+				break;
+			case 2:
+				product = new TVSeries();
+				break;
+			default:
+				throw new InvalidProductDataException("You've attempted to create a product from a category that does not exist."
+						+ " Please try again");
+			}
+			// Set the product's category
+			product.setProductCategory(productCategory);
+
+			// Create the Collection of available product genres
+			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+
+			// Add the product and the genres to the model
+			m.addAttribute("product", product);
+			m.addAttribute("genres", genres);
+
+			// Return the product view
+			return "newProduct";
 		}
-		// Set the product's category
-		product.setProductCategory(productCategory);
-
-		// Create the Collection of available product genres
-		ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
-
-		// Add the product and the genres to the model
-		m.addAttribute("product", product);
-		m.addAttribute("genres", genres);
-
-		// Return the product view
-		return "newProduct";
+		catch (SQLException | InvalidProductCategoryDataException | InvalidGenreDataException e) {
+			//Error when readin data from the DB
+			throw new SQLException(dbError,e);
+		}
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.POST)
@@ -165,13 +178,13 @@ public class AdministratorController {
 			}
 
 			// Set product category
-			ProductCategory productcategory = WebSite.getProductCategoryById(category);
+			ProductCategory productcategory = ProductCategoryDao.getInstance().getProductCategoryById(category);
 			newProduct.setProductCategory(productcategory);
 
 			// Set genres
 			Set<Genre> newProductGenres = new HashSet<>();
 			for (Genre genre : newProduct.getGenres()) {
-				newProductGenres.add(WebSite.getGenreById(Integer.valueOf(genre.getValue())));
+				newProductGenres.add(GenreDao.getInstance().getGenreById(Integer.valueOf(genre.getValue())));
 			}
 			newProduct.setGenres(newProductGenres);
 
@@ -189,7 +202,7 @@ public class AdministratorController {
 			}
 
 		}
-		catch (SQLException e) {
+		catch (SQLException | InvalidGenreDataException | InvalidProductCategoryDataException e ) {
 			throw new SQLException(dbError, e);
 		}
 		catch (NumberFormatException e) {
@@ -205,7 +218,11 @@ public class AdministratorController {
 			HttpServletRequest req) throws Exception {
 		
 		if (productID != null && productID != 0) {
-			return ProductDao.getInstance().getProductById(productID);
+			Product product = ProductDao.getInstance().getProductById(productID);
+			if(product == null) {
+				throw new Exception("You've attempted to edit a product that does not exist!");
+			}
+			return product;
 		}
 		if (category == null) {
 			return null;
@@ -214,8 +231,7 @@ public class AdministratorController {
 			case 1:return new Movie();
 			case 2:return new TVSeries();
 		default:
-			throw new Exception(
-					"You've attempted to create a product from a category that does not exist. Please try again");
+			throw new Exception("You've attempted to create a product from a category that does not exist. Please try again");					
 		}
 	}
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
+import com.filmoteka.exceptions.InvalidGenreDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Product;
@@ -33,22 +35,28 @@ public final class ExpiringProductsNotifier implements Callable<Boolean> {
 	}
 	
 	@Override
-	public Boolean call() throws SQLException, InvalidUserDataException, InvalidProductDataException {
-			//Collect all users that need to be notified in a map
-			Map<User, List<Product>> expiringProducts = UserDao.getInstance().getExpiringProducts();
-			
-			//Compose message for each one
-			for (Entry<User,List<Product>> e: expiringProducts.entrySet()) {
-				User user = e.getKey();
-				List<Product> products = e.getValue();
-				String message = buildEmailMessage(user, products);
+	public Boolean call() {
+			try {
+				//Collect all users that need to be notified in a map
+				 Map<User, List<Product>> expiringProducts = UserDao.getInstance().getExpiringProducts();
 				
-				//Send each on of them an email (no attachments)
-				MailManager.sendEmail(user.getEmail(), MESSAGE_SUBJECT, message, null);
+				//Compose message for each one
+				for (Entry<User,List<Product>> e: expiringProducts.entrySet()) {
+					User user = e.getKey();
+					List<Product> products = e.getValue();
+					String message = buildEmailMessage(user, products);
+					
+					//Send each on of them an email (no attachments)
+					MailManager.sendEmail(user.getEmail(), MESSAGE_SUBJECT, message, null);
+				}
+				
+			return true;
 			}
-			
-		return true;
-		
+			catch (SQLException | InvalidUserDataException | InvalidProductDataException
+					| InvalidGenreDataException | InvalidProductCategoryDataException e) {
+				//TODO --> log exception and continue work
+				return false;
+			}	
 	}
 	
 	private String buildEmailMessage(User user, List<Product> products) {

@@ -53,6 +53,10 @@ public class FilesController {
 		return uploadFile(uploadedFile, POSTERS_FILEPATH, filename);
 	}
 	
+	public static final String uploadUserImage(MultipartFile uploadedFile, String filename) throws IOException{
+		return uploadFile(uploadedFile, USER_IMAGES_FILEPATH, filename);
+	}
+	
 	private static final String uploadFile(MultipartFile uploadedFile, String filepath, String filename) throws IOException {
 		try {
 			//Check if file is empty

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.filmoteka.exceptions.InvalidGenreDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.manager.UserManager;
@@ -31,7 +32,6 @@ import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.TVSeriesDao;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.nomenclatures.Genre;
-import com.filmoteka.util.WebSite;
 import com.filmoteka.util.productFilters.ProductQueryInfo;
 
 
@@ -130,7 +130,7 @@ public class ProductController {
 			// Return the result and an OK status
 			return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
 		}
-		catch (SQLException | InvalidProductDataException e) {
+		catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException e) {
 			// Return an entity with a status code for Internal Server Error (handling is
 			// done via JS)
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -163,10 +163,38 @@ public class ProductController {
 				//Return an OK status
 				return new ResponseEntity<Boolean>(HttpStatus.OK);
 			}
-			catch (SQLException | InvalidProductDataException e) {
+			catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException e) {
 				//Return an entity with a status code for Internal Server Error (handling is done via JS)
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}
+		
+		@RequestMapping(value = "/auth/towatchlist", method = RequestMethod.POST)
+		public ResponseEntity<Boolean> addOrRemoveWatchlistProduct(HttpSession session,
+				@RequestParam("productID") Integer productID) {
+			try {
+				// Get user from session
+				User user = (User) session.getAttribute("USER");
+	
+				// Get product from database
+				Product product = ProductDao.getInstance().getProductById(productID);
+	
+				// Check if the productId is valid
+				if (product == null) {
+					// If not --> return an HTTP code for no such product (400);
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
+				// Check the result of adding or removing the product from the watchlist
+				boolean isAdded = UserManager.getInstance().addOrRemoveProductFromWatchlist(user, product);
+	
+				// Return the result and an OK status
+				return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
+			}
+			catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException e1) {
+				// Return an entity with a status code for Internal Server Error (handling is
+				// done via JS)
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	 		}
 		}
 		
 		@RequestMapping(value = "/auth/addreview", method = RequestMethod.POST)
@@ -195,7 +223,7 @@ public class ProductController {
 				//Return an OK status
 				return new ResponseEntity<Boolean>(HttpStatus.OK);
 			}
-			catch (SQLException | InvalidProductDataException e) {
+			catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException e) {
 				//Return an entity with a status code for Internal Server Error (handling is done via JS)
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -246,7 +274,7 @@ public class ProductController {
 			// Set genres
 			List<Genre> newFilterGenres = new ArrayList<>();
 			for (Genre genre : newFilter.getGenres()) {
-				newFilterGenres.add(WebSite.getGenreById(Integer.valueOf(genre.getValue())));
+				newFilterGenres.add(GenreDao.getInstance().getGenreById(Integer.valueOf(genre.getValue())));
 			}
 			newFilter.setGenres(newFilterGenres);
 

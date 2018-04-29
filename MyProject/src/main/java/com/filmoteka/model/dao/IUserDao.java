@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Order;
@@ -25,13 +27,15 @@ public interface IUserDao {
 	
 	Collection<User> getAllUsers() throws Exception;
 	
-	Map<Product,LocalDate> getUserProductsById(int userId) throws SQLException, InvalidProductDataException;
+	Map<Product,LocalDate> getUserProductsById(int userId) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
 	
 	Set<Integer> getUserFavoritesById(int userId) throws SQLException;
 	
 	Set<Integer> getUserWatchlistById(int userId) throws SQLException;
 	
-	User getUserByLoginCredentials(String username, String password) throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException;
+	User getUserByLoginCredentials(String username, String password) throws SQLException, InvalidUserDataException,
+	InvalidOrderDataException, InvalidProductDataException, InvalidGenreDataException, InvalidProductCategoryDataException;
 	
 	void addProductToFavorites(User user, Product product) throws SQLException;
 	
@@ -41,7 +45,8 @@ public interface IUserDao {
 	
 	void removeProductFromWatchlist(User user, Product product) throws SQLException;
 	
-	Set <Order> getUserOrdersById(int userId) throws SQLException, InvalidOrderDataException, InvalidProductDataException;
+	Set <Order> getUserOrdersById(int userId) throws SQLException, InvalidOrderDataException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
 	
 	void saveUserProductsInCartById(int userId, Map<Product, LocalDate> products) throws SQLException;
 	

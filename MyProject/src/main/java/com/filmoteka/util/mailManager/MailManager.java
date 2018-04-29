@@ -73,6 +73,7 @@ public final class MailManager {
 
 		}
 		catch (MessagingException mex) {
+			//TODO --> log error and continue with the next user
 			mex.printStackTrace();
 		}
 	}

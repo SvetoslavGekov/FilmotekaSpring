@@ -1,24 +1,31 @@
 package com.filmoteka;
 
-import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import com.filmoteka.exceptions.InvalidGenreDataException;
-import com.filmoteka.exceptions.InvalidOrderDataException;
-import com.filmoteka.exceptions.InvalidProductCategoryDataException;
-import com.filmoteka.exceptions.InvalidProductDataException;
-import com.filmoteka.exceptions.InvalidUserDataException;
-import com.filmoteka.util.WebSite;
+import com.filmoteka.util.taskExecutors.CustomTaskExecutor;
+import com.filmoteka.util.taskExecutors.ExpiredProductsDeleter;
+import com.filmoteka.util.taskExecutors.ExpiringProductsNotifier;
 
 @Component
 public class Startup {
+	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(19).withMinute(24).withSecond(00);
+	private static final List<CustomTaskExecutor> TASKS = new ArrayList<>();
 	
 	@EventListener(ContextRefreshedEvent.class)
-	void contextRefreshEvent() throws SQLException, InvalidGenreDataException, InvalidProductDataException, InvalidUserDataException, InvalidOrderDataException, InvalidProductCategoryDataException {
-		//3. Initialize the website main method
-		WebSite.main(null);
+	void contextRefreshEvent() {
+		//Create all utility tasks
+		TASKS.add(new CustomTaskExecutor(ExpiringProductsNotifier.getInstance())); //Expiring products notifier
+		TASKS.add(new CustomTaskExecutor(ExpiredProductsDeleter.getInstance()));// Expired products deleter
+		
+		//Start all task at the same time
+		for (CustomTaskExecutor taskExecutor : TASKS) {
+			taskExecutor.startExecutionAt(TASKS_STARTING_TIME.getHour(), TASKS_STARTING_TIME.getMinute(), TASKS_STARTING_TIME.getSecond());
+		}
 	}
 }

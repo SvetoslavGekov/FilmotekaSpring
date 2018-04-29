@@ -17,7 +17,9 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.filmoteka.dao.dbManager.DBManager;
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.exceptions.InvalidUserDataException;
@@ -25,9 +27,10 @@ import com.filmoteka.model.Product;
 import com.filmoteka.model.Review;
 import com.filmoteka.model.SimpleProductFactory;
 import com.filmoteka.model.User;
+import com.filmoteka.model.dao.nomenclatures.GenreDao;
+import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
-import com.filmoteka.util.WebSite;
 import com.filmoteka.util.productFilters.ProductQueryInfo;
 import com.filmoteka.validation.Supp;
 
@@ -148,7 +151,8 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Product getProductById(int productId) throws SQLException, InvalidProductDataException{
+	public Product getProductById(int productId) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException,InvalidProductCategoryDataException{
 		Product product = null;
 		
 		String sql = "SELECT  p.product_id, p.name, p.category_id, p.release_year, p.pg_rating,p.duration, p.rent_cost, " + 
@@ -167,7 +171,7 @@ public final class ProductDao implements IProductDao {
 					
 					Date saleValidity = rs.getDate("sale_validity");
 					Date finishedAiring = rs.getDate("finished_airing");
-					ProductCategory productCategory = WebSite.getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
 					
 					//Collect the product's genres
 					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(productId));
@@ -204,7 +208,8 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Collection<Product> getAllProducts() throws SQLException, InvalidProductDataException{
+	public Collection<Product> getAllProducts() throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		//Create a collection of all products
 		Collection<Product> allProducts = new ArrayList<>();
 		
@@ -222,7 +227,8 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException {
+	public Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Collection<Product> selectedProducts = new ArrayList<>();
 		
 		//Check if the collection is not null or empty
@@ -254,7 +260,7 @@ public final class ProductDao implements IProductDao {
 		return selectedProducts;
 	}
 
-	public Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException{
+	public Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException{
 		Map<Integer, Collection<Genre>> productGenres = new HashMap<>();
 		
 		//Building the query
@@ -277,7 +283,7 @@ public final class ProductDao implements IProductDao {
 					while(rs.next()) {
 						//Fill the collection
 						Integer productId = rs.getInt("product_id");
-						Genre genre = WebSite.getGenreById(rs.getInt("genre_id"));
+						Genre genre = GenreDao.getInstance().getGenreById(rs.getInt("genre_id"));
 						
 						if(!productGenres.containsKey(productId)) {
 							productGenres.put(productId, new ArrayList<Genre>());
@@ -292,14 +298,14 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Collection<Genre> getProductGenresById(int id) throws SQLException {
+	public Collection<Genre> getProductGenresById(int id) throws SQLException, InvalidGenreDataException {
 		Collection<Genre> productGenres = new HashSet<>();
 		try (PreparedStatement ps = con
 				.prepareStatement("SELECT genre_id FROM product_has_genres WHERE product_id = ?;")) {
 			ps.setInt(1, id);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					Genre g = WebSite.getGenreById(rs.getInt("genre_id"));
+					Genre g = GenreDao.getInstance().getGenreById(rs.getInt("genre_id"));
 					productGenres.add(g);
 				}
 			}
@@ -370,7 +376,8 @@ public final class ProductDao implements IProductDao {
 		}
 	}
 
-	public Collection<Product> getProductsOnSale(Integer limit) throws SQLException, InvalidProductDataException{
+	public Collection<Product> getProductsOnSale(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		List<Integer> identifiers = new ArrayList<>();
 		
 		//Get the list of cheapest products
@@ -394,7 +401,8 @@ public final class ProductDao implements IProductDao {
 		return getProductsByIdentifiers(identifiers);
 	}
 	
-	public Collection<Product> getMostPopularProducts(Integer limit) throws SQLException, InvalidProductDataException{
+	public Collection<Product> getMostPopularProducts(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		List<Integer> identifiers = new ArrayList<>();
 		
 		//Get the list of cheapest products
@@ -418,7 +426,8 @@ public final class ProductDao implements IProductDao {
 		return getProductsByIdentifiers(identifiers);
 	}
 	
-	public Collection<Product> getHighestRatedProducts(Integer limit) throws SQLException, InvalidProductDataException{
+	public Collection<Product> getHighestRatedProducts(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		List<Integer> identifiers = new ArrayList<>();
 		
 		//Get the list of most rated products
@@ -444,7 +453,8 @@ public final class ProductDao implements IProductDao {
 		return getProductsByIdentifiers(identifiers);
 	}
 	
-	public Collection<Product> getCheapestProducts(Integer limit) throws SQLException, InvalidProductDataException{
+	public Collection<Product> getCheapestProducts(Integer limit) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		List<Integer> identifiers = new ArrayList<>();
 		
 		//Get the list of cheapest products
@@ -468,7 +478,8 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException{
+	public List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		List<Product> filteredProducts = new ArrayList<>();
 		
 		//Building the query
@@ -565,7 +576,8 @@ public final class ProductDao implements IProductDao {
 		}
 	}
 	
-	public void deleteProduct(int productID) throws SQLException, InvalidProductDataException{
+	public void deleteProduct(int productID) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		
 		//For testing
 		Product testProduct = this.getProductById(productID);
@@ -580,7 +592,7 @@ public final class ProductDao implements IProductDao {
 		System.out.println(testProduct.getName()+" with product_id "+productID+" has been deleted from the Database!");
 	}
 
-	public ProductQueryInfo getFilterInfo() throws SQLException, InvalidProductQueryInfoException {
+	public ProductQueryInfo getFilterInfo() throws SQLException, InvalidProductQueryInfoException, InvalidGenreDataException {
 		ProductQueryInfo filter = null;
 		//Create a query to select all necessary data
 		String sql = "SELECT MIN(release_year) minReleaseYear, MAX(release_year) maxReleaseYear,\r\n" + 
@@ -588,7 +600,7 @@ public final class ProductDao implements IProductDao {
 				"	MIN(buy_cost) minBuyCost, MAX(buy_cost) maxBuyCost,\r\n" + 
 				"	MIN(rent_cost) minRentCost, MAX(rent_cost) maxRentCost FROM products;";
 		
-		List<Genre> genres = new ArrayList<>(WebSite.getAllGenres().values());
+		List<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
 		
 		//Create a statement
 		try(Statement st = con.createStatement()){

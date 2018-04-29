@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.nomenclatures.Genre;
-import com.filmoteka.util.WebSite;
 
 public final class GenreManager {
 	//Fields
@@ -31,8 +30,6 @@ public final class GenreManager {
 		Genre genre = new Genre(genreName);
 		//Add genre to DB
 		dao.saveGenre(genre);
-		//Add genre to the GENRES collection
-		WebSite.addGenre(genre);
 	}
 	
 	public void updateExistingGenre(Genre g, String newGenreName) throws InvalidGenreDataException, SQLException {

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.filmoteka.exceptions.InvalidGenreDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.nomenclatures.Genre;
@@ -16,19 +18,23 @@ public interface IProductDao {
 	
 	void updateProduct(Product p) throws SQLException;
 	
-	Collection<Genre> getProductGenresById(int id) throws SQLException;
+	Collection<Genre> getProductGenresById(int id) throws SQLException, InvalidGenreDataException;
 	
 	Map<Integer,Double> getProductRatersById(int movieId) throws SQLException;
 	
-	Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException;
+	Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
 	
-	Product getProductById(int productId) throws SQLException, InvalidProductDataException;
+	Product getProductById(int productId) throws SQLException, InvalidProductDataException, InvalidGenreDataException,
+	InvalidProductCategoryDataException;
 	
-	Collection<Product> getAllProducts() throws SQLException, InvalidProductDataException;
+	Collection<Product> getAllProducts() throws SQLException, InvalidProductDataException, InvalidGenreDataException,
+	InvalidProductCategoryDataException;
 
 	void deleteExpiredProducts() throws SQLException;
 
-	List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException;
+	List<Product> getFilteredProducts(ProductQueryInfo filter) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException;
 
 
 	

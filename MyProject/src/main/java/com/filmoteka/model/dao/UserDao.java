@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.filmoteka.dao.dbManager.DBManager;
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Order;
@@ -48,7 +50,8 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public User getUserByID(int id) throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException {
+	public User getUserByID(int id) throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		User user = null;
 		String sql = "SELECT user_id, is_admin, first_name, last_name, username, password, email, phone, registration_date,"
 				+ " last_login,profile_picture, money FROM users WHERE user_id = ?;";
@@ -149,7 +152,8 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public Collection<User> getAllUsers() throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException {
+	public Collection<User> getAllUsers() throws SQLException, InvalidUserDataException, InvalidOrderDataException,
+	InvalidProductDataException, InvalidGenreDataException, InvalidProductCategoryDataException {
 		HashSet<User> resultUsers = new HashSet<>();
 		String sql = "SELECT user_id, is_admin, username, email, password, first_name, last_name, registration_date, phone,"
 				+ " last_login, profile_picture, money FROM users ORDER BY user_id DESC;";
@@ -198,7 +202,8 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public Map<Product, LocalDate> getUserProductsById(int userId) throws SQLException, InvalidProductDataException {
+	public Map<Product, LocalDate> getUserProductsById(int userId) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Map<Product, LocalDate> userProducts = new TreeMap<>();
 		try (PreparedStatement ps = connection
 				.prepareStatement("SELECT product_id, validity FROM user_has_products WHERE user_id = ?;")) {
@@ -279,7 +284,8 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public Set<Order> getUserOrdersById(int userId) throws SQLException, InvalidOrderDataException, InvalidProductDataException {
+	public Set<Order> getUserOrdersById(int userId) throws SQLException, InvalidOrderDataException,
+	InvalidProductDataException, InvalidGenreDataException, InvalidProductCategoryDataException {
 		Set<Order> orders = new HashSet<Order>();
 		try (PreparedStatement ps = connection.prepareStatement("SELECT order_id FROM orders WHERE user_id = ? ORDER BY date DESC;")) {
 			ps.setInt(1, userId);
@@ -295,7 +301,8 @@ public class UserDao implements IUserDao {
 
 	@Override
 	public User getUserByLoginCredentials(String username, String password)
-			throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException {
+			throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException,
+			InvalidGenreDataException, InvalidProductCategoryDataException {
 		User user = null;
 		try (PreparedStatement ps = connection.prepareStatement("SELECT user_id, password FROM users WHERE username = ?");) {
 			ps.setString(1, username);
@@ -368,7 +375,8 @@ public class UserDao implements IUserDao {
 		return false;
 	}
 	
-	public Map<User, List<Product>> getExpiringProducts() throws SQLException, InvalidUserDataException, InvalidProductDataException{
+	public Map<User, List<Product>> getExpiringProducts() throws SQLException, InvalidUserDataException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException{
 		Map<User,List<Product>> expiringProducts = new TreeMap<>();
 		
 		String query = "SELECT up.user_id, up.product_id, up.validity, u.first_name, u.last_name, u.username, u.password, u.email" + 

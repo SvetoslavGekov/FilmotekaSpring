@@ -15,12 +15,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.filmoteka.dao.dbManager.DBManager;
+import com.filmoteka.exceptions.InvalidGenreDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.TVSeries;
+import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
-import com.filmoteka.util.WebSite;
 
 public final class TVSeriesDao implements ITVSeriesDao {
 	// Fields
@@ -102,7 +104,8 @@ public final class TVSeriesDao implements ITVSeriesDao {
 	}
 
 	@Override
-	public Collection<TVSeries> getAllTVSeries() throws SQLException, InvalidProductDataException {
+	public Collection<TVSeries> getAllTVSeries() throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Collection<TVSeries> allTVSeries = new ArrayList<TVSeries>();
 		try (PreparedStatement ps = con.prepareStatement("SELECT tv.season, tv.finished_airing, p.product_id, p.name, p.category_id, p.release_year,"
 						+ " p.pg_rating, p.duration, p.rent_cost, p.buy_cost, p.description, p.poster, p.trailer, p.writers, p.actors,"
@@ -114,7 +117,7 @@ public final class TVSeriesDao implements ITVSeriesDao {
 
 					int tvsID = rs.getInt("product_id");
 					Date saleValidity = rs.getDate("sale_validity");
-					ProductCategory productCategory = WebSite.getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
 					
 					// Collect the tv series's genres
 					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(tvsID));
@@ -157,7 +160,7 @@ public final class TVSeriesDao implements ITVSeriesDao {
 
 	@Override
 	public Collection<Product> getTVSeriesBySubstring(String substring)
-			throws SQLException, InvalidProductDataException {
+			throws SQLException, InvalidProductDataException, InvalidGenreDataException, InvalidProductCategoryDataException {
 
 		String sql = "SELECT tv.season, tv.finished_airing, "
 							+ "p.product_id, p.name, p.category_id, p.release_year, "
@@ -177,7 +180,7 @@ public final class TVSeriesDao implements ITVSeriesDao {
 					
 					int tvsID = rs.getInt("product_id");
 					Date saleValidity = rs.getDate("sale_validity");
-					ProductCategory productCategory = WebSite.getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
 					
 					// Collect the tv series's genres
 					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(tvsID));

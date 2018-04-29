@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.manager.UserManager;
 import com.filmoteka.model.Order;
@@ -70,11 +72,12 @@ public class CartController {
 			for (Entry<Product,LocalDate> e: user.getShoppingCart().entrySet()) {
 				System.out.println(String.format("%s	%s", e.getKey().getName(), e.getValue()));
 			}
+			System.out.println("Cart price is: " +user.getShoppingCartPrice());
 			
 			//Return the result and an OK status
 			return new ResponseEntity<Boolean>(isAddedToCart, HttpStatus.OK);
 		}
-		catch (SQLException | InvalidProductDataException e) {
+		catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException e) {
 			//Return an entity with a status code for Internal Server Error (handling is done via JS)
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -101,6 +104,7 @@ public class CartController {
 			for (Entry<Product, LocalDate> e : user.getShoppingCart().entrySet()) {
 				System.out.println(String.format("%s	%s", e.getKey().getName(), e.getValue()));
 			}
+			System.out.println("Cart price is: " +user.getShoppingCartPrice());
 
 			// Redirect to the updated cart JSP
 			return "redirect:cart";

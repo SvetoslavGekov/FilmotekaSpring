@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.filmoteka.dao.dbManager.DBManager;
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Order;
 import com.filmoteka.model.Product;
@@ -38,7 +40,9 @@ public final class OrderDao implements IOrderDao {
 		return instance;
 	}
 	
-	public Order getOrderById(int orderId) throws SQLException, InvalidOrderDataException, InvalidProductDataException {
+	@Override
+	public Order getOrderById(int orderId) throws SQLException, InvalidOrderDataException,
+	InvalidProductDataException, InvalidGenreDataException, InvalidProductCategoryDataException {
 		Order order = null;
 		
 		//Get the collection of products
@@ -59,7 +63,9 @@ public final class OrderDao implements IOrderDao {
 		return order;
 	}
 	
-	private Map<Product, LocalDate> getOrderProductsById(int orderId) throws SQLException, InvalidProductDataException {
+	@Override
+	public Map<Product, LocalDate> getOrderProductsById(int orderId) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Map<Product, LocalDate> orderProducts = new TreeMap<>();
 		
 		try(PreparedStatement ps = con.prepareStatement("SELECT order_id, product_id, validity FROM order_has_products WHERE order_id = ?;")){
@@ -96,6 +102,7 @@ public final class OrderDao implements IOrderDao {
 		return orderProducts;
 	}
 
+	@Override
 	public void saveOrder(Order order) throws SQLException, InvalidOrderDataException {
 		synchronized (con) {
 			//Set autocommiting to false
@@ -133,6 +140,7 @@ public final class OrderDao implements IOrderDao {
 			}
 		}
 	}
+	
 	
 	private void saveOrderProducts(Order order) throws SQLException {
 		//Get orderId and collection of products

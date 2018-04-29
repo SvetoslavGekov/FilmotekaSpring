@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.filmoteka.exceptions.InvalidFormDataException;
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.manager.UserManager;
@@ -56,7 +58,8 @@ public class UserController {
 		try {
 			user = UserManager.getInstance().logIn(username, password);
 		}
-		catch (InvalidProductDataException | SQLException | InvalidUserDataException | InvalidOrderDataException e) {
+		catch (InvalidProductDataException | SQLException | InvalidUserDataException | InvalidOrderDataException
+				| InvalidGenreDataException | InvalidProductCategoryDataException e) {
 			//If an error occurs while loading the user --> throw a DB exception
 			throw new SQLException(dbError, e);
 		}

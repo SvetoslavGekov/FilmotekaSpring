@@ -13,12 +13,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.filmoteka.dao.dbManager.DBManager;
+import com.filmoteka.exceptions.InvalidGenreDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Movie;
 import com.filmoteka.model.Product;
+import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
-import com.filmoteka.util.WebSite;
 
 public final class MovieDao implements IMovieDao {
 	//Fields
@@ -96,7 +98,8 @@ public final class MovieDao implements IMovieDao {
 	}
 
 	@Override
-	public Collection<Movie> getAllMovies() throws SQLException, InvalidProductDataException {
+	public Collection<Movie> getAllMovies() throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Collection<Movie> allMovies = new ArrayList<Movie>();
 		try(PreparedStatement ps = con.prepareStatement("SELECT m.director, p.product_id, p.name, p.category_id, p.release_year, p.pg_rating,"
 				+ " p.duration, p.rent_cost, p.buy_cost, p.description, p.poster, p.trailer, p.writers, p.actors,"
@@ -108,7 +111,7 @@ public final class MovieDao implements IMovieDao {
 					
 					int movieId = rs.getInt("product_id");
 					Date saleValidity = rs.getDate("sale_validity");
-					ProductCategory productCategory = WebSite.getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
 					
 					//Collect the movie's genres
 					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(movieId));
@@ -145,7 +148,8 @@ public final class MovieDao implements IMovieDao {
 	}
 	
 	@Override
-	public Collection<Product> getMoviesBySubstring(String substring) throws SQLException, InvalidProductDataException {
+	public Collection<Product> getMoviesBySubstring(String substring) throws SQLException, InvalidProductDataException,
+	InvalidGenreDataException, InvalidProductCategoryDataException {
 		
 		String sql = "SELECT m.director, p.product_id, p.name, p.category_id, p.release_year, "
 							+ "p.pg_rating, p.duration, p.rent_cost, "
@@ -165,7 +169,7 @@ public final class MovieDao implements IMovieDao {
 					
 					int movieId = rs.getInt("product_id");
 					Date saleValidity = rs.getDate("sale_validity");
-					ProductCategory productCategory = WebSite.getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
 					
 					//Collect the movie's genres
 					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(movieId));

@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.filmoteka.exceptions.InsufficientFundsException;
+import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
+import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Order;
@@ -52,7 +54,8 @@ public class UserManager {
 		return true;
 	}
 
-	public User logIn(String username, String password) throws InvalidProductDataException, SQLException, InvalidUserDataException, InvalidOrderDataException {
+	public User logIn(String username, String password) throws InvalidProductDataException, SQLException,
+		InvalidUserDataException, InvalidOrderDataException, InvalidGenreDataException, InvalidProductCategoryDataException {
 		User u = this.dao.getUserByLoginCredentials(username, password);
 		if (u != null) {
 			u.setLastLogin(LocalDateTime.now());
