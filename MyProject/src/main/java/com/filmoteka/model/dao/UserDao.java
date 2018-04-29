@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.collections.set.SynchronizedSortedSet;
+
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
@@ -58,8 +60,7 @@ public class UserDao implements IUserDao {
 			ps.setInt(1, id);
 			try (ResultSet rs = ps.executeQuery();) {
 				rs.next();
-				
-				boolean isAdmin = rs.getBoolean("is_admin");
+				 
 				int userId = rs.getInt("user_id");
 				Timestamp lastLogin = rs.getTimestamp("last_login");
 				
@@ -69,7 +70,7 @@ public class UserDao implements IUserDao {
 				Map<Product, LocalDate> products = new TreeMap<>(getUserProductsById(userId));
 
 				user =  new User(userId, // User Id
-						isAdmin, //Admin flag
+						rs.getBoolean("is_admin"), //Admin flag
 						rs.getString("first_name"), // First Name
 						rs.getString("last_name"), // Last Name
 						rs.getString("username"), // UserName
@@ -101,7 +102,7 @@ public class UserDao implements IUserDao {
 				PreparedStatement.RETURN_GENERATED_KEYS);
 		
 		String hashedPassword = user.hashPassword();
-		s.setBoolean(1, user.isAdmin()); // User Type
+		s.setBoolean(1, user.getIsAdmin()); // User Type
 		s.setString(2, user.getFirstName());// First Name
 		s.setString(3, user.getLastName()); // Last Name
 		s.setString(4, user.getUsername());// Username
@@ -312,7 +313,7 @@ public class UserDao implements IUserDao {
 					//Check the salt of the password
 					String hashedPassword = rs.getString("password");
 					if(BCrypt.checkpw(password, hashedPassword)) {
-						user = getUserByID(rs.getInt(1));
+						user = getUserByID(rs.getInt("user_id"));
 					}
 				}
 			}

@@ -73,7 +73,6 @@ public class UserController {
 
 			// Set the IP of the request which called the server
 			session.setAttribute("ip", request.getRemoteAddr());
-
 			// Redirect to the main page service
 			return "redirect:/main";
 		}

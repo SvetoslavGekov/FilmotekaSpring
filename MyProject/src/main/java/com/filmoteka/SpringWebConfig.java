@@ -18,6 +18,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import com.filmoteka.interceptors.AdministratorInterceptor;
 import com.filmoteka.interceptors.AuthorizationInterceptor;
 
 @Configuration
@@ -74,7 +75,8 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(changeInterceptor);
 		
 		//Add custom interceptors
-		registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/auth/**").excludePathPatterns("/admin/**");
+		registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/auth/**").excludePathPatterns("/adm/**");
+		registry.addInterceptor(new AdministratorInterceptor()).addPathPatterns("/adm/**");
 	}
 	
 }

@@ -44,7 +44,7 @@ public class User implements Comparable<User> {
 	// Constructor for registering a new user
 	public User(boolean isAdmin,String firstName, String lastName, String username, String password, String email)
 			throws InvalidUserDataException {
-		setAdmin(isAdmin);
+		setIsAdmin(isAdmin);
 		setFirstName(firstName);
 		setLastName(lastName);
 		setUsername(username);
@@ -54,13 +54,12 @@ public class User implements Comparable<User> {
 	}
 
 	// Constructor for reading a user from the DB
-	public User(int userId,boolean isAdmin, String firstName, String lastName, String username, String password,
+	public User(int userId, boolean isAdmin, String firstName, String lastName, String username, String password,
 			String email, String phone, LocalDate registrationDate, LocalDateTime lastLogin, String profilePicture,
 			double money, Set<Integer> favourites, Set<Integer> watchList, Map<Product, LocalDate> products)
 			throws InvalidUserDataException {
 		this(isAdmin,firstName, lastName, username, password, email);
 		setUserId(userId);
-		setAdmin(false);
 		setPhone(phone);
 		setRegistrationDate(registrationDate);
 		setLastLogin(lastLogin);
@@ -82,11 +81,11 @@ public class User implements Comparable<User> {
 		}
 	}
 
-	public void setAdmin(boolean isAdmin) {
+	public void setIsAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
 
-	public boolean isAdmin() {
+	public boolean getIsAdmin() {
 		return this.isAdmin;
 	}
 
