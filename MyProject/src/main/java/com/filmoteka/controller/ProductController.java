@@ -29,6 +29,7 @@ import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.manager.UserManager;
 import com.filmoteka.model.Movie;
 import com.filmoteka.model.Product;
+import com.filmoteka.model.Review;
 import com.filmoteka.model.TVSeries;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.MovieDao;
@@ -52,6 +53,12 @@ public class ProductController {
 				
 				//Add the product to the model
 				m.addAttribute("product", product);
+				
+				//Get reviews of the product
+				List<Review> reviews = ProductDao.getInstance().getReviewsByProductId(product.getId());
+				
+				//Add product reviews to the model
+				m.addAttribute("reviews", reviews);
 			}
 			catch (SQLException | InvalidProductDataException e) {
 				//Error while reading the product from the database
@@ -165,8 +172,8 @@ public class ProductController {
 				// Get product from database
 				Product product = ProductDao.getInstance().getProductById(productId);
 				
-				// Check if the productId is valid
-				if (product == null) {
+				// Check if the productId and rating are valid
+				if (product == null || rating > 10 || rating < 1) {
 					// If not --> return an HTTP code for no such product (400);
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 				}
@@ -175,6 +182,38 @@ public class ProductController {
 				ProductDao.getInstance().rateProduct(user, product, rating);
 				
 				System.out.println("\nRated product from "+user.getFirstName()+" with rate = "+rating);
+				
+				
+				//Return an OK status
+				return new ResponseEntity<Boolean>(HttpStatus.OK);
+			}
+			catch (SQLException | InvalidProductDataException e) {
+				//Return an entity with a status code for Internal Server Error (handling is done via JS)
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		
+		@RequestMapping(value = "/auth/addreview", method = RequestMethod.POST)
+		public ResponseEntity<Boolean> addReviewToProduct(HttpSession session,
+				@RequestParam("productID") Integer productId,
+				@RequestParam("reviewContent") String reviewContent){
+			try {
+				// Get user from session
+				User user = (User) session.getAttribute("USER");
+
+				// Get product from database
+				Product product = ProductDao.getInstance().getProductById(productId);
+				
+				// Check if the productId and reviewContent length are valid
+				if (product == null || reviewContent.length() > 480 || reviewContent.length() < 3) {
+					// If not --> return an HTTP code for no such product (400);
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
+				
+				// Add review to product
+				ProductDao.getInstance().addReview(user.getUserId(), product.getId(), reviewContent);
+				
+				System.out.println("\n"+"Added review content:\n"+reviewContent+"\nFor product with id = "+productId+"\nFROM: "+user.getFirstName()+"\n\n");
 				
 				
 				//Return an OK status

@@ -17,9 +17,12 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.filmoteka.dao.dbManager.DBManager;
+import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
+import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Product;
+import com.filmoteka.model.Review;
 import com.filmoteka.model.SimpleProductFactory;
 import com.filmoteka.model.User;
 import com.filmoteka.model.nomenclatures.Genre;
@@ -609,5 +612,45 @@ public final class ProductDao implements IProductDao {
 			}
 		}
 		return filter;
+	}
+
+	public void addReview(int userID, int productID, String reviewContent) throws SQLException {
+		
+		String sql = "INSERT INTO reviews(product_id, user_id, content) VALUES (?,?,?);";
+		PreparedStatement s = con.prepareStatement(sql);
+		
+			s.setInt(1, productID);
+			s.setInt(2, userID);
+			s.setString(3, reviewContent);
+			s.executeUpdate();
+	}
+	
+	public List<Review> getReviewsByProductId(int productID) throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException{
+		List<Review> reviews = new ArrayList<>();
+		
+		String sql = "SELECT r.review_id, r.product_id, u.username, r.content, r.date_time FROM reviews AS r\r\n" + 
+						"JOIN users AS u ON r.user_id = u.user_id\r\n" + 
+						"WHERE r.product_id = ? ORDER BY r.date_time DESC;";
+		
+		try(PreparedStatement ps = con.prepareStatement(sql);){
+			ps.setInt(1, productID);
+		
+			try(ResultSet rs = ps.executeQuery()){
+				while(rs.next()) {
+					
+					Review review = new Review(
+											  rs.getLong("review_id"), 
+											  rs.getLong("product_id"), 
+											  rs.getString("username"), 
+											  rs.getString("content"), 
+											  rs.getTimestamp("date_time").toLocalDateTime()
+											  );
+					
+					reviews.add(review);
+				}
+			}
+		}
+		
+		return reviews;
 	}
 }

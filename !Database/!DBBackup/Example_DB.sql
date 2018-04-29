@@ -1,9 +1,9 @@
-DROP DATABASE IF EXISTS `filmoteka`;
+DROP DATABASE IF EXISTS filmoteka;
 CREATE DATABASE  IF NOT EXISTS `filmoteka` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `filmoteka`;
--- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: filmoteka
+-- Host: 127.0.0.1    Database: filmoteka
 -- ------------------------------------------------------
 -- Server version	5.7.21-log
 
@@ -202,7 +202,7 @@ CREATE TABLE `product_has_raters` (
 
 LOCK TABLES `product_has_raters` WRITE;
 /*!40000 ALTER TABLE `product_has_raters` DISABLE KEYS */;
-INSERT INTO `product_has_raters` VALUES (1,1,3.1),(1,2,4.8),(4,1,5.5),(4,2,4.6),(6,3,3.2);
+INSERT INTO `product_has_raters` VALUES (1,1,10.0),(1,2,4.8),(4,1,5.5),(4,2,4.6),(6,3,3.2);
 /*!40000 ALTER TABLE `product_has_raters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,8 +243,39 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,1,'The Terminator',1984,'R',107,5.00,10.00,'A seemingly indestructible humanoid cyborg is sent from 2029 to 1984 to assassinate a waitress, whose unborn son will lead humanity in a war against the machines, while a soldier from that war is sent to protect her at all costs.','images/terminator.jpg',NULL,'James Cameron, Gale Anne Hurd','Arnold Schwarzenegger, Linda Hamilton, Michael Biehn',10,NULL),(2,1,'Titanic ',1997,'PG-13',194,10.00,15.00,'84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.','images/titanic.jpg',NULL,'James Cameron','Leonardo DiCaprio, Kate Winslet, Billy Zane',5,'2018-03-04'),(3,1,'Jumanji ',1995,'PG',104,5.00,7.50,'After being trapped in a jungle board game for 26 years, a Man-Child wins his release from the game. But, no sooner has he arrived that he is forced to play again, and this time sets the creatures of the jungle loose on the city. Now it is up to him to stop them.','images\\jumanji.jpg',NULL,'Jonathan Hensleigh, Greg Taylor','Robin Williams, Kirsten Dunst, Bonnie Hunt',3,'2018-05-15'),(4,2,'The Simpsons',1989,'-',22,3.00,5.00,'This is an animated sitcom about the antics of a dysfunctional family. Homer is the oafish unhealthy beer loving father, Marge is the hardworking homemaker wife, Bart is the perpetual ten-year-old underachiever (and proud of it), Lisa is the unappreciated eight-year-old genius, and Maggie is the cute, pacifier loving silent infant.','images\\the simpsons.jpg',NULL,'James L. Brooks, Matt Groening, Sam Simon','Dan Castellaneta, Nancy Cartwright, Julie Kavner',1,NULL),(5,2,'ER',1994,'-',44,3.00,5.00,'Michael Crichton has created a medical drama that chronicles life and death in a Chicago hospital emergency room. Each episode tells the tale of another day in the ER, from the exciting to the mundane, and the joyous to the heart-rending. Frenetic pacing, interwoven plot lines, and emotional rollercoastering is used to attempt to accurately depict the stressful environment found there. This show even portrays the plight of medical students in their quest to become physicians.','images\\er.jpg',NULL,'Michael Crichton','Anthony Edwards, George Clooney, Julianna Margulies',22,NULL),(6,2,'The Mentalist',2008,'-',43,3.00,5.00,'After a serial killer named Red John murdered Patrick Jane\'s wife and daughter, Jane dedicated his life to hunting down and killing Red John. To that end he gave up his lucrative pretense of being a psychic and joined the California Bureau of Investigation (CBI) as a consultant to the team responsible for investigating the Red John case, led by Senior Agent Teresa Lisbon. Using Jane\'s exceptional gift for observation and his mentalist tric able to close an unprecedented number of cases, but Jane\'s unconventional and often outright illegal methods also bring much censure down on Lisbon\'s head, making his assistance both a blessing and a curse. Meanwhile, the hunt for Red John continues...','images\\the mentalist.jpg',NULL,'Bruno Heller','Simon Baker, Robin Tunney, Tim Kang',NULL,NULL);
+INSERT INTO `products` VALUES (1,1,'The Terminator',1984,'R',107,5.00,10.00,'A seemingly indestructible humanoid cyborg is sent from 2029 to 1984 to assassinate a waitress, whose unborn son will lead humanity in a war against the machines, while a soldier from that war is sent to protect her at all costs.','1.jpg',NULL,'James Cameron, Gale Anne Hurd','Arnold Schwarzenegger, Linda Hamilton, Michael Biehn',10,NULL),(2,1,'Titanic ',1997,'PG-13',194,10.00,15.00,'84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.','2.jpg',NULL,'James Cameron','Leonardo DiCaprio, Kate Winslet, Billy Zane',5,'2018-03-04'),(3,1,'Jumanji ',1995,'PG',104,5.00,7.50,'After being trapped in a jungle board game for 26 years, a Man-Child wins his release from the game. But, no sooner has he arrived that he is forced to play again, and this time sets the creatures of the jungle loose on the city. Now it is up to him to stop them.','3.jpg',NULL,'Jonathan Hensleigh, Greg Taylor','Robin Williams, Kirsten Dunst, Bonnie Hunt',3,'2018-05-15'),(4,2,'The Simpsons',1989,'-',22,3.00,5.00,'This is an animated sitcom about the antics of a dysfunctional family. Homer is the oafish unhealthy beer loving father, Marge is the hardworking homemaker wife, Bart is the perpetual ten-year-old underachiever (and proud of it), Lisa is the unappreciated eight-year-old genius, and Maggie is the cute, pacifier loving silent infant.','4.jpg',NULL,'James L. Brooks, Matt Groening, Sam Simon','Dan Castellaneta, Nancy Cartwright, Julie Kavner',1,NULL),(5,2,'ER',1994,'-',44,3.00,5.00,'Michael Crichton has created a medical drama that chronicles life and death in a Chicago hospital emergency room. Each episode tells the tale of another day in the ER, from the exciting to the mundane, and the joyous to the heart-rending. Frenetic pacing, interwoven plot lines, and emotional rollercoastering is used to attempt to accurately depict the stressful environment found there. This show even portrays the plight of medical students in their quest to become physicians.','5.jpg',NULL,'Michael Crichton','Anthony Edwards, George Clooney, Julianna Margulies',22,NULL),(6,2,'The Mentalist',2008,'-',43,3.00,5.00,'After a serial killer named Red John murdered Patrick Jane\'s wife and daughter, Jane dedicated his life to hunting down and killing Red John. To that end he gave up his lucrative pretense of being a psychic and joined the California Bureau of Investigation (CBI) as a consultant to the team responsible for investigating the Red John case, led by Senior Agent Teresa Lisbon. Using Jane\'s exceptional gift for observation and his mentalist tric able to close an unprecedented number of cases, but Jane\'s unconventional and often outright illegal methods also bring much censure down on Lisbon\'s head, making his assistance both a blessing and a curse. Meanwhile, the hunt for Red John continues...','6.jpg',NULL,'Bruno Heller','Simon Baker, Robin Tunney, Tim Kang',NULL,NULL);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reviews`
+--
+
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reviews` (
+  `review_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `date_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`review_id`),
+  KEY `fk_reviews_products` (`product_id`),
+  KEY `fk_reviews_users` (`user_id`),
+  CONSTRAINT `fk_reviews_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_reviews_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reviews`
+--
+
+LOCK TABLES `reviews` WRITE;
+/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+INSERT INTO `reviews` VALUES (22,1,1,'I really liked this movie.','2018-04-29 16:50:29'),(23,1,1,'fine','2018-04-29 16:51:05'),(24,5,2,'Wasnt so interesting','2018-04-29 16:51:44'),(25,1,2,'Arnold is a bad actor :/','2018-04-29 16:52:14');
+/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -352,7 +383,7 @@ CREATE TABLE `user_has_watchlist_products` (
 
 LOCK TABLES `user_has_watchlist_products` WRITE;
 /*!40000 ALTER TABLE `user_has_watchlist_products` DISABLE KEYS */;
-INSERT INTO `user_has_watchlist_products` VALUES (2,1),(3,1),(1,2),(1,4),(1,5);
+INSERT INTO `user_has_watchlist_products` VALUES (1,1),(2,1),(3,1),(1,2),(1,4),(1,5);
 /*!40000 ALTER TABLE `user_has_watchlist_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -390,7 +421,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,0,'sgekov','svetoslav_gekov@abv.bg','$2a$10$1jk0yGGk90M1Bhi6V.4iJO1fcqI77czYaCj9esf0DEAZM7ocIH7fy','Svetoslav','Gekov','2018-04-01',NULL,'2018-04-20 15:58:10',NULL,9868.00),(2,0,'mdimitrov','mario0.bg@abv.bg','$2a$10$0/PmI5dkHCtW.7T/wQbSr.AogH65p4fSaPpGC8TmhFAoaIbHnf6um','Mario','Dimitrov','2018-04-01',NULL,NULL,NULL,200.00),(3,1,'admin','admin@filmoteka.bg','$2a$10$BhejaMOwKu8AOxnK/M0d3OxF6dtgnTqr2fMdck/2rW/C3o1w7jJwm','Admin','Adminov','2018-04-01',NULL,'2018-04-14 12:22:10',NULL,5000.00),(9,0,'wave','wavecatcher@abv.bg','$2a$10$c5zMdMRo2FhSN5KTYScVOOQXPrEuGKu5uD2nbnnWqsxCKalARV6Ri','Wave','Catcher','2018-04-14',NULL,'2018-04-20 15:17:42',NULL,150.00),(10,0,'citizen','random@mail.bg','$2a$10$2VWjmX1CPcS/tv4p/LgL/.uWf3z4cH2D9HjrRdg8z3uBJGACiJsxG','Citizenich','Randomich','2018-04-18','123','2018-04-18 06:26:22',NULL,150.00);
+INSERT INTO `users` VALUES (1,0,'sgekov','svetoslav_gekov@abv.bg','$2a$10$1jk0yGGk90M1Bhi6V.4iJO1fcqI77czYaCj9esf0DEAZM7ocIH7fy','Svetoslav','Gekov','2018-04-01',NULL,'2018-04-29 13:48:02',NULL,9868.00),(2,0,'mdimitrov','mario0.bg@abv.bg','$2a$10$0/PmI5dkHCtW.7T/wQbSr.AogH65p4fSaPpGC8TmhFAoaIbHnf6um','Mario','Dimitrov','2018-04-01',NULL,'2018-04-29 13:51:26',NULL,200.00),(3,1,'admin','admin@filmoteka.bg','$2a$10$BhejaMOwKu8AOxnK/M0d3OxF6dtgnTqr2fMdck/2rW/C3o1w7jJwm','Admin','Adminov','2018-04-01',NULL,'2018-04-14 12:22:10',NULL,5000.00),(9,0,'wave','wavecatcher@abv.bg','$2a$10$c5zMdMRo2FhSN5KTYScVOOQXPrEuGKu5uD2nbnnWqsxCKalARV6Ri','Wave','Catcher','2018-04-14',NULL,'2018-04-20 15:17:42',NULL,150.00),(10,0,'citizen','random@mail.bg','$2a$10$2VWjmX1CPcS/tv4p/LgL/.uWf3z4cH2D9HjrRdg8z3uBJGACiJsxG','Citizenich','Randomich','2018-04-18','123','2018-04-18 06:26:22',NULL,150.00);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -403,4 +434,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-20 18:58:40
+-- Dump completed on 2018-04-29 16:56:10

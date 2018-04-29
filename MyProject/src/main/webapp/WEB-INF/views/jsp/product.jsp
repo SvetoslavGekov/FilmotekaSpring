@@ -4,31 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<!-- Style rating stars -->
-<style type="text/css">
-.rating {
-  unicode-bidi: bidi-override;
-  direction: rtl;
-  text-align: center;
-}
-.rating > span {
-  display: inline-block;
-  position: relative;
-  width: 1.1em;
-}
-.rating > span:hover,
-.rating > span:hover ~ span {
-  color: transparent;
-}
-.rating > span:hover:before,
-.rating > span:hover ~ span:before {
-   content: "\2605";
-   position: absolute;
-   left: 0; 
-   color: gold;
-}
 
-</style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -39,6 +15,10 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2017.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-food.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
+
+<!-- Style rating stars and review table -->
+<link href="../css/product.css" rel="stylesheet" type="text/css">
+
 <title>${product.name }</title>
 
 <base href="http://localhost:8080/FilmotekaSpring/">
@@ -62,7 +42,7 @@
 							<button  onClick="addProductToWatchList(${product.id})">To Watch list</button>
 							<button float="left" onClick="addProductToCart(${product.id},true)">Buy</button>
 							<button  onClick="addProductToCart(${product.id},false)">Rent</button>
-							<button float="left" onClick="document.getElementById('rate').style.display = 'block'">Add rating</button>
+							<button float="left" onClick="showOrHideContent('rate')">Add rating</button>
 							
 							<div id="rate" class="rating" style="display:none">
 							<c:forEach begin="1" end="10" varStatus="loop">
@@ -93,27 +73,115 @@
 							<c:when test="${product.productCategory.id == 2 }">
 								<div><h5>Season:</h5><span>${product.season}</span></div>
 								<div><h5>Finished airing:</h5><span>${product.finishedAiring}</span></div>
+								
 							</c:when>
-							
 						</c:choose>
+						<button id="addreviewbtn" onclick="showOrHideContent('addreview')">Add review</button>
+						<button id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	
+	
+	<!-- Adding review -->
+	<div id="addreview" style="display:none" style="margin-top:10px">
+		<table width="500" align="center" style="margin-top:1%">
+					<thead>
+						<tr>
+						<th align="left">${ sessionScope.USER.username }</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+						<td>
+							<textarea rows="7" cols="70" style="resize:none" name="content" id="reviewcont"
+									placeholder="${ sessionScope.USER.firstName }, what you think about this product..."
+								maxlength="480" minlength="5"></textarea>
+						</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+						<td align="right"><button onclick="addReview(document.getElementById('reviewcont').value, ${ product.id })">Submit</button></td>
+						</tr>
+					</tfoot>
+		</table>
+	</div>
+	
+	
+	
+	<!-- Review tables -->
+	<div id="reviews" style="display:none" style="margin-top:4%">
+	<c:choose>
+		<c:when test="${not empty reviews }">
+		<c:forEach var="review" items="${reviews}">
+			<table class="review" align="right" style="margin-top:2%">
+				<thead>
+					<tr>
+					<th>${ review.username }</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td>${ review.content }</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>
+							${ review.dateTime.dayOfMonth} 
+		                    ${ review.dateTime.month} 
+		                    ${ review.dateTime.year} at 
+		                    ${ review.dateTime.hour}:${ review.dateTime.minute}:${ review.dateTime.second }
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</c:forEach>
+		</c:when>
+		
+		<c:otherwise>
+			<h3 align="center"><i>Be the first to write a review</i></h3>
+		</c:otherwise>
+	</c:choose>
+	</div>	
+	
 </body>
 
 <script src="js/userInteractions.js">
 </script>
+
 <script type="text/javascript">
-function rateProduct(id, rating) {
-	var xhttp = new XMLHttpRequest();
-	
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			alert("Product successfully rated with rating = "+rating);
+function showOrHideContent(btnid){
+	if(document.getElementById(btnid).style.display == 'block'){
+		document.getElementById(btnid).style.display = 'none';
+	}
+	else{
+		document.getElementById(btnid).style.display = 'block';
+	}
+}
+
+function addReview(reviewContent, productID) {
+	//clear the textarea
+	document.getElementById('reviewcont').value = '';
+	//add the review only if it is between 3 and 480 characters
+	if(reviewContent.length < 3 || reviewContent.length > 480){
+		if(reviewContent.length > 480){
+			alert("What is the meaning of a too long review? That's pretty annoying for the other customers.");
+		}else{
+			alert("What is the meaning of a too short review? Help other customers make the right choice.");
 		}
-		else if(this.readyState == 4 && this.status == 500){
+		return;
+	}
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		//if (this.readyState == 4 && this.status == 200) {
+		//	alert("Added review:\n"+reviewContent+"\n For product with id = "+productID);
+		//}else
+		if(this.readyState == 4 && this.status == 500){
 			alert(dbError);
 		}
 		else if(this.readyState == 4 && this.status == 400){
@@ -124,11 +192,13 @@ function rateProduct(id, rating) {
 		}
 	};
 	
-	
-	xhttp.open("POST", "auth/rateproduct", true);
+	xhttp.open("POST", "auth/addreview", true);
 	xhttp.setRequestHeader("Content-type",
 			"application/x-www-form-urlencoded");
-	xhttp.send("productID="+ id +"&rating=" + rating);
+	xhttp.send("productID="+ productID +"&reviewContent=" + reviewContent);
+	
+	//To show the new review reloading is required (AJAX can handle this)
+	location.reload();
 }
 </script>
 </html>
