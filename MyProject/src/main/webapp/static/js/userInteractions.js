@@ -35,6 +35,31 @@ function addProductToCart(id, willBuy) {
 	xhttp.send("productID="+ id +"&willBuy=" + willBuy);
 }
 
+function rateProduct(id, rating) {
+	var xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			alert("Product successfully rated with rating = "+rating);
+		}
+		else if(this.readyState == 4 && this.status == 500){
+			alert(dbError);
+		}
+		else if(this.readyState == 4 && this.status == 400){
+			alert(noSuchProduct);
+		}
+		else if(this.readyState == 4 && this.status == 401){
+			redirectToUnauthorizedPage();
+		}
+	};
+	
+	
+	xhttp.open("POST", "auth/rateproduct", true);
+	xhttp.setRequestHeader("Content-type",
+			"application/x-www-form-urlencoded");
+	xhttp.send("productID="+ id +"&rating=" + rating);
+}
+
 
 function addProductToFavorites(id) {
 	var xhttp = new XMLHttpRequest();

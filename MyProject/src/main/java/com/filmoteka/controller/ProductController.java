@@ -2,16 +2,12 @@ package com.filmoteka.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,15 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.manager.UserManager;
-import com.filmoteka.model.Movie;
 import com.filmoteka.model.Product;
-import com.filmoteka.model.TVSeries;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.MovieDao;
 import com.filmoteka.model.dao.ProductDao;
@@ -135,34 +128,38 @@ public class ProductController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+		
+		@RequestMapping(value = "/auth/rateproduct", method = RequestMethod.POST)
+		public ResponseEntity<Boolean> addProductToCart(HttpSession session,
+				@RequestParam("productID") Integer productId,
+				@RequestParam("rating") Double rating){
+			try {
+				// Get user from session
+				User user = (User) session.getAttribute("USER");
 
-	@RequestMapping(value = "/auth/towatchlist", method = RequestMethod.POST)
-	public ResponseEntity<Boolean> addOrRemoveWatchlistProduct(HttpSession session,
-			@RequestParam("productID") Integer productID) {
-		try {
-			// Get user from session
-			User user = (User) session.getAttribute("USER");
-
-			// Get product from database
-			Product product = ProductDao.getInstance().getProductById(productID);
-
-			// Check if the productId is valid
-			if (product == null) {
-				// If not --> return an HTTP code for no such product (400);
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				// Get product from database
+				Product product = ProductDao.getInstance().getProductById(productId);
+				
+				// Check if the productId is valid
+				if (product == null) {
+					// If not --> return an HTTP code for no such product (400);
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
+				
+				// Rate product
+				ProductDao.getInstance().rateProduct(user, product, rating);
+				
+				System.out.println("\nRated product from "+user.getFirstName()+" with rate = "+rating);
+				
+				
+				//Return an OK status
+				return new ResponseEntity<Boolean>(HttpStatus.OK);
 			}
-			// Check the result of adding or removing the product from the watchlist
-			boolean isAdded = UserManager.getInstance().addOrRemoveProductFromWatchlist(user, product);
-
-			// Return the result and an OK status
-			return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
+			catch (SQLException | InvalidProductDataException e) {
+				//Return an entity with a status code for Internal Server Error (handling is done via JS)
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
-		catch (SQLException | InvalidProductDataException e1) {
-			// Return an entity with a status code for Internal Server Error (handling is
-			// done via JS)
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 
 	@RequestMapping(value = "/browse", method = RequestMethod.GET)
 	public String loadProductBrowsingPage(Model m) throws Exception {
