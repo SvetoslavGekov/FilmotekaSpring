@@ -1,7 +1,7 @@
 package com.filmoteka.model.nomenclatures;
 
 import com.filmoteka.exceptions.InvalidGenreDataException;
-import com.filmoteka.validation.Supp;
+import com.filmoteka.util.Supp;
 
 public class Genre {
 	//Fields

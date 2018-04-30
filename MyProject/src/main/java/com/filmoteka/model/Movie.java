@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
-import com.filmoteka.validation.Supp;
+import com.filmoteka.util.Supp;
 
 @Component
 public class Movie extends Product {

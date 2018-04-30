@@ -32,7 +32,7 @@ import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.TVSeriesDao;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.nomenclatures.Genre;
-import com.filmoteka.util.productFilters.ProductQueryInfo;
+import com.filmoteka.util.ProductQueryInfo;
 
 
 @Controller

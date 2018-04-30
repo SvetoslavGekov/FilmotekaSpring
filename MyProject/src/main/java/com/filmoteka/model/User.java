@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.filmoteka.exceptions.InvalidUserDataException;
-import com.filmoteka.validation.BCrypt;
-import com.filmoteka.validation.Supp;
+import com.filmoteka.util.BCrypt;
+import com.filmoteka.util.Supp;
 
 import java.util.Set;
 import java.util.TreeMap;

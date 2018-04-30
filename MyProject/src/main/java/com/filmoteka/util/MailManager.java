@@ -1,4 +1,4 @@
-package com.filmoteka.util.mailManager;
+package com.filmoteka.util;
 
 import java.io.File;
 import java.util.*;

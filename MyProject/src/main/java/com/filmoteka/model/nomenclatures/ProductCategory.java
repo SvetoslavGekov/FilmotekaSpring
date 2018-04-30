@@ -1,7 +1,7 @@
 package com.filmoteka.model.nomenclatures;
 
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
-import com.filmoteka.validation.Supp;
+import com.filmoteka.util.Supp;
 
 public final class ProductCategory {
 	//Fields

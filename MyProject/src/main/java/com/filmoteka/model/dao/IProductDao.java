@@ -12,7 +12,7 @@ import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.nomenclatures.Genre;
-import com.filmoteka.util.productFilters.ProductQueryInfo;
+import com.filmoteka.util.ProductQueryInfo;
 
 
 public interface IProductDao {
