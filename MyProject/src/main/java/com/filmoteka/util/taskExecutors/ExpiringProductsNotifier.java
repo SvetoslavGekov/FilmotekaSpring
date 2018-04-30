@@ -14,7 +14,7 @@ import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.UserDao;
-import com.filmoteka.util.mailManager.MailManager;
+import com.filmoteka.util.MailManager;
 
 public final class ExpiringProductsNotifier implements Callable<Boolean> {
 	//Fields
@@ -54,7 +54,7 @@ public final class ExpiringProductsNotifier implements Callable<Boolean> {
 			}
 			catch (SQLException | InvalidUserDataException | InvalidProductDataException
 					| InvalidGenreDataException | InvalidProductCategoryDataException e) {
-				//TODO --> log exception and continue work
+				e.printStackTrace();
 				return false;
 			}	
 	}

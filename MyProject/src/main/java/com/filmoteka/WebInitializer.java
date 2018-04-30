@@ -1,11 +1,9 @@
 package com.filmoteka;
 
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import org.springframework.web.servlet.support.
-AbstractAnnotationConfigDispatcherServletInitializer;
- 
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
- 
+	
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] { SpringWebConfig.class };
@@ -20,6 +18,5 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected String[] getServletMappings() {
         return new String[] { "/", "*.html", "*.pdf" };
     }
-    
 
 }

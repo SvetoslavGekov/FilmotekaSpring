@@ -31,8 +31,8 @@ import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
-import com.filmoteka.util.productFilters.ProductQueryInfo;
-import com.filmoteka.validation.Supp;
+import com.filmoteka.util.ProductQueryInfo;
+import com.filmoteka.util.Supp;
 
 public final class ProductDao implements IProductDao {
 	private static final String DEFAULT_FILTER_ORDERED_BY = "name";

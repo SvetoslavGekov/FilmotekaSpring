@@ -29,7 +29,7 @@ import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Order;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
-import com.filmoteka.validation.BCrypt;
+import com.filmoteka.util.BCrypt;
 
 import java.util.Set;
 import java.util.TreeMap;
@@ -379,7 +379,7 @@ public class UserDao implements IUserDao {
 	InvalidGenreDataException, InvalidProductCategoryDataException{
 		Map<User,List<Product>> expiringProducts = new TreeMap<>();
 		
-		String query = "SELECT up.is_admin,up.user_id, up.product_id, up.validity, u.first_name, u.last_name, u.username, u.password, u.email" + 
+		String query = "SELECT up.user_id, up.product_id, up.validity, u.is_admin, u.first_name, u.last_name, u.username, u.password, u.email" + 
 				"	FROM user_has_products AS up" + 
 				"	JOIN users AS u USING (user_id)" + 
 				"	WHERE validity = DATE_ADD(curdate(), INTERVAL 1 DAY);";

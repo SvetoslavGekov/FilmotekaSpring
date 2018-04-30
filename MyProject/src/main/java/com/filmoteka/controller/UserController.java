@@ -21,7 +21,7 @@ import com.filmoteka.manager.UserManager;
 import com.filmoteka.model.User;
 
 import com.filmoteka.model.dao.UserDao;
-import com.filmoteka.validation.BCrypt;
+import com.filmoteka.util.BCrypt;
 
 
 @Controller

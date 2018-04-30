@@ -1,4 +1,4 @@
-package com.filmoteka.util.productFilters;
+package com.filmoteka.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.model.nomenclatures.Genre;
-import com.filmoteka.validation.Supp;
 
 public class ProductQueryInfo {
 	private static final String[] ORDERED_OPTIONS = {"name","duration","buy_cost","rent_cost"};

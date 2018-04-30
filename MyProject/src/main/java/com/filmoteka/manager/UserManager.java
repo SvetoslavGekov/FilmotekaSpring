@@ -18,7 +18,7 @@ import com.filmoteka.model.Order;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.UserDao;
-import com.filmoteka.validation.Supp;
+import com.filmoteka.util.Supp;
 
 public class UserManager {
 

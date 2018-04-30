@@ -1,4 +1,4 @@
-package com.filmoteka.validation;
+package com.filmoteka.util;
 
 import java.io.File;
 import java.io.IOException;
