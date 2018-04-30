@@ -2,6 +2,9 @@ package com.filmoteka.model;
 
 import java.time.LocalDateTime;
 
+import com.filmoteka.exceptions.InvalidReviewDataException;
+import com.filmoteka.util.Supp;
+
 public class Review {
 	
 	private long id;
@@ -11,7 +14,7 @@ public class Review {
 	private LocalDateTime dateTime;
 	
 	
-	public Review(long id, long productId, String username, String content, LocalDateTime dateTime) {
+	public Review(long id, long productId, String username, String content, LocalDateTime dateTime) throws InvalidReviewDataException {
 		this.setId(id);
 		this.setProductId(productId);
 		this.setUserId(username);
@@ -41,17 +44,21 @@ public class Review {
 	}
 
 
-	private void setContent(String content) {
-		if(!content.isEmpty() && content != null) {
+	private void setContent(String content) throws InvalidReviewDataException {
+		if(Supp.isNotNullOrEmpty(content)) {
 			this.content = content;
+			return;
 		}
+		throw new InvalidReviewDataException("Invalid review content");
 	}
 
 
-	private void setDateTime(LocalDateTime dateTime) {
+	private void setDateTime(LocalDateTime dateTime) throws InvalidReviewDataException {
 		if(dateTime != null) {
 			this.dateTime = dateTime;
+			return;
 		}
+		throw new InvalidReviewDataException("Invalid review dateTime");
 	}
 
 
