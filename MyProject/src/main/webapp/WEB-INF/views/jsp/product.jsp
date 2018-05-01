@@ -151,8 +151,4 @@
 
 <script src="js/userInteractions.js">
 </script>
-
-<script type="text/javascript">
-
-</script>
 </html>

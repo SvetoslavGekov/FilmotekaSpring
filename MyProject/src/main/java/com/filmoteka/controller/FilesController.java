@@ -89,4 +89,26 @@ public class FilesController {
 		
 		return byteArray;
 	}
+	
+	@RequestMapping(value = "/getProfilePic", method = RequestMethod.GET)
+	@ResponseBody
+	public byte[] getProfilePicture(@RequestParam("pic") String pic) throws FileNotFoundException, IOException {
+
+		//Grab the file where the picture is saved at
+		File f = new File(USER_IMAGES_FILEPATH + File.separator + pic);
+		
+		//Check if the file exists
+		if(!f.exists() || !Supp.isNotNullOrEmpty(pic)) {
+			//Assign the no image photo to the user without a profile picture
+			f = new File(USER_IMAGES_FILEPATH + File.separator + NO_IMAGE);
+		}
+		
+		byte[] byteArray = new byte[(int) f.length()];
+		//Write the picture in a byte array and return it
+		try(BufferedInputStream is = new BufferedInputStream(new FileInputStream(f));){
+			is.read(byteArray);
+		}
+		
+		return byteArray;
+	}
 }

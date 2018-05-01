@@ -6,11 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.filmoteka.exceptions.InvalidFormDataException;
 import com.filmoteka.exceptions.InvalidGenreDataException;
@@ -128,6 +130,7 @@ public class UserController {
 								@RequestParam("lastname") String lastName,
 								@RequestParam("email") String email,
 								@RequestParam("phone") String phone,
+								@RequestParam("profilePicture") MultipartFile profilePicture,
 								HttpServletRequest request) throws Exception{
 		
 		User user = (User) session.getAttribute("USER");
@@ -167,6 +170,13 @@ public class UserController {
 		user.setEmail(email);
 		user.setPhone(phone);
 		user.setPassword(newPass1);
+		
+		// Upload profile picture if there is one
+		if (!profilePicture.isEmpty()
+				&& FilenameUtils.getExtension(profilePicture.getOriginalFilename()).equalsIgnoreCase("jpg")) {
+			String profilePicturePath = FilesController.uploadUserImage(profilePicture, null);
+			user.setProfilePicture(profilePicturePath);
+		}
 		UserDao.getInstance().updateUser(user);
 	
 		return "account";

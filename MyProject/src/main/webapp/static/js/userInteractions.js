@@ -195,3 +195,23 @@ function addReview(reviewContent, productID) {
 	xhttp.send("productID="+ productID +"&reviewContent=" + reviewContent);
 }
 
+function openPassFields(){
+	document.getElementById("cpass").setAttribute("required", "");
+	document.getElementById("cpass").setAttribute("pattern","^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$");
+	document.getElementById("cpass").setAttribute("title", "At least 6 characters containing: 1 Uppercase letter, 1 Lowercase letter and 1 number");
+	
+	document.getElementById("npass").setAttribute("required", "");
+	document.getElementById("npass").setAttribute("pattern","^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$");
+	document.getElementById("npass").setAttribute("title", "At least 6 characters containing: 1 Uppercase letter, 1 Lowercase letter and 1 number");
+	
+	document.getElementById("npass2").setAttribute("required", "");
+	document.getElementById("npass2").setAttribute("pattern","^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$");
+	document.getElementById("npass2").setAttribute("title", "At least 6 characters containing: 1 Uppercase letter, 1 Lowercase letter and 1 number");
+	
+    if(document.getElementById("passwordfield").style.display == 'none'){
+        document.getElementById("passwordfield").style.display = 'block';
+    }else{
+        document.getElementById("passwordfield").style.display = 'none';
+    }
+}
+

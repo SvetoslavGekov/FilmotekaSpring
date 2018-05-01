@@ -202,14 +202,14 @@ public class User implements Comparable<User> {
 	}
 
 	public void setProfilePicture(String profilePicture) throws InvalidUserDataException {
-		try {
-			if (Supp.isValidImagePath(profilePicture)) {
+//		try {
+//			if (Supp.isValidImagePath(profilePicture)) {
 				this.profilePicture = profilePicture;
-			}
-		}
-		catch (IOException e) {
-			throw new InvalidUserDataException("Invalid image path");
-		}
+//			}
+//		}
+//		catch (IOException e) {
+//			throw new InvalidUserDataException("Invalid profile image path");
+//		}
 	}
 
 	public void setFavourites(Set<Integer> favourites) {
