@@ -46,6 +46,8 @@ public class ProductController {
 	private static final int MAX_REVIEW_CHARS = 480;
 	private static final int MIN_REVIEW_CHARS = 3;
 	
+	private static final Integer TOP_ITEMS_COUNT = new Integer(6);
+	
 	
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
 	public String loadProductPage(Model m, @PathVariable("id") Integer productId) throws Exception {
@@ -78,14 +80,13 @@ public class ProductController {
 			// Create a map of: category --> list of products
 			Map<String, List<Product>> groupedProducts = new TreeMap<>();
 			// Get top 5 of
-			groupedProducts.put("On Sale", (List<Product>) ProductDao.getInstance().getProductsOnSale(new Integer(5))); // On
-																														// sale
+			groupedProducts.put("On Sale", (List<Product>) ProductDao.getInstance().getProductsOnSale(new Integer(TOP_ITEMS_COUNT))); // On sale
 			groupedProducts.put("Most Popular",
-					(List<Product>) ProductDao.getInstance().getMostPopularProducts(new Integer(5))); // Most Popular
+					(List<Product>) ProductDao.getInstance().getMostPopularProducts(new Integer(TOP_ITEMS_COUNT))); // Most Popular
 			groupedProducts.put("Highest Rated",
-					(List<Product>) ProductDao.getInstance().getHighestRatedProducts(new Integer(5))); // Highest rated
+					(List<Product>) ProductDao.getInstance().getHighestRatedProducts(new Integer(TOP_ITEMS_COUNT))); // Highest rated
 			groupedProducts.put("Cheapest",
-					(List<Product>) ProductDao.getInstance().getCheapestProducts(new Integer(5))); // Cheapest
+					(List<Product>) ProductDao.getInstance().getCheapestProducts(new Integer(TOP_ITEMS_COUNT))); // Cheapest
 
 			// Set the products in the model
 			m.addAttribute("mainPageProducts", groupedProducts);
