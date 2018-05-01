@@ -4,9 +4,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>FilmotekaBG</title>
+
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- HTML Imports -->
+
+<!-- Color Libraries -->
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-metro.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-highway.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2017.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-food.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
+<link rel="stylesheet" href="css/color-theme.css">
 <link rel="stylesheet" href="css/user_form.css">
+
+<base href="http://localhost:8080/FilmotekaSpring/">
+
+<title>FilmotekaBG Login</title> 
 </head>
 <body>
 

@@ -14,7 +14,7 @@ import com.filmoteka.util.taskExecutors.ExpiringProductsNotifier;
 
 @Component
 public class ApplicationStartup {
-	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(16).withMinute(23).withSecond(20);
+	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(9).withMinute(32).withSecond(20);
 	private static final List<CustomTaskExecutor> TASKS = new ArrayList<CustomTaskExecutor>();
 	
 	@EventListener()
