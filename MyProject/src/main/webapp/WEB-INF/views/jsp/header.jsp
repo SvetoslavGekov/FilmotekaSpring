@@ -19,6 +19,18 @@
 	  <div id="barItems" class="w3-bar w3-2017-lapis-blue  w3-card-4">
 		<button class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='main'"><b>Home</b></button>
 		<button class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='browse'"><b>Browse products</b></button>
+		
+		<!-- If user is admin (add additional menus) -->
+		<c:if test="${sessionScope.USER.isAdmin }">
+			<div class="w3-dropdown-hover">
+				<button class="w3-button w3-hover-teal">Administrative</button>
+				<div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
+					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/1'"><b>New Movie</b></a>
+					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/2'"><b>New TV Series</b></a>
+				</div>
+			</div>
+		</c:if>
+		
 		<div class="w3-bar-item " style="width:30%">
 			<form method = "GET" action="search">
 				<i class="fa fa-search"></i>
@@ -30,7 +42,7 @@
     		<c:when test="${ sessionScope.USER != null }">
        		 	<div class="w3-dropdown-hover w3-right">
 				  	<button class=" w3-button w3-hover-teal" onclick="location.href='auth/account'" title="More"><b>${ sessionScope.USER.firstName} ${ sessionScope.USER.lastName}<b></button>     
-				 	 <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-theme-d1">
+				 	 <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
 						<a class="w3-bar-item w3-button w3-hover-teal"><b>My Products</b></a>
 						<a class="w3-bar-item w3-button w3-hover-teal"><b>My Favorites</b></a>
 						<a class="w3-bar-item w3-button w3-hover-teal"><b>My WatchList</b></a>

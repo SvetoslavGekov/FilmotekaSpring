@@ -35,10 +35,10 @@ span.signup,
 
 <title>FilmotekaBG Login</title> 
 </head>
-<body>
+<body bgcolor="#E9EBEE">
 
 <div class="w3-display-container">
-	<div class="w3-border w3-round-xxlarge w3-card-4 w3-animate-zoom" style="width:50%; margin-top:5%; margin-left:25%" >
+	<div class="w3-border w3-round-xxlarge w3-card-4 w3-animate-zoom w3-white" style="width:50%; margin-top:5%; margin-left:25%" >
       <div class="w3-center"><br>
       	<p class="w3-wide w3-xxlarge w3-text-theme"><b>FILMOTEKA.BG LOGIN</b></p>
         <img src="img/avatar.jpg" alt="User Avatar" style="width:30%" class="w3-circle w3-margin-bottom">
@@ -58,7 +58,7 @@ span.signup,
           <button class="w3-button w3-block w3-2017-lapis-blue w3-section w3-padding w3-hover-teal" type="submit"><b>Login</b></button>
         </div>
       </form>
-      <div class="w3-container w3-border-top w3-light-grey w3-padding-large">
+      <div class="w3-container w3-border-top w3-grey w3-padding-large">
 		<span class="">Don't have an account?  
 	    	<span class="signup" onclick="document.getElementById('id01').style.display='block'">Sign up now</span>
 	    </span>

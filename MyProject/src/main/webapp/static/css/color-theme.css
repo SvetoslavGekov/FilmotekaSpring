@@ -21,15 +21,3 @@
 .w3-hover-text-theme:hover {color:#034f84 !important}
 .w3-hover-border-theme:hover {border-color:#034f84 !important}
 
-	#menus,#filters{
-		margin-top:7%;
-		width:22%;
-		margin-left:1%;
-		margin-bottom:10%;
-	}
-	
-	#content{
-		maring-top:7%;
-		margin-left:24%;
-		margin-right:2%;
-	}

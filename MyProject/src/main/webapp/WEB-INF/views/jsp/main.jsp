@@ -24,7 +24,7 @@
 <title>FilmotekaBG Main</title>
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
-<body>
+<body bgcolor="#E9EBEE">
 
 	<!-- Include the header file via JSTL -->
 	<c:import url="header.jsp"></c:import>
@@ -37,7 +37,7 @@
 	  					<p class="w3-panel w3-text-theme w3-center w3-wide w3-xlarge"><b>${entry.key}</b></p>
 			  			<c:forEach var="product" items="${entry.value}">
 			  			<div class="w3-col" style="width:15%">
-			  				<div class = "w3 w3-vivid-reddish-purple w3-round-large" style="border:25px">
+			  				<div class = "w3-vivid-green w3-round-large" style="border:25px">
 			  					<p class = "w3-center w3-small w3-wide"><b>${product.name}</b></p>
 			  					<div class="w3-display-container w3-white">
 			  					<img src="getPic?pic=${product.poster}" class="w3-hover-opacity" style="width:100%; height:250px;">
@@ -45,13 +45,25 @@
 			  							<button class="w3-button w3-indigo w3-tiny w3-round-xxlarge w3-hover-vivid-greenish-blue" 
 			  								onclick="location.href='product/${product.id}'">More Info</button>
 			  						</div>
-			  						<div class="w3-display-bottomleft w3-display-hover " style="margin-bottom:2%; margin-left:2%;">
+			  						<div class="w3-display-bottomleft w3-display-hover " style="margin-bottom:1%; margin-left:2%;">
 			  							<button class="w3-button w3-indigo w3-tiny w3-round-xxlarge"
 			  								 onClick="addProductToCart(${product.id},true)">Buy</button>
+										<p class="w3-tiny w3-text-white w3-highway-green w3-round-xxlarge w3-center w3-align-right">
+											<b>
+											<fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/>
+											<i class="fa fa-euro"></i>
+											</b>
+										</p>
 			  						</div>
-			  						<div class="w3-display-bottomright w3-display-hover " style="margin-bottom:2%; margin-right:2%;">
+			  						<div class="w3-display-bottomright w3-display-hover " style="margin-bottom:1%; margin-right:2%;">
 			  							<button class="w3-button w3-indigo w3-tiny w3-round-xxlarge" 
 			  								onClick="addProductToCart(${product.id},false)">Rent</button>
+			  							<p class=" w3-tiny w3-text-white w3-highway-green w3-round-xxlarge w3-center w3-align-right">
+											<b>
+											<fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/>
+											<i class="fa fa-euro"></i>
+											</b>
+										</p>
 			  						</div>
 			  						<div class="w3-display-topright w3-display-hover w3-small" style="margin-top:2%; margin-right:2%;">
 			  							<div class="w3-tag w3-round w3-green" style="padding:3px">

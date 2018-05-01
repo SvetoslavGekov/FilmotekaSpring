@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,19 +26,22 @@
 <title>Browse Products</title>
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
-<body>
+<body bgcolor="#E9EBEE">
 <!-- Include the header file via JSTL -->
 <c:import url="header.jsp"></c:import>
 	
+<div class="w3-display-container" style="margin-top:5%">
 <!-- Filters Section -->
-<form:form commandName="newFilter">
-<div id="filters" class="w3-container w3-light-gray w3-round-xxlarge menus w3-left">
-	<input type="submit" value="Apply filter" />
+
+<div id="filters" class="w3-container w3-white w3-round-xxlarge menus w3-left" style="margin-left:2%; width:20%">
+	<form:form commandName="newFilter">
+	
 	<!--Ordering-->
 	<div class="w3-panel">
+		<input class ="w3-margin"  type="submit" value="Apply filter" />
         <button type = "button" onclick="openOrCloseSection('orderingSection')" class="w3-small w3-btn w3-block w3-theme-d2  w3-left-align">Ordering</button>
     	<div id="orderingSection" class="w3-container w3-show w3-padding ">
-			<form:select path="orderedBy" id="orderedBySelector" class="w3-select w3-border" name="option">
+			<form:select path="orderedBy" id="orderedBySelector" class="w3-select w3-border w3-round-xxlarge" name="option">
 			  <form:option value="name">Alphabetically</form:option>
 			  <form:option value="duration">By Duration</form:option>
 			  <form:option value="buy_cost">By Price</form:option>
@@ -128,27 +132,97 @@
     		<form:checkboxes path="genres" items="${genres}" itemLabel="value" itemValue="id" delimiter="<br/>"/>
     	</div>
     </div>
+	</form:form>
 </div>
-</form:form>
 
-<div id ="contents" class="w3-container w3-border w3-left" style="margin-left:24%; margin-top:10%">
-		<table cellspacing="0" cellpading="0" width="75%" border="1">
-			<tbody>
-				<tr>
-					<th colspan = "2">Product</th>
-				</tr>
-				<c:forEach var="product" items="${products}">
-				<tr>
-				<td>
-					<a href="product/${product.id}">
-						<img height="150" width="150" alt="${product.name}" title = "${product.name }" src = "getPic?pic=${product.poster}">
-					</a>
-				</td>
-				<td valign="middle"><span class="cartItem">${product.name} ${product.releaseDate.year}</span></td>
-				</tr>
-				</c:forEach>
-			</tbody>
-		</table>	
+
+<div id ="contents" class="w3-container menus w3-right" style="width:70%; margin-right:4%">
+	<h1>Filtered products</h1>
+	<c:forEach var="product" items="${products}">
+	<div class="w3-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
+		<div class="w3-row-padding">
+			<div class="w3-col w3-container w3-margin" style="width:25%;">
+				<div class="w3-container w3-padding">
+	        		<a href="product/${product.id}">
+	        			<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round" style="width:100%; height:225px;">
+	        		</a>
+	        	</div>
+	        </div>
+	        	<div class="w3-col w3-container w3-margin" style="width:45%;">
+	            	<div class="w3-container">
+	                  <a href="product/${product.id}">
+	                  	<span class="w3-large w3-text-highway-blue"><b>${product.name}</b></span><br><br>
+	                  </a>
+	                  
+	                  <span class="w3-medium w3-text-theme " ><b>Product type:</b>
+	                  	<span class="w3-small w3-text-black ">${product.productCategory.value}</span>
+	                  </span><br>
+					  <span class="w3-medium w3-text-theme "><b>Released:</b>
+					  	<span class="w3-small w3-text-black ">${product.releaseDate.year}</span>
+					  </span><br>
+					  <span class="w3-medium w3-text-theme "><b>Pg Rating:</b>
+					  	<div class="w3-tag w3-round w3-green w3-tiny" style="padding:3px">
+							<div class="w3-tag w3-round w3-green w3-border w3-border-white">
+								${product.pgRating}
+							</div>
+						</div>
+					  </span><br>
+					  <span class="w3-medium w3-text-theme "><b>Viewer Rating:</b>
+						<div class="w3-tag w3-round w3-vivid-reddish-purple w3-tiny" style="padding:3px">
+						  <i class="fa fa-star-o"></i>
+						  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
+								<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
+						  </div>
+						</div>
+					  </span><br>
+					  <span class="w3-medium w3-text-theme "><b>Duration:</b>
+					  	<span class="w3-small w3-text-black ">${product.duration} minutes</span>
+					  </span><br>
+					  <span class="w3-medium w3-text-theme "><b>Genres:</b><br>
+					  	<c:forEach var="genre" items="${product.genres}">
+					  		<span class="w3-tiny w3-text-black" >${genre.value }</span><span class = ghost>|</span>
+					  	</c:forEach>
+					  	
+					  </span><br>
+					  
+	              </div>
+	          </div>
+	          <div class="w3-rest w3-container w3-margin">
+	          	<span class="w3-medium w3-text-theme w3-text-black" > Pricing
+	          	<br><br>
+	          	<!-- Buying price -->
+	          	<span class="w3-medium w3-text-black" >Buying</span>
+				<c:choose>
+				<c:when test="${product.originalBuyCost != product.buyCost }">
+	          		<br><span class="w3-small w3-text-red">Old price: <del><fmt:formatNumber value="${product.originalBuyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></del></span><br>
+	          		<span class="w3-medium">New price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          	</c:when>
+	          	<c:otherwise>
+	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          	</c:otherwise>
+				</c:choose>
+				
+				<!-- Buying price -->
+				<br><br>
+				<span class="w3-medium w3-text-black">Renting</span>
+				<c:choose>
+				<c:when test="${product.originalBuyCost != product.buyCost }">
+	          		<br><span class="w3-small w3-text-red">Old price: <del><fmt:formatNumber value="${product.originalRentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></del></span><br>
+	          		<span class="w3-medium">New price: <fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          		<br><br>
+	          		<span class="w3-medium">Save ${product.salePercent}% now!</span>
+	          	</c:when>
+	          	<c:otherwise>
+	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          	</c:otherwise>
+				</c:choose>
+	          	</span>
+	          	
+	          </div>
+	      </div>
+	  </div>
+		</c:forEach>
+	</div>
 </div>
 </body>
 </html>
