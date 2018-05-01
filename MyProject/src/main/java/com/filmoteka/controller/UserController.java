@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +51,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String userLogin(@RequestParam("username") String username, @RequestParam("password") String password,
+	public String userLogin(Model model, @RequestParam("username") String username, @RequestParam("password") String password,
 			HttpServletRequest request) throws SQLException {
 
 		// Check if the credentials are valid
@@ -77,9 +78,11 @@ public class UserController {
 			return "redirect:/main";
 		}
 		else {
-			//Show an error page for invalid username or password
+			//Show an error for invalid username or password
 			String message = "Invalid Username or Password";
-			throw new SQLException(message);
+			
+			model.addAttribute("loginError",message);
+			return "index";
 		}
 	}
 	
