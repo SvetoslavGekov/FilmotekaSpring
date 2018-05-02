@@ -423,4 +423,20 @@ public class UserDao implements IUserDao {
 		
 		return expiringProducts;
 	}
+
+	public boolean isEmailFree(String email, int userId) throws SQLException {
+		String sql = "SELECT user_id, email FROM users WHERE email = ?";
+		try(PreparedStatement ps = connection.prepareStatement(sql)){
+			//Set user id
+			ps.setString(1, email);
+			try(ResultSet rs = ps.executeQuery()){
+				while(rs.next()) {
+					if(rs.getInt("user_id") != userId) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
 }

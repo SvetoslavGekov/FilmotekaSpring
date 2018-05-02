@@ -34,7 +34,7 @@ public class UserController {
 	@RequestMapping(value = "/unauthorized", method = RequestMethod.GET)
 	public String redirectToHome(HttpServletResponse response) {
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		return "unauthorized";
+		return "index";
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -167,9 +167,17 @@ public class UserController {
 		//Update current user
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setEmail(email);
 		user.setPhone(phone);
 		user.setPassword(newPass1);
+		
+		//Save old email
+		String oldEmail = user.getEmail();
+		user.setEmail(email);
+		//Check if the entered email is not already taken
+		if(!UserDao.getInstance().isEmailFree(user.getEmail(), user.getUserId())) {
+			user.setEmail(oldEmail);
+			throw new Exception("The email you've entered has already been taken by another user.");
+		}
 		
 		// Upload profile picture if there is one
 		if (!profilePicture.isEmpty()

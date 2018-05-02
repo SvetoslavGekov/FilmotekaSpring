@@ -34,9 +34,9 @@
 			<c:forEach var="entry" items="${mainPageProducts}">
 	  			<div class="w3-panel w3-padding-large w3-border-theme-theme w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-round-xxlarge w3-light-grey">
 	  				<div class="w3-row-padding">
-	  					<p class="w3-panel w3-text-theme w3-center w3-wide w3-xlarge"><b>${entry.key}</b></p>
+	  					<p class="w3-panel w3-text-theme w3-center w3-xlarge"><b>${entry.key}</b></p>
 			  			<c:forEach var="product" items="${entry.value}">
-			  			<div class="w3-col" style="width:15%">
+			  			<div class="w3-col" style="width:18%">
 			  				<div class = "w3-vivid-green w3-round-large" style="border:25px">
 			  					<p class = "w3-center w3-small w3-wide"><b>${product.name}</b></p>
 			  					<div class="w3-display-container w3-white">

@@ -6,113 +6,175 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>New product creation</title>
 <base href="http://localhost:8080/FilmotekaSpring/">
-</head>
-<body>
-	<form:form commandName="product" enctype="multipart/form-data">
-      <table>
-      	  <tr>
-	      	  <td>
-	      	  	<input type="hidden" name="category" value="${category}">
-	      	  	<input type="hidden" name="productID" value="${product.id}">
-	      	  </td>
-      	  </tr>
-          <tr>
-              <td>Product Name:</td>
-              <td><form:input path="name" type="text" required="required"/></td>
-          </tr>
-          <tr>
-              <td>Release Date:</td>
-              <td><form:input path="releaseDate" type="date" name="releaseDate" required="required" /></td>
-          </tr>
-          <tr>
-              <td>Pg rating:</td>
-              <td><form:input path="pgRating" type="text" required="required"/></td>
-          </tr>
-          <tr>
-              <td>Duration:</td>
-              <td><form:input path="duration" type="number" required="required" min="1"/></td>
-          </tr>
-          <tr>
-              <td>Buy cost:</td>
-              <td><form:input path="originalBuyCost" type="number" required="required" min="1"/></td>
-          </tr>                    
-           <tr>
-              <td>Rent cost:</td>
-              <td><form:input path="originalRentCost" type="number" required="required" min="1"/></td>
-          </tr>  
-          <tr>
-              <td>Description:</td>
-              <td><form:input path="description" type="textarea"/><br></td>
-              
-          </tr>
-          <tr>
-              <td>Poster:</td>
-              <td><input type="file" name="posterFile" accept=".jpg"/><br>
-              	${product.poster}
-              </td>
-              
-          </tr>
-          <tr>
-              <td>Trailer:</td>
-              <td><input type="file" name="trailerFile" accept=".avi"/>
-              	${product.trailer}
-              </td>
-              
-          </tr>
-          <tr>
-              <td>Writers:</td>
-              <td><form:input path="writers" type="text"/></td>
-          </tr>
-          <tr>
-              <td>Actors:</td>
-              <td><form:input path="actors" type="text"/></td>
-          </tr>
-          <tr>
-              <td>Sale Percent</td>
-              <td><form:input path="salePercent" type="number"/></td>
-          </tr>
-          <tr>
-          	<td>saleValidity</td>
-          	<td><form:input path="saleValidity" type="date"/></td>
-          </tr>
-          
-          <!-- Category specific info -->
-          <c:set var = "categoryID" value = "${product.productCategory.id}"/>
-          <c:choose>
-          	<c:when test="${categoryID == 1}">
-	          <tr>
-	          	<td>Director</td>
-	          	<td><form:input path="director" type="text"/></td>
-	          </tr>
-          	</c:when>
-          	
-           	<c:when test="${categoryID == 2}">
-	          <tr>
-	          	<td>Season</td>
-	          	<td><form:input path="season" type="number"/></td>
-	          </tr>
-	          <tr>
-	          	<td>Finished Airing</td>
-	          	<td><form:input path="finishedAiring" type="date"/></td>
-	          </tr>
-          	</c:when>         	
-          </c:choose>
-          <tr>
-          	<td>Genres:</td>
-              <td>
-                  <%-- Property is of an array or of type java.util.Collection --%>
-                  <form:checkboxes path="genres" items="${genres}" itemLabel="value" itemValue="id"/>
-              </td>
-          </tr>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-          <tr>
-              <td colspan="2">
-                  <input type="submit" value="Create product" />
-              </td>
-          </tr>
-      </table>
-  </form:form>
+<!-- Color Libraries -->
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-metro.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-highway.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2017.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-food.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
+<link rel="stylesheet" href="css/color-theme.css">
+
+<title>FilmotekaBG Administration</title>
+
+</head>
+<body bgcolor="#E9EBEE">
+
+	<!-- Include the header file via JSTL -->
+	<c:import url="header.jsp"></c:import>
+	
+	<div class="w3-container" style="width:76%; margin-top:4%; margin-left:12%">
+		<div class="w3-container w3-theme w3-border">
+			<h1>Create/Edit product</h1>
+		</div>
+		<div class="w3-container w3-white w3-border">
+			<div class = "w3-row-padding">
+				<div class ="w3-container w3-margin w3-border">
+					<form:form commandName="product" enctype="multipart/form-data">
+						<div class="w3-row-padding w3-margin">
+						
+							<input type="hidden" name="category" value="${category}">
+	      	  				<input type="hidden" name="productID" value="${product.id}">
+	      	  				
+							<!-- Left 50% of the form -->
+							<div class="w3-col s6">
+								<!-- Product name -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-commenting-o"></i> Product Name*: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="name" type="text" required="required"/>
+							    </div>
+							    
+							    <!-- Release year -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-calendar"></i> Release Year*: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="releaseDate" type="date" name="releaseDate" required="required" />
+							    </div>
+							    
+							    <!-- PG Rating -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-info-circle"></i> PG Rating*: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="pgRating" type="text" required="required"/>
+							    </div>
+							    
+							    <!-- Duration -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-clock-o"></i> Duration*: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="duration" type="number" required="required" min="1"/>
+							    </div>
+							    
+							    <!-- Price -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-euro"></i> Price*: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="originalBuyCost" type="number" required="required" min="1"/>
+							    </div>
+							    
+								<!-- Rent cost -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-euro"></i> Rent cost*: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="originalRentCost" type="number" required="required" min="1"/>
+							    </div>
+							    
+							    <!-- Description -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-tv"></i> Description: </label>
+							    <div class="w3-rest" style="margin-bottom:15px;">
+							      <form:textarea class="w3-text" style="font-size:12px;" path="description" rows="5" cols="44"/>
+							    </div>
+							    
+							    <!-- Writers -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-pencil-square-o"></i> Writers: </label>
+							    <div class="w3-rest" style="margin-bottom:15px;">
+							      <form:textarea class="w3-text" style="font-size:12px;" path="writers" rows="3" cols="44"/>
+							    </div>
+							    
+							    <!-- Actors -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-user"></i> Actors: </label>
+							    <div class="w3-rest" style="margin-bottom:15px;">
+							      <form:textarea class="w3-text" style="font-size:12px;" path="actors" rows="3" cols="44"/>
+							    </div>							    
+							</div>
+							
+							<!-- Right 50% of the form -->
+							<div class="w3-col s6">
+							
+								<!-- Poster -->
+								<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round w3-border"
+									 style="width:50%; height:300px; margin-bottom:5%;"><br>
+								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-image-o"></i> Poster Image: ${product.poster} </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <input class="w3-input w3-border" type="file" name="posterFile" accept=".jpg"/>
+							    </div>
+
+								<!-- Trailer -->
+								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-movie-o"></i> Trailer: ${product.trailer} </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <input class="w3-input w3-border" type="file" name="trailerFile" accept=".avi"/>
+							    </div>
+	
+								<!-- Sale percent -->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-percent"></i> Sale Percent: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="salePercent" type="number"/>
+							    </div>
+							    
+								<!-- Sale validity-->
+							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-calendar"></i> Sale Validity: </label>
+							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <form:input class="w3-input w3-border" path="saleValidity" type="date"/>
+							    </div>
+							    
+							    <!-- Category specific info -->
+					          <c:set var = "categoryID" value = "${product.productCategory.id}"/>
+					          <c:choose>
+					          	<c:when test="${categoryID == 1}">
+									<!-- Director-->
+								  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-bullhorn"></i> Director: </label>
+								    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+								      <form:input class="w3-input w3-border" path="director" type="text"/>
+								    </div>
+					          	</c:when>
+					          	
+					           	<c:when test="${categoryID == 2}">
+									<!-- Season-->
+								  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-hourglass-o"></i> Season: </label>
+								    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+								      <form:input class="w3-input w3-border" path="season" type="number"/>
+								    </div>
+								    
+									<!-- Finished Airing Date-->
+								  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-calendar"></i> Finished Airing Date: </label>
+								    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+								      <form:input class="w3-input w3-border" path="finishedAiring" type="date"/>
+								    </div>								    	
+					          	</c:when>         	
+					          </c:choose>
+							    								    	
+							</div>
+						</div>
+						<!-- Genres -->
+						<div class="w3-container w3-theme w3-border">
+							<h2>Genres</h2>
+						</div>
+						<div class="w3-container w3-border w3-white" >
+							<form:checkboxes path="genres" items="${genres}" itemLabel="value" itemValue="id" delimiter="<br/>"/>
+						</div>
+						<div class="w3-panel">
+						<c:choose>
+							<c:when test="${ mode == false}">
+								<input class="w3-button w3-small w3-theme" type="submit" value="Save changes"/>
+							</c:when>
+							<c:otherwise>
+								<input class="w3-button w3-small w3-theme" type="submit" value="Create product"/>
+							</c:otherwise>
+						</c:choose>
+						</div>
+					</form:form>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

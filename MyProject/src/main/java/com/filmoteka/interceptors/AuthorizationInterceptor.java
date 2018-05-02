@@ -14,7 +14,6 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// Get the session object
-		System.out.println("Hey, I'm not in the controller yet");
 		HttpSession session = request.getSession(false);
 
 		// If there is no session at all -> nobody has logged in -> redirect to the login page

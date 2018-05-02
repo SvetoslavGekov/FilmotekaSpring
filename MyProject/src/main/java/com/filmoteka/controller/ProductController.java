@@ -46,7 +46,7 @@ public class ProductController {
 	private static final int MAX_REVIEW_CHARS = 480;
 	private static final int MIN_REVIEW_CHARS = 3;
 	
-	private static final Integer TOP_ITEMS_COUNT = new Integer(6);
+	private static final Integer TOP_ITEMS_COUNT = new Integer(5);
 	
 	
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)

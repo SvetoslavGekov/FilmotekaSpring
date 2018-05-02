@@ -11,7 +11,7 @@
 span.signup,
 .close:hover,
 .close:focus {
-    color: dodgerblue;
+    color: blue;
     cursor: pointer;
 }
 </style>
@@ -52,9 +52,9 @@ span.signup,
       <form class="w3-container" method="post" action="login">
         <div class="w3-section">
           <label><b>Username</b></label>
-          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" value = "sgekov" required>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" value = "admin" required>
           <label><b>Password</b></label>
-          <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required value = "Sgekov123">
+          <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required value = "Admin123">
           <button class="w3-button w3-block w3-2017-lapis-blue w3-section w3-padding w3-hover-teal" type="submit"><b>Login</b></button>
         </div>
       </form>

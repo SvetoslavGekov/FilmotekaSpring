@@ -54,7 +54,8 @@ public class AdministratorController {
 			// Add the product and it's genres to the model
 			m.addAttribute("product", product);
 			m.addAttribute("genres", genres);
-
+			m.addAttribute("mode",false); //Mode for editing items
+			
 			// Return the product view
 			return "newProduct";
 		}
@@ -64,7 +65,7 @@ public class AdministratorController {
 	}
 
 	@RequestMapping(value = "/adm/editProduct/{productID}", method = RequestMethod.POST)
-	public void editProduct(@ModelAttribute Product existingProduct, BindingResult result,
+	public String editProduct(@ModelAttribute Product existingProduct, BindingResult result,
 			@RequestParam("posterFile") MultipartFile posterFile,
 			@RequestParam("trailerFile") MultipartFile trailerFile) throws Exception {
 		try {
@@ -104,10 +105,14 @@ public class AdministratorController {
 				throw new Exception(
 						"You've attempted to update a product from a category that does not exist. Please try again");
 			}
+			
+			//Go back to the page
+			return "redirect:/adm/editProduct/"+existingProduct.getId();
 		}
 		catch (SQLException | InvalidProductDataException | InvalidGenreDataException e) {
 			throw new Exception(dbError, e);
 		}
+		
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.GET)
@@ -134,6 +139,7 @@ public class AdministratorController {
 			// Add the product and the genres to the model
 			m.addAttribute("product", product);
 			m.addAttribute("genres", genres);
+			m.addAttribute("mode",true); //Mode for creating new items
 
 			// Return the product view
 			return "newProduct";
@@ -145,7 +151,7 @@ public class AdministratorController {
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.POST)
-	public void saveProduct(@ModelAttribute Product newProduct, BindingResult result,
+	public String saveProduct(@ModelAttribute Product newProduct, BindingResult result,
 			@RequestParam("posterFile") MultipartFile posterFile,
 			@RequestParam("trailerFile") MultipartFile trailerFile,
 			@RequestParam("category") Integer category)
@@ -191,7 +197,9 @@ public class AdministratorController {
 				throw new Exception(
 						"You've attempted to create a product from a category that does not exist. Please try again");
 			}
-
+			
+			//Go back to the page
+			return "redirect:/adm/editProduct/"+newProduct.getId();
 		}
 		catch (SQLException | InvalidGenreDataException | InvalidProductCategoryDataException e ) {
 			throw new SQLException(dbError, e);
