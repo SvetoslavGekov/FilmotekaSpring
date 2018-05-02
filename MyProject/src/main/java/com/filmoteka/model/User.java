@@ -19,6 +19,9 @@ import java.util.TreeSet;
 public class User implements Comparable<User> {
 	// Fields
 	private static final int RENT_PERIOD = 8; // days
+	private static final short MAX_STRING_FIELD_LENGTHS = 45;
+	private static final short MAX_FILENAME_LENGTH = 200;
+	
 	private int userId;
 	private boolean isAdmin;
 	private String firstName;
@@ -94,7 +97,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setFirstName(String firstName) throws InvalidUserDataException {
-		if (Supp.isNotNullOrEmpty(firstName)) {
+		if (Supp.isNotNullOrEmpty(firstName) && firstName.length() <= MAX_STRING_FIELD_LENGTHS) {
 			this.firstName = firstName;
 		}
 		else {
@@ -107,7 +110,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setLastName(String lastName) throws InvalidUserDataException {
-		if (Supp.isNotNullOrEmpty(lastName)) {
+		if (Supp.isNotNullOrEmpty(lastName) && lastName.length() <= MAX_STRING_FIELD_LENGTHS) {
 			this.lastName = lastName;
 		}
 		else {
@@ -120,7 +123,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setUsername(String username) throws InvalidUserDataException {
-		if (Supp.isNotNullOrEmpty(username) && Supp.isValidUsername(username)) {
+		if (Supp.isNotNullOrEmpty(username) && Supp.isValidUsername(username) && username.length() <= MAX_STRING_FIELD_LENGTHS) {
 			this.username = username;
 		}
 		else {
@@ -146,7 +149,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setEmail(String email) throws InvalidUserDataException {
-		if (Supp.isNotNullOrEmpty(email) && Supp.isValidEmail(email)) {
+		if (Supp.isNotNullOrEmpty(email) && Supp.isValidEmail(email) && email.length() <= MAX_STRING_FIELD_LENGTHS) {
 			this.email = email;
 		}
 		else {
@@ -159,7 +162,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setPhone(String phone) throws InvalidUserDataException {
-		if(phone == null || Supp.isValidPhoneNumber(phone)){
+		if(phone == null || (Supp.isValidPhoneNumber(phone) && phone.length() <= MAX_STRING_FIELD_LENGTHS)){
 			this.phone = phone;
 		}
 		else {
@@ -202,14 +205,9 @@ public class User implements Comparable<User> {
 	}
 
 	public void setProfilePicture(String profilePicture) throws InvalidUserDataException {
-//		try {
-//			if (Supp.isValidImagePath(profilePicture)) {
-				this.profilePicture = profilePicture;
-//			}
-//		}
-//		catch (IOException e) {
-//			throw new InvalidUserDataException("Invalid profile image path");
-//		}
+		if (profilePicture ==null || (Supp.isNotNullOrEmpty(profilePicture) && profilePicture.length() <= MAX_FILENAME_LENGTH)) {
+			this.profilePicture = profilePicture;
+		}
 	}
 
 	public void setFavourites(Set<Integer> favourites) {

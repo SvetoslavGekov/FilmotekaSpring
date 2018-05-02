@@ -13,6 +13,7 @@ import com.filmoteka.util.Supp;
 
 @Component
 public class Movie extends Product {
+	private static final byte MAX_DIRECTOR_LENGTH = 80;
 	//Optional fields
 	private String director;
 	
@@ -60,7 +61,7 @@ public class Movie extends Product {
 	
 	//Setters
 	public void setDirector(String director) {
-		if(Supp.isNotNullOrEmpty(director)) {
+		if(Supp.isNotNullOrEmpty(director) && director.length() <= MAX_DIRECTOR_LENGTH) {
 			this.director = director;
 		}
 	}

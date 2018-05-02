@@ -5,6 +5,14 @@
 <!DOCTYPE html >
 <html>
 <head>
+<style>
+.fa {
+    font-size: 50px;
+    cursor: pointer;
+    user-select: none;
+}
+</style>
+
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -57,7 +65,10 @@
 						  		<span class="w3-large w3-wide"><b>(${product.releaseDate.year})</b></span><span class = ghost>|</span>
 								
 								<!-- Duration -->
-								<span class="w3-large w3-wide">${product.duration} minutes</span><br>
+								<span class="w3-large w3-wide">${product.duration} minutes</span>
+								<i onclick="addProductToFavorites(${product.id},this)" title="Add to favorites" class="fa fa-heart w3-xlarge"></i>
+								<i onclick="addProductToWatchList(${product.id},this)" title="Add to watchlist" class="fa fa-heart w3-xlarge"></i>
+								<br>
 								<hr>
 							</div>
 							

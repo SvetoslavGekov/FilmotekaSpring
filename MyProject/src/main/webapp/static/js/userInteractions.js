@@ -42,7 +42,7 @@ function addProductToCart(id, willBuy) {
 
 
 
-function addProductToFavorites(id) {
+function addProductToFavorites(id, element) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 500){
@@ -60,10 +60,12 @@ function addProductToFavorites(id) {
 			var result = (this.responseText);
 			if(result === 'true'){
 				showAlert("Product added to favorites.", 1);
+				swapAddToFavorites(element);
 				return;
 			}
 			else if (result === 'false'){
 				showAlert("Product removed from favorites.", 1);
+				swapAddToFavorites(element);
 				return;
 			}
 		}
@@ -75,7 +77,7 @@ function addProductToFavorites(id) {
 	xhttp.send("productID=" + id);
 }
 
-function addProductToWatchList(id) {
+function addProductToWatchList(id,element) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 500){
@@ -213,6 +215,7 @@ function openPassFields(){
 }
 
 function showAlert(message, type){
+	
 	var div = document.createElement("div");
 	
 	if(type ==1){
@@ -250,5 +253,9 @@ function showAlert(message, type){
 	setTimeout(function(){
 	     div.remove();
 	},2000);
+}
+
+function swapAddToFavorites(element){
+	element.classList.toggle("fa-heart-o");
 }
 

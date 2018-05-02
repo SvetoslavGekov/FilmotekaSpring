@@ -20,6 +20,12 @@ import com.filmoteka.util.Supp;
 public abstract class Product implements Comparable<Product>{
 	//Mandatory fields
 	private static final double BASE_PERCENT = 100d;
+	private static final short MAX_NAME_LENGTH =  150;
+	private static final short MAX_PG_RATING_LENGTH = 10;
+	private static final short MAX_DESCRIPTION_LENGTH = 1000;
+	private static final short MAX_WRITERS_ACTORS_LENGTH =  200;
+	private static final short MAX_FILENAME_LENGTH =  200;
+	
 	private int id;
 	private ProductCategory productCategory;
 	private String name;
@@ -138,7 +144,7 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setName(String name) throws InvalidProductDataException {
-		if(Supp.isNotNullOrEmpty(name)) {
+		if(Supp.isNotNullOrEmpty(name) && name.length() <= MAX_NAME_LENGTH) {
 			this.name = name;
 		}
 		else {
@@ -156,7 +162,7 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setPgRating(String pgRating) throws InvalidProductDataException {
-		if(Supp.isNotNullOrEmpty(pgRating)) {
+		if(Supp.isNotNullOrEmpty(pgRating) && pgRating.length() <= MAX_PG_RATING_LENGTH) {
 			this.pgRating = pgRating;
 		}
 		else {
@@ -210,31 +216,31 @@ public abstract class Product implements Comparable<Product>{
 	}
 
 	public void setDescription(String description) {
-		if(Supp.isNotNullOrEmpty(description)) {
+		if(Supp.isNotNullOrEmpty(description) && description.length() <= MAX_DESCRIPTION_LENGTH) {
 			this.description = description;
 		}
 	}
 
 	public void setPoster(String poster) {
-		if(Supp.isNotNullOrEmpty(poster)) {
+		if(Supp.isNotNullOrEmpty(poster) && poster.length() <= MAX_FILENAME_LENGTH) {
 			this.poster = poster;
 		}
 	}
 	
 	public void setTrailer(String trailer) {
-		if(Supp.isNotNullOrEmpty(trailer)) {
+		if(Supp.isNotNullOrEmpty(trailer) && trailer.length() <= MAX_FILENAME_LENGTH) {
 			this.trailer = trailer;
 		}
 	}
 
 	public void setWriters(String writers) {
-		if(Supp.isNotNullOrEmpty(writers)) {
+		if(Supp.isNotNullOrEmpty(writers) && writers.length() <= MAX_WRITERS_ACTORS_LENGTH) {
 			this.writers = writers;
 		}
 	}
 
 	public void setActors(String actors) {
-		if(Supp.isNotNullOrEmpty(actors)) {
+		if(Supp.isNotNullOrEmpty(actors) && actors.length() <= MAX_WRITERS_ACTORS_LENGTH) {
 			this.actors = actors;
 		}
 	}
@@ -269,7 +275,7 @@ public abstract class Product implements Comparable<Product>{
 	}
 	
 	public void setSalePercent(double salePercent) {
-		if(salePercent >= 0d && salePercent < 100d) {
+		if(salePercent >= 0d && salePercent < BASE_PERCENT) {
 			this.salePercent = salePercent;
 		}
 	}
