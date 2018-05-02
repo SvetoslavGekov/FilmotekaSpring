@@ -50,7 +50,8 @@ public class ProductController {
 	
 	
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
-	public String loadProductPage(Model m, @PathVariable("id") Integer productId) throws Exception {
+	public String loadProductPage(Model m, @PathVariable("id") Integer productId,
+			HttpSession session) throws Exception {
 		try {
 			// Grab the product from the database
 			Product product = ProductDao.getInstance().getProductById(productId);
@@ -66,8 +67,22 @@ public class ProductController {
 			//Get reviews of the product
 			List<Review> reviews = ReviewDao.getInstance().getReviewsByProductId(product.getId());
 			
+			
+			boolean isInFavorites = false;
+			boolean isInWatchlist = false;
+			
+			//Check if there is a user logged in the session
+			User user = (User) session.getAttribute("USER");
+			if(user != null) {
+				//Look if the product is favored or added to the watchlist
+				isInFavorites = user.getFavourites().contains(productId);
+				isInWatchlist = user.getWatchList().contains(productId);
+			}
+			
 			//Add product reviews to the model
 			m.addAttribute("reviews", reviews);
+			m.addAttribute("isInFavorites", isInFavorites);
+			m.addAttribute("isInWatchlist", isInWatchlist);
 
 			// Return the product view
 			return "product";

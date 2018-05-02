@@ -60,12 +60,12 @@ function addProductToFavorites(id, element) {
 			var result = (this.responseText);
 			if(result === 'true'){
 				showAlert("Product added to favorites.", 1);
-				swapAddToFavorites(element);
+				swapAddToFavorites(element,1);
 				return;
 			}
 			else if (result === 'false'){
 				showAlert("Product removed from favorites.", 1);
-				swapAddToFavorites(element);
+				swapAddToFavorites(element,2);
 				return;
 			}
 		}
@@ -95,10 +95,12 @@ function addProductToWatchList(id,element) {
 			var result = (this.responseText);
 			if(result === 'true'){
 				showAlert("Product added to watchlist.", 1);
+				swapAddToWatchlist(element,1);
 				return;
 			}
 			else if (result === 'false'){
 				showAlert("Product removed from watchlist.", 1);
+				swapAddToWatchlist(element,2);
 				return;
 			}
 		}
@@ -255,7 +257,25 @@ function showAlert(message, type){
 	},2000);
 }
 
-function swapAddToFavorites(element){
-	element.classList.toggle("fa-heart-o");
+function swapAddToFavorites(element, type){
+	if(type == 1){
+		element.classList = "fa fa-heart-o w3-xxlarge w3-text-red";
+		element.setAttribute("title", "Remove from favorites");
+	}
+	if(type == 2){
+		element.classList = "fa fa-heart w3-xxlarge w3-text-red";
+		element.setAttribute("title", "Add to favorites");
+	}
+}
+
+function swapAddToWatchlist(element,type){
+	if(type == 1){
+		element.classList = "fa fa-eye-slash w3-xxlarge w3-text-green";
+		element.setAttribute("title", "Remove from watchlist");
+	}
+	if(type == 2){
+		element.classList = "fa fa-eye w3-xxlarge w3-text-green";
+		element.setAttribute("title", "Add to watchlist");
+	}
 }
 

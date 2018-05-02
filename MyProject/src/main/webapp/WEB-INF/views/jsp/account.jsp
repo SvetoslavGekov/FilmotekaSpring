@@ -91,14 +91,14 @@
 	                      <label for="firstname"><b>First Name:</b></label>
 	                      	<div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-address-card-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="text" placeholder="Enter your first name" name="firstname" value="${ sessionScope.USER.firstName }"
-							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;" required maxlength="45">
+							 pattern="[A-Za-z]{1,45}" title="Not including numbers or special characters (latin letters only)" style="text-transform: capitalize;" required maxlength="45">
 	                    </div>
 	                    <hr>
 	                    <div class="container" >
 	                      <label for="lastname"><b>Last Name:</b></label>
 	                      <div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-address-card-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="text" placeholder="Enter your last name" name="lastname" value="${ sessionScope.USER.lastName }"
-							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;" required maxlength="45">
+							 pattern="[A-Za-z]{1,45}" title="Not including numbers or special characters (latin letters only)" style="text-transform: capitalize;" required maxlength="45">
 	                    </div>
 	                     <hr>
 	                    <div class="container" >

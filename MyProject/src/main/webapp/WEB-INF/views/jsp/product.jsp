@@ -51,6 +51,30 @@
 							<div class="w3-container ">
 								<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round w3-margin w3-center"
 								 style="width:100%; height:350px; margin-bottom:5%;">
+								 
+								 <!-- Pricing -->
+								 <span class="">Price:<br></span>
+								<c:if test="${product.originalBuyCost != product.buyCost }">
+								<span class="w3-tag w3-round-large w3-red"><del>${product.originalBuyCost }  <i class="fa fa-euro"></i></del></span>
+								</c:if>
+								<span class="w3-tag w3-round-large w3-green"><fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},true)">Buy</span>
+								<br>
+								<span class="">Renting price:<br></span>
+								<c:if test="${product.originalBuyCost != product.buyCost }">
+								<span class="w3-tag w3-round-large w3-red"><del>${product.originalRentCost }  <i class="fa fa-euro"></i></del></span>
+								</c:if>
+								<span class="w3-tag w3-round-large w3-green"><fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},false)">Rent</span>
+								<br>
+								
+								<c:if test="${product.originalBuyCost != product.buyCost }">
+								<span class="w3-tax w3-large w3-theme">Save ${product.salePercent }% now!</span>
+								</c:if>
+							</div>
+							
+							<div class="w3-container">
+	
 							</div>
 						</div>
 						
@@ -65,9 +89,24 @@
 						  		<span class="w3-large w3-wide"><b>(${product.releaseDate.year})</b></span><span class = ghost>|</span>
 								
 								<!-- Duration -->
-								<span class="w3-large w3-wide">${product.duration} minutes</span>
-								<i onclick="addProductToFavorites(${product.id},this)" title="Add to favorites" class="fa fa-heart w3-xlarge"></i>
-								<i onclick="addProductToWatchList(${product.id},this)" title="Add to watchlist" class="fa fa-heart w3-xlarge"></i>
+								<span class="w3-large w3-wide">${product.duration} minutes</span><br>
+								<c:choose >
+									<c:when test="${not isInFavorites }">
+										<i onclick="addProductToFavorites(${product.id},this)" title="Add to favorites" class="fa fa-heart w3-xxlarge w3-text-red"></i>
+									</c:when>
+									<c:otherwise>
+										<i onclick="addProductToFavorites(${product.id},this)" title="Remove from favorites" class="fa fa-heart-o w3-xxlarge w3-text-red"></i>
+									</c:otherwise>
+								</c:choose>
+								
+								<c:choose >
+								<c:when test="${not isInWatchlist }">
+										<i onclick="addProductToWatchList(${product.id},this)" title="Add to watchlist"	class="fa fa-eye w3-xxlarge w3-text-green"></i>
+									</c:when>
+									<c:otherwise>
+										<i onclick="addProductToWatchList(${product.id},this)" title="Remove from watchlist"	class="fa fa-eye-slash w3-xxlarge w3-text-green"></i>
+									</c:otherwise>
+								</c:choose>
 								<br>
 								<hr>
 							</div>
@@ -127,85 +166,31 @@
 										<span class="w3-medium"><b> ${product.finishedAiring}</b></span>
 									</c:when>
 								</c:choose>
+								
+								<div class="w3-container w3-theme w3-text-vivid-white" style="margin-top: 15px;">Description:
+								</div>
+								<div class="w3-container w3-border" style="margin-bottom:10px">
+									<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
+								</div>
+								<button id="addreviewbtn" onclick="showOrHideContent('addreview')">Add review</button>
+								<button id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</button>
 							</div>
-							
 						</div>
 					</div>
-				<div class="w3-container w3-theme w3-text-vivid-white">
-					Description:
-				</div>
-				<div class="w3-container w3-border" style="margin-bottom:10px">
-					<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
-				</div>
+					<!-- Reviews  -->
+					<div>
+					
+					</div>
+					<div id="addreview" class = "w3-container" style="display:none" style="margin-top:10px">
+						<textarea rows="7" cols="50" style="resize:none" name="content"
+							placeholder="${ sessionScope.USER.firstName }, tell us what you think about this product..."
+							maxlength="480" minlength="5"
+						></textarea>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
-
-
-
-
-
-
-	<!-- Visualize the product information -->
-	<div class = "product" style="margin-top:10%">
-		<table cellspacing="0" cellpading="0" border="1">
-			<tbody>
-				<tr>
-					<td class ="image" rowspawn="2" valign="top">
-						<div>
-							<img class = "poster" width="100%" alt = "${product.poster }" title = "${product.name }" 
-								src="getPic?pic=${product.poster}">
-						</div>
-						<div>
-							<button float="left" onClick="addProductToFavorites(${product.id})">To Favorites</button>
-							<button  onClick="addProductToWatchList(${product.id})">To Watch list</button>
-							<button float="left" onClick="addProductToCart(${product.id},true)">Buy</button>
-							<button  onClick="addProductToCart(${product.id},false)">Rent</button>
-							<button float="left" onClick="showOrHideContent('rate')">Add rating</button>
-							
-							<div id="rate" class="rating" style="display:none">
-							<c:forEach begin="1" end="10" varStatus="loop">
-   							 	<span onClick="rateProduct(${ product.id }, ${11 - loop.index})">&#9734;</span>
-							</c:forEach>
-							</div>
-							
-						</div>
-					</td>
-					<td>
-						<h4>${product.name}</h4>
-						<p>PgRating: ${product.pgRating}</p>
-						<p>Duration: ${product.duration}</p><br>
-						<span>Genres<br>
-						<c:forEach var="genre" items="${product.genres }">
-							<span >${genre.value }</span><span class = ghost>|</span>
-						</c:forEach>
-						</span>
-						<div ><h5>Description:</h5>${product.description }</div>
-						<div><h5>Writers:</h5><span>${product.writers }</span></div>
-						<div><h5>Actors:</h5><span>${product.actors }</span></div>
-						
-						<c:choose>
-							<c:when test="${product.productCategory.id == 1 }">
-								<div><h5>Director:</h5><span>${product.director}</span></div>
-							</c:when>
-							
-							<c:when test="${product.productCategory.id == 2 }">
-								<div><h5>Season:</h5><span>${product.season}</span></div>
-								<div><h5>Finished airing:</h5><span>${product.finishedAiring}</span></div>
-								
-							</c:when>
-						</c:choose>
-						<button id="addreviewbtn" onclick="showOrHideContent('addreview')">Add review</button>
-						<button id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	
 	
 	<!-- Adding review -->
 	<div id="addreview" style="display:none" style="margin-top:10px">
