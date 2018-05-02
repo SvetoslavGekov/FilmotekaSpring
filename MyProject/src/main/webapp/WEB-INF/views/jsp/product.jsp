@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html >
 <html>
 <head>
@@ -22,9 +23,120 @@
 
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
-<body>
+<body bgcolor="#E9EBEE">
 	<!-- Include the header file via JSTL -->
 	<c:import url="header.jsp"></c:import>
+
+	<!-- Visualize the product information -->
+	<div class="w3-container" style="width:70%; margin-top:4%; margin-left:15%">
+		<div class="w3-container w3-theme w3-border">
+			<h1>Product Information</h1>
+		</div>
+		<div class="w3-container w3-white w3-border">
+			<div class="w3-row-padding">
+				<div class ="w3-container w3-margin w3-border">
+					<div class="w3-row-padding w3-margin">
+					
+						<!-- Left part of the product info page -->
+						<div class="w3-col s4">
+							<!-- Poster -->
+							<div class="w3-container ">
+								<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round w3-margin w3-center"
+								 style="width:100%; height:350px; margin-bottom:5%;">
+							</div>
+						</div>
+						
+						<!-- Right part of the product info page -->
+						<div class="w3-col s8">
+							
+							<div class="w3-container w3-text-theme">
+								<!-- Name -->
+								<span class="w3-wide w3-xxlarge"><b>${product.name}</b></span><br><span class = ghost>|</span>
+														
+								<!-- Year -->
+						  		<span class="w3-large w3-wide"><b>(${product.releaseDate.year})</b></span><span class = ghost>|</span>
+								
+								<!-- Duration -->
+								<span class="w3-large w3-wide">${product.duration} minutes</span><br>
+								<hr>
+							</div>
+							
+							<!-- Genres -->
+							<div class="w3-container">
+						  	<c:forEach var="genre" items="${product.genres}">
+					  			<div class="w3-tag w3-round w3-food-blueberry w3-tiny" style="padding:3px">
+									<div class="w3-tag w3-round w3-food-blueberry w3-border w3-border-white">
+										${genre.value}
+									</div>
+								</div>
+					  		</c:forEach>
+					  		<span class = ghost>|</span>
+					  		
+					  		<!-- Pg Rating -->
+				  			<div class="w3-tag w3-round w3-green w3-tiny" style="padding:3px">
+								<div class="w3-tag w3-round w3-green w3-border w3-border-white">
+									${product.pgRating}
+								</div>
+							</div>
+							<span class = ghost>|</span>
+							
+							<!-- Viewer Rating -->
+							<div class="w3-tag w3-round w3-vivid-reddish-purple w3-tiny" style="padding:3px">
+							  <i class="fa fa-star-o"></i>
+							  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
+									<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
+							  </div>
+							  
+							</div>								
+							<span class="w3-small w3-text-black">(Votes: ${product.raters.size()})</span>					
+							</div>
+							
+							<div class="w3-container" style="margin-top:10px">
+								<!-- Writers -->
+								<div class="w3-container w3-small  w3-theme w3-text-vivid-white">Writers: </div>
+								<span class="w3-medium"><b>${product.writers}</b></span><br>
+								
+								<!-- Actors -->
+								<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Actors: </div>
+								<span class="w3-medium"><b>${product.actors}</b></span><br>
+								
+								<!-- Category specific info -->
+								<c:choose>
+									<c:when test="${product.productCategory.id == 1}">
+										<!-- Director-->
+										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Director: </div>
+										<span class="w3-medium"><b> ${product.director}</b></span>
+									</c:when>
+									<c:when test="${product.productCategory.id == 2}">
+										<!-- Season-->
+										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Season: </div>
+										<span class="w3-medium"><b> ${product.season}</b></span><br>
+										<!-- Finished airing-->
+										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Finished airing: </div>
+										<span class="w3-medium"><b> ${product.finishedAiring}</b></span>
+									</c:when>
+								</c:choose>
+							</div>
+							
+						</div>
+					</div>
+				<div class="w3-container w3-theme w3-text-vivid-white">
+					Description:
+				</div>
+				<div class="w3-container w3-border" style="margin-bottom:10px">
+					<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
 
 	<!-- Visualize the product information -->
 	<div class = "product" style="margin-top:10%">

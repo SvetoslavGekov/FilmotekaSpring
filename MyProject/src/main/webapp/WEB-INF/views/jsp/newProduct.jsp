@@ -29,7 +29,14 @@
 	
 	<div class="w3-container" style="width:76%; margin-top:4%; margin-left:12%">
 		<div class="w3-container w3-theme w3-border">
-			<h1>Create/Edit product</h1>
+			<c:choose>
+				<c:when test="${ mode == false}">
+					<h1>Edit Existing Product</h1>
+				</c:when>
+				<c:otherwise>
+					<h1>Create New Product</h1>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<div class="w3-container w3-white w3-border">
 			<div class = "w3-row-padding">

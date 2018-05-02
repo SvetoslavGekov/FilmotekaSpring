@@ -180,7 +180,11 @@
 					  </span><br>
 					  <span class="w3-medium w3-text-theme "><b>Genres:</b><br>
 					  	<c:forEach var="genre" items="${product.genres}">
-					  		<span class="w3-tiny w3-text-black" >${genre.value }</span><span class = ghost>|</span>
+				  			<div class="w3-tag w3-round w3-food-blueberry w3-tiny" style="padding:3px">
+								<div class="w3-tag w3-round w3-food-blueberry w3-border w3-border-white">
+									${genre.value}
+								</div>
+							</div>
 					  	</c:forEach>
 					  	
 					  </span><br>
