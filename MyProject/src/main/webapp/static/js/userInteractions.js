@@ -8,23 +8,28 @@ function addProductToCart(id, willBuy) {
 	var xhttp = new XMLHttpRequest();
 	
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText);
-			if(result === 'true'){
-				alert("Product successfully added to cart.");
-			}
-			else if (result === 'false'){
-				alert("Sorry, but you already own this product!");
-			}
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
+		if(this.readyState == 4 && this.status == 500){
+			showAlert(dbError, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
+			showAlert(noSuchProduct, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 401){
 			redirectToUnauthorizedPage();
+			return;
+		}
+		else if (this.readyState == 4 && this.status == 200) {
+			var result = (this.responseText);
+			if(result === 'true'){
+				showAlert("Product added to cart.", 1);
+				return;
+			}
+			else if (result === 'false'){
+				showAlert("Sorry, but you already own this product!.", 2);
+				return;
+			}
 		}
 	};
 	
@@ -35,52 +40,32 @@ function addProductToCart(id, willBuy) {
 	xhttp.send("productID="+ id +"&willBuy=" + willBuy);
 }
 
-function rateProduct(id, rating) {
-	var xhttp = new XMLHttpRequest();
-	
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			alert("Product successfully rated with rating = "+rating);
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
-		}
-		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
-		}
-		else if(this.readyState == 4 && this.status == 401){
-			redirectToUnauthorizedPage();
-		}
-	};
-	
-	
-	xhttp.open("POST", "auth/rateproduct", true);
-	xhttp.setRequestHeader("Content-type",
-			"application/x-www-form-urlencoded");
-	xhttp.send("productID="+ id +"&rating=" + rating);
-}
 
 
 function addProductToFavorites(id) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText);
-			if(result === 'true'){
-				alert("Product added to favorites.");
-			}
-			else if (result === 'false'){
-				alert("Product removed from favorites.");
-			}
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
+		if(this.readyState == 4 && this.status == 500){
+			showAlert(dbError, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
+			showAlert(noSuchProduct, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 401){
 			redirectToUnauthorizedPage();
+		}
+		else if (this.readyState == 4 && this.status == 200) {
+			var result = (this.responseText);
+			if(result === 'true'){
+				showAlert("Product added to favorites.", 1);
+				return;
+			}
+			else if (result === 'false'){
+				showAlert("Product removed from favorites.", 1);
+				return;
+			}
 		}
 	};
 	
@@ -93,23 +78,27 @@ function addProductToFavorites(id) {
 function addProductToWatchList(id) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var result = (this.responseText);
-			if(result === 'true'){
-				alert("Product added to watchlist.");
-			}
-			else if (result === 'false'){
-				alert("Product removed from watchlist.");
-			}
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
+		if(this.readyState == 4 && this.status == 500){
+			showAlert(dbError, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
+			showAlert(noSuchProduct, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 401){
 			redirectToUnauthorizedPage();
+		}
+		if (this.readyState == 4 && this.status == 200) {
+			var result = (this.responseText);
+			if(result === 'true'){
+				showAlert("Product added to watchlist.", 1);
+				return;
+			}
+			else if (result === 'false'){
+				showAlert("Product removed from watchlist.", 1);
+				return;
+			}
 		}
 	};
 	
@@ -123,17 +112,21 @@ function rateProduct(id, rating) {
 	var xhttp = new XMLHttpRequest();
 	
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			alert("Product successfully rated with rating = "+rating);
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
+		if(this.readyState == 4 && this.status == 500){
+			showAlert(dbError, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
+			showAlert(noSuchProduct, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 401){
 			redirectToUnauthorizedPage();
+			return;
+		}
+		else if (this.readyState == 4 && this.status == 200) {
+			showAlert("Product successfully rated.", 1);
+			return;
 		}
 	};
 	
@@ -145,7 +138,7 @@ function rateProduct(id, rating) {
 }
 
 function redirectToUnauthorizedPage(){
-	window.location.href = "unauthorized";
+	window.location.href = "";
 }
 
 //If these functions are here(userInteractions.js), my btns can't find them
@@ -175,17 +168,21 @@ function addReview(reviewContent, productID) {
 	
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			alert("Added review:\n"+reviewContent+"\n For product with id = "+productID);
-		}
-		else if(this.readyState == 4 && this.status == 500){
-			alert(dbError);
+		if(this.readyState == 4 && this.status == 500){
+			showAlert(dbError, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 400){
-			alert(noSuchProduct);
+			showAlert(noSuchProduct, 3);
+			return;
 		}
 		else if(this.readyState == 4 && this.status == 401){
 			redirectToUnauthorizedPage();
+			return;
+		}
+		else if (this.readyState == 4 && this.status == 200) {
+			showAlert("Added review:\n"+reviewContent+"\n For product with id = "+productID, 1);
+			return;
 		}
 	};
 	
@@ -213,5 +210,45 @@ function openPassFields(){
     }else{
         document.getElementById("passwordfield").style.display = 'none';
     }
+}
+
+function showAlert(message, type){
+	var div = document.createElement("div");
+	
+	if(type ==1){
+		//Success
+		div.className += "w3-panel w3-green w3-display-container w3-round-xxlarge w3-bottom";
+	}
+	if(type == 2){
+		//Information
+		div.className += "w3-panel w3-blue w3-display-container w3-round-xxlarge w3-bottom";
+	}
+	if(type == 3){
+		//Warning
+		div.className += "w3-panel w3-yellow w3-display-container w3-round-xxlarge w3-bottom";
+	}
+	
+	
+	div.setAttribute("id", "resultAlert");
+	div.style.width="30%";
+	div.style.marginLeft="35%"
+
+	var span = document.createElement("span");
+	span.className += "w3-button w3-hover-red w3-large w3-display-topright w3-round-xxlarge"
+	span.setAttribute('onclick','document.getElementById("resultAlert").remove()');
+	var x = document.createTextNode('x');
+	span.appendChild(x);
+
+	var paragraph = document.createElement("p");
+	var nodec = document.createTextNode(message);
+	paragraph.appendChild(nodec);
+
+	div.appendChild(span);
+	div.appendChild(paragraph);
+	document.body.appendChild(div);
+
+	setTimeout(function(){
+	     div.remove();
+	},2000);
 }
 
