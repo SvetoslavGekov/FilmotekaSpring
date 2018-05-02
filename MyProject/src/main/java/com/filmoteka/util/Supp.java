@@ -2,7 +2,7 @@ package com.filmoteka.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
@@ -73,7 +73,7 @@ public final class Supp {
 		return false;
 	}
 	
-	public static final void inClauseAppender(StringBuilder sql, List<Integer> appendables) {
+	public static final void inClauseAppender(StringBuilder sql, Set<Integer> appendables) {
 		//Check if there is any need to append in the first place
 		if(appendables != null && !appendables.isEmpty()) {
 			for (int i = 0; i < appendables.size(); i++) {

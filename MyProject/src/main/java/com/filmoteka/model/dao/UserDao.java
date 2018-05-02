@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections.set.SynchronizedSortedSet;
-
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
@@ -210,7 +208,7 @@ public class UserDao implements IUserDao {
 			ps.setInt(1, userId);
 			try (ResultSet rs = ps.executeQuery()) {
 				//Create a list of the user's  products and their validities
-				List<Integer> productIDs = new ArrayList<>();
+				Set<Integer> productIDs = new HashSet<>();
 				List<Date> validities = new ArrayList<>();
 				
 				while (rs.next()) {
@@ -386,7 +384,7 @@ public class UserDao implements IUserDao {
 		try(Statement s = connection.createStatement()){
 			try(ResultSet rs = s.executeQuery(query)){
 				//Create a map of the user and all his products(Identifiers)
-				Map<User, List<Integer>> userProducts = new TreeMap<>(); 
+				Map<User, Set<Integer>> userProducts = new TreeMap<>(); 
 				
 				while(rs.next()) {
 					//Create user and product identifiers
@@ -402,16 +400,16 @@ public class UserDao implements IUserDao {
 					//Put instances in resulting map
 					if(!userProducts.containsKey(user)) {
 						//If no such user is in the map -> create new entry with new array list
-						userProducts.put(user, new ArrayList<Integer>());
+						userProducts.put(user, new HashSet<Integer>());
 					}
 					//Add product to array list
 					userProducts.get(user).add(rs.getInt("product_id"));
 				}
 				
 				//Create all products per user (faster than single queries to the database).
-				for (Entry<User, List<Integer>> e: userProducts.entrySet()) {
+				for (Entry<User, Set<Integer>> e: userProducts.entrySet()) {
 					User user = e.getKey();
-					List<Integer> products = e.getValue();
+					Set<Integer> products = e.getValue();
 					if(!expiringProducts.containsKey(user)) {
 						expiringProducts.put(user, new ArrayList<Product>());
 					}

@@ -279,3 +279,18 @@ function swapAddToWatchlist(element,type){
 	}
 }
 
+function addOrRemoveFromCollection(collectionName, productID){
+			switch (collectionName) {
+			    case "Favorites":
+			    	addProductToFavorites(productID);
+			        break;
+			    case "WatchList":
+			    	addProductToWatchList(productID);
+			        break;
+			    case "Cart":
+			    	addProductToCart(productID, false);
+			        break;
+			    default: break;
+			}
+		}
+

@@ -7,9 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
@@ -72,7 +74,7 @@ public final class OrderDao implements IOrderDao {
 			ps.setInt(1, orderId);
 			try(ResultSet rs = ps.executeQuery()){
 				//Create a list of product IDs
-				List<Integer> productIDs = new ArrayList<>();
+				Set<Integer> productIDs = new HashSet<>();
 				List<Date> validities = new ArrayList<>();
 				
 				//Populate products collection
