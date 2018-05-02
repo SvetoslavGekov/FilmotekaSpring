@@ -35,7 +35,8 @@ public class ReviewDao implements IReviewDao {
 	}
 	
 	@Override
-	public List<Review> getReviewsByUserId(int userID) throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException, InvalidReviewDataException{
+	public List<Review> getReviewsByUserId(int userID) throws SQLException, InvalidUserDataException, 
+		InvalidOrderDataException, InvalidProductDataException, InvalidReviewDataException{
 		List<Review> reviews = new ArrayList<>();
 		
 		String sql = "SELECT r.review_id, r.product_id, u.username, r.content, r.date_time FROM reviews AS r\r\n" + 
@@ -65,7 +66,8 @@ public class ReviewDao implements IReviewDao {
 	}
 	
 	@Override
-	public List<Review> getReviewsByProductId(int productID) throws SQLException, InvalidUserDataException, InvalidOrderDataException, InvalidProductDataException, InvalidReviewDataException{
+	public List<Review> getReviewsByProductId(int productID) throws SQLException, InvalidUserDataException,
+		InvalidOrderDataException, InvalidProductDataException, InvalidReviewDataException{
 		List<Review> reviews = new ArrayList<>();
 		
 		String sql = "SELECT r.review_id, r.product_id, u.username, r.content, r.date_time FROM reviews AS r\r\n" + 

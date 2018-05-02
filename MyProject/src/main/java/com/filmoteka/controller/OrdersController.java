@@ -37,9 +37,16 @@ public class OrdersController {
 	}
 	
 	@RequestMapping(value = "/order/{id}", method = RequestMethod.GET)
-	public String loadProductPage(Model m, @PathVariable("id") Integer orderId ) throws Exception {
-		//Grab the order from the database
+	public String loadProductPage(Model m, @PathVariable("id") Integer orderId, HttpSession session ) throws Exception {
+		
 		try {
+			//Check if the requested order belongs to the user in the first place
+			User user = (User) session.getAttribute("USER");
+			if(!OrderDao.getInstance().isUserOwnerOfOrder(orderId, user.getUserId())) {
+				throw new Exception("You've attempted to view an order that does not belong to you!");
+			}
+			
+			//Grab the order from the database
 			Order order = OrderDao.getInstance().getOrderById(orderId);
 			
 			//Add the order to the model

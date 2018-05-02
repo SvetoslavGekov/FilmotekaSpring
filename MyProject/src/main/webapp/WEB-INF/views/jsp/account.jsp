@@ -17,7 +17,7 @@
 
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
-<body>
+<body bgcolor="#E9EBEE">
 	<!-- Include the header file via JSTL -->
 	<c:import url="header.jsp"></c:import>
 	
@@ -84,28 +84,28 @@
 	                	<div class="container" >
 	                		<label for="profilePicture"><b>Profile picture:</b></label>
 	                		<div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-user w3-text-theme"></i></div>
-	                      <input class="w3-button w3-section w3-ripple w3-padding w3-hover-teal" type="file" name="profilePicture" accept=".jpg"/>
+	                      <input class="w3-section w3-padding w3-text-hover-teal" type="file" name="profilePicture" accept=".jpg"/>
 	                    </div>
 	                    <hr>
 	                    <div class="container" >
 	                      <label for="firstname"><b>First Name:</b></label>
 	                      	<div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-address-card-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="text" placeholder="Enter your first name" name="firstname" value="${ sessionScope.USER.firstName }"
-							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;">
+							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;" required>
 	                    </div>
 	                    <hr>
 	                    <div class="container" >
 	                      <label for="lastname"><b>Last Name:</b></label>
 	                      <div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-address-card-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="text" placeholder="Enter your last name" name="lastname" value="${ sessionScope.USER.lastName }"
-							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;">
+							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;" required>
 	                    </div>
 	                     <hr>
 	                    <div class="container" >
 	                       <label for="email"><b>Email:</b></label>
 	                      	 <div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-envelope-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="email" placeholder="Enter your email address" name="email" value="${ sessionScope.USER.email }"
-				 	 			pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+				 	 			pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
 	                    </div>
 	                    <hr>
 	                    <div class="container" >

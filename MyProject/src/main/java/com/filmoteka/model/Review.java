@@ -22,25 +22,31 @@ public class Review {
 		this.setDateTime(dateTime);
 	}
 
-
-	private void setId(long id) {
+	//Setters
+	private void setId(long id) throws InvalidReviewDataException {
 		if(id > 0) {
 			this.id = id;
+			return;
 		}
+		throw new InvalidReviewDataException("Invalid review identificator");
 	}
 
 
-	private void setProductId(long productId) {
+	private void setProductId(long productId) throws InvalidReviewDataException {
 		if(productId > 0) {
 			this.productId = productId;
+			return;
 		}
+		throw new InvalidReviewDataException("Invalid review product identificator");
 	}
 
 
-	private void setUserId(String username) {
-		if(username != null && !username.isEmpty()) {
+	private void setUserId(String username) throws InvalidReviewDataException {
+		if(Supp.isNotNullOrEmpty(username)) {
 			this.username = username;
+			return;
 		}
+		throw new InvalidReviewDataException("Invalid review username");
 	}
 
 
@@ -62,6 +68,7 @@ public class Review {
 	}
 
 
+	//Getters
 	public long getId() {
 		return id;
 	}

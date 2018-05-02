@@ -161,4 +161,21 @@ public final class OrderDao implements IOrderDao {
 			ps.executeBatch();
 		}
 	}
+
+	public boolean isUserOwnerOfOrder(Integer orderId, int userId) throws SQLException {
+		String sql = "SELECT user_id FROM orders WHERE order_id = ?";
+		try(PreparedStatement ps = con.prepareStatement(sql)){
+			//Set the id
+			ps.setInt(1, orderId);
+			try(ResultSet rs = ps.executeQuery()){
+				//Check if any result is returned and if the userIDs match
+				if(rs.next()) {
+					if(rs.getInt("user_id") == userId) {
+						return true;	
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

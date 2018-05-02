@@ -135,7 +135,7 @@
 	</form:form>
 </div>
 
-
+<!-- Products section -->
 <div id ="contents" class="w3-container menus w3-right" style="width:70%; margin-right:4%">
 	<h1>Filtered products</h1>
 	<c:forEach var="product" items="${products}">

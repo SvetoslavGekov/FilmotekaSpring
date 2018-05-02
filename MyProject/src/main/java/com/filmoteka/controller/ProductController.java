@@ -55,6 +55,11 @@ public class ProductController {
 			// Grab the product from the database
 			Product product = ProductDao.getInstance().getProductById(productId);
 
+			//Check if the product exists
+			if(product == null) {
+				throw new Exception("You've attempted to view a product that does not exist!");
+			}
+			
 			// Add the product to the model
 			m.addAttribute("product", product);
 			
