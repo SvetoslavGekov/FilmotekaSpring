@@ -18,14 +18,10 @@ import java.util.TreeMap;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
-import com.filmoteka.exceptions.InvalidOrderDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
-import com.filmoteka.exceptions.InvalidReviewDataException;
-import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Product;
-import com.filmoteka.model.Review;
 import com.filmoteka.model.SimpleProductFactory;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
@@ -228,9 +224,9 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException,
+	public Collection<Product> getProductsByIdentifiers(Set<Integer> identifiers) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException {
-		Collection<Product> selectedProducts = new ArrayList<>();
+		Collection<Product> selectedProducts = new HashSet<>();
 		
 		//Check if the collection is not null or empty
 		if(identifiers != null && !identifiers.isEmpty()) {
@@ -262,7 +258,7 @@ public final class ProductDao implements IProductDao {
 	}
 
 	@Override
-	public Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException{
+	public Map<Integer, Collection<Genre>> getProductGenresById(Set<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException{
 		Map<Integer, Collection<Genre>> productGenres = new HashMap<>();
 		
 		//Building the query
@@ -316,7 +312,7 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Map<Integer, Map<Integer, Double>> getProductRatersById(List<Integer> productIdentifiers) throws SQLException{
+	public Map<Integer, Map<Integer, Double>> getProductRatersById(Set<Integer> productIdentifiers) throws SQLException{
 		Map<Integer, Map<Integer, Double>> productRaters = new HashMap<>();
 		
 		//Building the query
@@ -501,7 +497,7 @@ public final class ProductDao implements IProductDao {
 				+ "	AND (p.rent_cost IS NULL OR (p.rent_cost >= ? AND p.rent_cost <= ?)) ");
 				
 		//Add genres if any
-		List<Integer> genresIDs = new ArrayList<>();
+		Set<Integer> genresIDs = new HashSet<>();
 		for (Genre genre : filter.getGenres()) {
 			genresIDs.add(genre.getId());
 		}

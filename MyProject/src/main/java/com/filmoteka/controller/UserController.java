@@ -1,6 +1,11 @@
 package com.filmoteka.controller;
 
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +26,9 @@ import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.manager.UserManager;
+import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
-
+import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.UserDao;
 import com.filmoteka.util.BCrypt;
 
@@ -188,5 +194,64 @@ public class UserController {
 		UserDao.getInstance().updateUser(user);
 	
 		return "account";
+	}
+	
+	@RequestMapping(value = "/auth/favourites", method = RequestMethod.GET)
+	public String loadFavoriteProducts(Model m, HttpSession session) throws Exception {
+		try {
+			// Get the user from the session
+			User user = (User) session.getAttribute("USER");
+			// Get user's favorites
+			Set<Integer> identifiers = user.getFavourites();
+			// Create a map of: type --> collection of products
+			Collection<Product> myFavourites = new HashSet<>();
+			
+			myFavourites.addAll(ProductDao.getInstance().getProductsByIdentifiers(identifiers));
+			
+			m.addAttribute("collection","Favorites");
+			m.addAttribute("products", myFavourites);
+		}
+		catch (SQLException | InvalidProductDataException e) {
+			throw new Exception("An error occured while loading the movies from the database. Please try again!");
+		}
+		return "productsList";
+	}
+	
+	@RequestMapping(value = "/auth/myproducts", method = RequestMethod.GET)
+	public String loadBoughtProducts(Model m, HttpSession session) throws Exception {
+		//try {
+			// Get the user from the session
+			User user = (User) session.getAttribute("USER");
+			// Create a map of: type --> collection of products
+			Collection<Product> myProducts = user.getProducts().keySet();
+		
+			m.addAttribute("collection","Products");
+			m.addAttribute("products", myProducts);
+		//}
+		//catch (SQLException | InvalidProductDataException e) {
+			//throw new Exception("An error occured while loading the movies from the database. Please try again!");
+		//}
+		return "productsList";
+	}
+	
+	@RequestMapping(value = "/auth/watchlist", method = RequestMethod.GET)
+	public String loadWatchListProducts(Model m, HttpSession session) throws Exception {
+		try {
+			// Get the user from the session
+			User user = (User) session.getAttribute("USER");
+			// Get user's watchlist
+			Set<Integer> identifiers = user.getWatchList();
+			// Create a map of: type --> collection of products
+			Collection<Product> myWatchList = new HashSet<>();
+			
+			myWatchList.addAll(ProductDao.getInstance().getProductsByIdentifiers(identifiers));
+			
+			m.addAttribute("collection","WatchList");
+			m.addAttribute("products", myWatchList);
+		}
+		catch (SQLException | InvalidProductDataException e) {
+			throw new Exception("An error occured while loading the movies from the database. Please try again!");
+		}
+		return "productsList";
 	}
 }

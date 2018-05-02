@@ -94,7 +94,7 @@ public class ProductController {
 					(List<Product>) ProductDao.getInstance().getCheapestProducts(new Integer(TOP_ITEMS_COUNT))); // Cheapest
 
 			// Set the products in the model
-			m.addAttribute("mainPageProducts", groupedProducts);
+			m.addAttribute("products", groupedProducts);
 		}
 		catch (SQLException | InvalidProductDataException e) {
 			throw new Exception("An error occured while loading the products from the database. Please try again!");
@@ -114,7 +114,7 @@ public class ProductController {
 					(List<Product>) TVSeriesDao.getInstance().getTVSeriesBySubstring(substring)); // TV Series
 
 			// Set the products in the model
-			m.addAttribute("mainPageProducts", productsBySearch);
+			m.addAttribute("products", productsBySearch);
 		}
 		catch (SQLException | InvalidProductDataException e) {
 			throw new Exception("An error occured while loading the movies from the database. Please try again!");

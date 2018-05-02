@@ -1,6 +1,5 @@
 package com.filmoteka.model;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
