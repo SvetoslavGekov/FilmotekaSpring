@@ -1,6 +1,7 @@
 package com.filmoteka.controller;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
+import com.filmoteka.exceptions.InvalidReviewDataException;
 import com.filmoteka.manager.UserManager;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.Review;
@@ -316,8 +318,9 @@ public class ProductController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			
+			Review review = new Review(productId, user.getUsername(), reviewContent, LocalDateTime.now());
 			// Add review to product
-			ProductDao.getInstance().addReview(user.getUserId(), product.getId(), reviewContent);
+			ProductDao.getInstance().addReview(review, user.getUserId());
 			
 			System.out.println("\n"+"Added review content:\n"+reviewContent+"\nFor product with id = "+productId+"\nFROM: "+user.getFirstName()+"\n\n");
 			
@@ -325,7 +328,7 @@ public class ProductController {
 			//Return an OK status
 			return new ResponseEntity<Boolean>(HttpStatus.OK);
 		}
-		catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException e) {
+		catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException | InvalidReviewDataException e) {
 			//Return an entity with a status code for Internal Server Error (handling is done via JS)
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

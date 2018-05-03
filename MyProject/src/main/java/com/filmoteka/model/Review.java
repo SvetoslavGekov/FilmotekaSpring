@@ -15,11 +15,15 @@ public class Review {
 	
 	
 	public Review(long id, long productId, String username, String content, LocalDateTime dateTime) throws InvalidReviewDataException {
+		this(productId, username, content, dateTime);
 		this.setId(id);
+	}
+
+	public Review(long productId, String username, String reviewContent, LocalDateTime now) throws InvalidReviewDataException {
 		this.setProductId(productId);
 		this.setUserId(username);
-		this.setContent(content);
-		this.setDateTime(dateTime);
+		this.setContent(reviewContent);
+		this.setDateTime(now);
 	}
 
 	//Setters

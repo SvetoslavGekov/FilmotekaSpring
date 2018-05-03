@@ -56,7 +56,7 @@
 	<div class="w3-panel">
         <button type = "button" onclick="openOrCloseSection('productNameSection')" class="w3-small w3-btn w3-block w3-theme-d2  w3-left-align">Product Name</button>
     	<div id="productNameSection" class="w3-container w3-show w3-padding ">
-			<form:input id="filterName" path = "name" name="filterName" class="w3-container w3-input" type="text" placeholder="Enter product name"/>
+			<form:input id="filterName" path = "name" name="filterName" class="w3-container w3-input" type="text" maxlength="100" placeholder="Enter product name"/>
     	</div>
     </div>
     
