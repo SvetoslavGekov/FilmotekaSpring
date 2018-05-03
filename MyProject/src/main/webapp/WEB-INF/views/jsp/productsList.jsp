@@ -33,7 +33,7 @@
 
 <!-- Products section -->
 <div class="w3-row-padding" style="margin-top:5%">
-<div id ="contents" class="w3-container menus" style="width:70%; margin-right:4%">
+<div id ="contents" class="w3-container menus" style="width:70%; margin-right:15%; margin-left:15%">
 	<p class="w3-panel w3-text-theme w3-center w3-xxlarge"><b>My ${ collection }</b></p>
 	<c:forEach var="product" items="${products}">
 	<div class="w3-display-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
@@ -109,7 +109,7 @@
 	          		<span class="w3-medium">New price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
 	          	</c:when>
 	          	<c:otherwise>
-	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/><i class="fa fa-euro"></i></span>
+	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
 	          	</c:otherwise>
 				</c:choose>
 				

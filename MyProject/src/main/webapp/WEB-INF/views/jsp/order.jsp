@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,48 +21,94 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
 <link rel="stylesheet" href="css/color-theme.css">
 <link rel="stylesheet" href="css/html_slider.css">
-<title>My Orders</title>
+<title>Order ${ order.id }</title>
 
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
-<body>
+<body bgcolor="#E9EBEE">
 	<!-- Include the header file via JSTL -->
 	<c:import url="header.jsp"></c:import>
 	
+	
 	<div id = "content" class="w3-container" style="margin-top:7%; margin-left:1%">
-	<h3>Order &numero;${ order.id }</h3>
 	<c:choose>
 		<c:when test="${not empty order.shoppingCart }">
-		
-			<c:forEach var="entry" items="${order.shoppingCart }">
-				<c:set var = "product" value = "${entry.key }"></c:set>
-				<c:set var = "validity" value = "${entry.value }"></c:set>
-				<c:set var = "price" value = "${product.buyCost }"></c:set>
-				<c:if test="${not empty validity }">
-					<c:set var = "price" value = "${ product.rentCost }"></c:set>
-				</c:if>
-						<table cellspacing="0" cellpading="0" width="75%" border="1">
-							<tbody>
-								<tr>
-									<th colspan = "2">Item</th>
-									<th>Validity</th>
-									<th>Price</th>
-								</tr>
-								<tr>
-								<td >
-									<img height="150" width="150" alt="${product.name}" title = "${product.name }" src = "getPic?pic=${product.poster}">
-								</td>
-								<td valign="middle"><span class="cartItem">${product.name} ${product.releaseDate.year}</span></td>
-								<td valign="middle" halign="center" >${validity }</td>
-								<td valign="middle" halign="center" >${price } &euro;</td>
-								</tr>
-							</tbody>
-						</table>
-			</c:forEach>	
+			<!-- Products section -->
+			<br>
+			<!-- Total cost of the order is not correct when refresh -->
+			<!--<p class="w3-panel w3-text-theme w3-left w3-xxlarge"><b>Total price:</b></p>
+			<span class="w3-panel w3-text-red w3-left w3-xxlarge"><fmt:formatNumber value="${ order.totalCost }" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+			-->
+			<span class="w3-panel w3-text-red w3-right w3-xxlarge"><i>${ order.date }</i></span>
+			<div id ="contents" class="w3-container menus" style="width:70%; margin-right:15% ; margin-left:15%">
+				<p class="w3-panel w3-center w3-text-theme w3-xxlarge"><b>Order ${ order.id }</b></p>
+				<c:forEach var="entry" items="${order.shoppingCart}">
+					<c:set var = "product" value = "${entry.key }"></c:set>
+				<div class="w3-display-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
+					<c:if test="${ collection == 'Cart' }">
+						<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"
+							onclick="location.href='auth/removefromcart?productID=${product.id}'" >&#10006</button>
+					</c:if>
+					<div class="w3-row-padding">
+						<div class="w3-col w3-container w3-margin" style="width:25%;">
+							<div class="w3-container w3-padding">
+				        		<a href="product/${product.id}">
+				        			<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round" style="width:100%; height:225px;">
+				        		</a>
+				        	</div>
+				        </div>
+				        	<div class="w3-col w3-container w3-margin" style="width:45%;">
+				            	<div class="w3-container">
+				                  <a href="product/${product.id}">
+				                  	<span class="w3-large w3-text-highway-blue"><b>${product.name}</b></span><br><br>
+				                  </a>
+				                  
+				                  <span class="w3-medium w3-text-theme " ><b>Product type:</b>
+				                  	<span class="w3-small w3-text-black ">${product.productCategory.value}</span>
+				                  </span><br>
+								  <span class="w3-medium w3-text-theme "><b>Released:</b>
+								  	<span class="w3-small w3-text-black ">${product.releaseDate.year}</span>
+								  </span><br>
+								  <span class="w3-medium w3-text-theme "><b>Pg Rating:</b>
+								  	<div class="w3-tag w3-round w3-green w3-tiny" style="padding:3px">
+										<div class="w3-tag w3-round w3-green w3-border w3-border-white">
+											${product.pgRating}
+										</div>
+									</div>
+								  </span><br>
+								  <span class="w3-medium w3-text-theme "><b>Viewer Rating:</b>
+									<div class="w3-tag w3-round w3-vivid-reddish-purple w3-tiny" style="padding:3px">
+									  <i class="fa fa-star-o"></i>
+									  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
+											<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
+									  </div>
+									</div>
+								  </span><br>
+								  <span class="w3-medium w3-text-theme "><b>Duration:</b>
+								  	<span class="w3-small w3-text-black ">${product.duration} minutes</span>
+								  </span><br>
+								  <span class="w3-medium w3-text-theme "><b>Genres:</b><br>
+								  	<c:forEach var="genre" items="${product.genres}">
+							  			<div class="w3-tag w3-round w3-food-blueberry w3-tiny" style="padding:3px">
+											<div class="w3-tag w3-round w3-food-blueberry w3-border w3-border-white">
+												${genre.value}
+											</div>
+										</div>
+								  	</c:forEach>
+								  	
+								  </span><br>
+								  
+				              </div>
+				          </div>
+				      </div>
+				  </div>
+					</c:forEach>
+				</div>
 		</c:when>
 		<c:otherwise>
-			<h3>Empty order!</h3>
+					<h3><i>Empty order!</i></h3>
 		</c:otherwise>
+		
 	</c:choose>
 	</div>
 </body>
