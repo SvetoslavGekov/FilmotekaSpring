@@ -42,6 +42,9 @@ public class CartController {
 		
 		// Add the cart into the view
 		m.addAttribute("cart", cart);
+		
+		// Add collection name(to show or hide buy and remove button)
+		m.addAttribute("collection", "Cart");
 
 		// Return the cart JSP
 		return "cart";
