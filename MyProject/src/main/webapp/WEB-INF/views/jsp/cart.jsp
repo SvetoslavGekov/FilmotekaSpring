@@ -36,11 +36,13 @@
 		
 			
 			<!-- Products section -->
+			<p class="w3-panel w3-text-theme w3-center w3-xxlarge"><b>My ${ collection }</b></p>
 			<c:if test="${ collection == 'Cart' }">
 				<button class="w3-button w3-indigo w3-round-xxlarge w3-hover-vivid-greenish-blue" onclick ="location.href='auth/buycart'" >Buy items in cart</button>
+					<br><br><span class="w3-medium w3-text-theme">Total cost: </span>
+					<span class="w3-medium w3-text-red"><fmt:formatNumber value="${ totalCost }" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
 			</c:if>
-			<div id ="contents" class="w3-container menus" style="width:70%; margin-right:4%">
-				<p class="w3-panel w3-text-theme w3-center w3-xxlarge"><b>My ${ collection }</b></p>
+			<div id ="contents" class="w3-container menus" style="width:70%; margin-right:15%; margin-left:15%">
 				<c:forEach var="entry" items="${cart}">
 					<c:set var = "product" value = "${entry.key }"></c:set>
 					<c:set var = "validity" value = "${entry.value }"></c:set>
@@ -106,9 +108,12 @@
 				          </div>
 				          <div class="w3-rest w3-container w3-margin">
 				          	<br><br>
+				          	
+				          	<c:if test="${ collection == 'Cart' }">
 				          		<span class="w3-medium w3-text-theme">Price:</span>
 				          		<br><span class="w3-medium w3-text-red"><fmt:formatNumber value="${ price }" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
 				          		<br><br>
+							</c:if>
 				          	<c:if test="${not empty validity }">
 				          		<br><span class="w3-medium w3-text-theme">Validity: </span>
 								<br><span class="w3-medium w3-text-red"><i>${ validity }</i></span>
