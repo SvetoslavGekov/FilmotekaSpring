@@ -23,7 +23,7 @@
 		<!-- If user is admin (add additional menus) -->
 		<c:if test="${sessionScope.USER.isAdmin }">
 			<div class="w3-dropdown-hover">
-				<button class="w3-button w3-hover-teal">Administrative</button>
+				<button class="w3-button w3-hover-teal"><b>Administrative</b></button>
 				<div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
 					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/1'"><b>New Movie</b></a>
 					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/2'"><b>New TV Series</b></a>

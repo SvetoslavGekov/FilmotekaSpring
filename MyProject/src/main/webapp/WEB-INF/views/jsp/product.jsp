@@ -111,7 +111,7 @@
 									<c:if test="${sessionScope.USER.isAdmin }">
 										<button class="w3-button fa fa-edit" onclick="location.href='adm/editProduct/${product.id}'"> Edit Product</button>
 									</c:if>
-									<span id="rate" class="rating w3-medium" style="display:none">
+									<span id="rate" class="rating w3-medium w3-left" style="display:none; margin-left:18%">
 									
 									<c:forEach begin="1" end="10" varStatus="loop">
 		   							 	<span title="Rate ${11 - loop.index}" onClick="rateProduct(${ product.id }, ${11 - loop.index})">&#9734;</span>

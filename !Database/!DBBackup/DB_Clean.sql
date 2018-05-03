@@ -29,7 +29,7 @@ CREATE TABLE `genres` (
   `value` varchar(45) NOT NULL COMMENT 'Genre''s name',
   PRIMARY KEY (`genre_id`),
   UNIQUE KEY `values_unique` (`value`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `movies` (
 
 LOCK TABLES `movies` WRITE;
 /*!40000 ALTER TABLE `movies` DISABLE KEYS */;
-INSERT INTO `movies` VALUES (1,'James Cameron'),(2,'James Cameron'),(3,'Joe Johnston');
+INSERT INTO `movies` VALUES (1,'James Cameron'),(2,'James Cameron'),(3,'Joe Johnston'),(7,NULL),(8,'Ryan Coogler');
 /*!40000 ALTER TABLE `movies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +173,7 @@ CREATE TABLE `product_has_genres` (
 
 LOCK TABLES `product_has_genres` WRITE;
 /*!40000 ALTER TABLE `product_has_genres` DISABLE KEYS */;
-INSERT INTO `product_has_genres` VALUES (1,1),(3,2),(4,3),(4,5),(6,6),(2,8),(5,8),(6,8),(3,9),(3,10),(6,15),(2,16),(5,16),(1,17);
+INSERT INTO `product_has_genres` VALUES (1,1),(7,1),(8,1),(3,2),(7,2),(8,2),(9,2),(4,3),(9,3),(4,5),(9,5),(6,6),(10,6),(2,8),(5,8),(6,8),(10,8),(3,9),(3,10),(6,15),(10,15),(2,16),(5,16),(1,17),(7,17),(8,17);
 /*!40000 ALTER TABLE `product_has_genres` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,7 +201,7 @@ CREATE TABLE `product_has_raters` (
 
 LOCK TABLES `product_has_raters` WRITE;
 /*!40000 ALTER TABLE `product_has_raters` DISABLE KEYS */;
-INSERT INTO `product_has_raters` VALUES (1,1,1.0),(1,2,4.8),(3,3,1.0),(4,1,7.0),(4,2,4.6),(4,3,1.0),(6,1,1.0),(6,3,3.2);
+INSERT INTO `product_has_raters` VALUES (1,1,1.0),(1,2,4.8),(3,3,1.0),(4,1,7.0),(4,2,4.6),(4,3,1.0),(6,1,1.0),(6,3,10.0);
 /*!40000 ALTER TABLE `product_has_raters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,7 @@ CREATE TABLE `products` (
   KEY `RELEASE_YEAR` (`release_year`),
   KEY `fk_category_id_idx` (`category_id`),
   CONSTRAINT `fk_category_id` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,1,'The Terminator',1984,'PG-R',107,5.00,10.00,'A seemingly indestructible humanoid cyborg is sent from 2029 to 1984 to assassinate a waitress, whose unborn son will lead humanity in a war against the machines, while a soldier from that war is sent to protect her at all costs.','1.jpg',NULL,'James Cameron, Gale Anne Hurd','Arnold Schwarzenegger, Linda Hamilton, Michael Biehn',10,NULL),(2,1,'Titanic',1997,'PG-13',194,10.00,15.00,'84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.','2.jpg',NULL,'James Cameron','Leonardo DiCaprio, Kate Winslet, Billy Zane',5,'2018-03-04'),(3,1,'Jumanji',1995,'PG-12',104,5.00,7.50,'After being trapped in a jungle board game for 26 years, a Man-Child wins his release from the game. But, no sooner has he arrived that he is forced to play again, and this time sets the creatures of the jungle loose on the city. Now it is up to him to stop them.','3.jpg',NULL,'Jonathan Hensleigh, Greg Taylor','Robin Williams, Kirsten Dunst, Bonnie Hunt',3,'2018-05-15'),(4,2,'The Simpsons',1989,'PG-12',22,3.00,5.00,'This is an animated sitcom about the antics of a dysfunctional family. Homer is the oafish unhealthy beer loving father, Marge is the hardworking homemaker wife, Bart is the perpetual ten-year-old underachiever (and proud of it), Lisa is the unappreciated eight-year-old genius, and Maggie is the cute, pacifier loving silent infant.','4.jpg',NULL,'James L. Brooks, Matt Groening, Sam Simon','Dan Castellaneta, Nancy Cartwright, Julie Kavner',1,NULL),(5,2,'ER',1994,'PG-16',44,3.00,5.00,'Michael Crichton has created a medical drama that chronicles life and death in a Chicago hospital emergency room. Each episode tells the tale of another day in the ER, from the exciting to the mundane, and the joyous to the heart-rending. Frenetic pacing, interwoven plot lines, and emotional rollercoastering is used to attempt to accurately depict the stressful environment found there. This show even portrays the plight of medical students in their quest to become physicians.','5.jpg',NULL,'Michael Crichton','Anthony Edwards, George Clooney, Julianna Margulies',22,NULL),(6,2,'The Mentalist',2008,'PG-14',43,3.00,5.00,'After a serial killer named Red John murdered Patrick Jane\'s wife and daughter, Jane dedicated his life to hunting down and killing Red John. To that end he gave up his lucrative pretense of being a psychic and joined the California Bureau of Investigation (CBI) as a consultant to the team responsible for investigating the Red John case, led by Senior Agent Teresa Lisbon. Using Jane\'s exceptional gift for observation and his mentalist tric able to close an unprecedented number of cases, but Jane\'s unconventional and often outright illegal methods also bring much censure down on Lisbon\'s head, making his assistance both a blessing and a curse. Meanwhile, the hunt for Red John continues...','6.jpg',NULL,'Bruno Heller','Simon Baker, Robin Tunney, Tim Kang',NULL,NULL);
+INSERT INTO `products` VALUES (1,1,'The Terminator',1984,'PG-R',107,5.00,10.00,'A seemingly indestructible humanoid cyborg is sent from 2029 to 1984 to assassinate a waitress, whose unborn son will lead humanity in a war against the machines, while a soldier from that war is sent to protect her at all costs.','1.jpg',NULL,'James Cameron, Gale Anne Hurd','Arnold Schwarzenegger, Linda Hamilton, Michael Biehn',10,NULL),(2,1,'Titanic',1997,'PG-13',194,10.00,15.00,'84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.','2.jpg',NULL,'James Cameron','Leonardo DiCaprio, Kate Winslet, Billy Zane',5,'2018-03-04'),(3,1,'Jumanji',1995,'PG-12',104,5.00,7.50,'After being trapped in a jungle board game for 26 years, a Man-Child wins his release from the game. But, no sooner has he arrived that he is forced to play again, and this time sets the creatures of the jungle loose on the city. Now it is up to him to stop them.','3.jpg',NULL,'Jonathan Hensleigh, Greg Taylor','Robin Williams, Kirsten Dunst, Bonnie Hunt',3,'2018-05-15'),(4,2,'The Simpsons',1989,'PG-12',22,3.00,5.00,'This is an animated sitcom about the antics of a dysfunctional family. Homer is the oafish unhealthy beer loving father, Marge is the hardworking homemaker wife, Bart is the perpetual ten-year-old underachiever (and proud of it), Lisa is the unappreciated eight-year-old genius, and Maggie is the cute, pacifier loving silent infant.','4.jpg',NULL,'James L. Brooks, Matt Groening, Sam Simon','Dan Castellaneta, Nancy Cartwright, Julie Kavner',1,NULL),(5,2,'ER',1994,'PG-16',44,3.00,5.00,'Michael Crichton has created a medical drama that chronicles life and death in a Chicago hospital emergency room. Each episode tells the tale of another day in the ER, from the exciting to the mundane, and the joyous to the heart-rending. Frenetic pacing, interwoven plot lines, and emotional rollercoastering is used to attempt to accurately depict the stressful environment found there. This show even portrays the plight of medical students in their quest to become physicians.','5.jpg',NULL,'Michael Crichton','Anthony Edwards, George Clooney, Julianna Margulies',22,NULL),(6,2,'The Mentalist',2008,'PG-14',43,3.00,5.00,'After a serial killer named Red John murdered Patrick Jane\'s wife and daughter, Jane dedicated his life to hunting down and killing Red John. To that end he gave up his lucrative pretense of being a psychic and joined the California Bureau of Investigation (CBI) as a consultant to the team responsible for investigating the Red John case, led by Senior Agent Teresa Lisbon. Using Jane\'s exceptional gift for observation and his mentalist tric able to close an unprecedented number of cases, but Jane\'s unconventional and often outright illegal methods also bring much censure down on Lisbon\'s head, making his assistance both a blessing and a curse. Meanwhile, the hunt for Red John continues...','6.jpg',NULL,'Bruno Heller','Simon Baker, Robin Tunney, Tim Kang',NULL,NULL),(7,1,'Ready Player One',2018,'PG-13',140,10.00,30.00,'In the year 2045, the real world is a harsh place. The only time Wade Watts (Tye Sheridan) truly feels alive is when he escapes to the OASIS, an immersive virtual universe where most of humanity spends their days. In the OASIS, you can go anywhere, do anything, be anyone-the only limits are your own imagination. The OASIS was created by the brilliant and eccentric James Halliday (Mark Rylance), who left his immense fortune and total control of the Oasis to the winner of a three-part contest he designed to find a worthy heir. When Wade conquers the first challenge of the reality-bending treasure hunt, he and his friends-aka the High Five-are hurled into a fantastical universe of discovery and danger to save the OASIS.','ready-player-one-poster.jpg',NULL,'Zak Penn, Ernest Cline',' Tye Sheridan, Olivia Cooke, Ben Mendelsohn',0,NULL),(8,1,'Black Panther',2018,'PG-13',134,7.00,15.00,'After the events of Captain America: Civil War, King T\'Challa returns home to the reclusive, technologically advanced African nation of Wakanda to serve as his country\'s new leader. However, T\'Challa soon finds that he is challenged for the throne from factions within his own country. When two foes conspire to destroy Wakanda, the hero known as Black Panther must team up with C.I.A. agent Everett K. Ross and members of the Dora Milaje, Wakandan special forces, to prevent Wakanda from being dragged into a world war.','Black_Panther.jpg',NULL,'Ryan Coogler, Joe Robert Cole',' Chadwick Boseman, Michael B. Jordan, Lupita Nyong\'o',15,'2018-06-02'),(9,2,'Rick and Morty',2013,'PG-12',23,4.00,10.00,'An animated series on adult-swim about the infinite adventures of Rick, a genius alcoholic and careless scientist, with his grandson Morty, a 14 year-old anxious boy who is not so smart. Together, they explore the infinite universes; causing mayhem and running into trouble.','RickAndMorty.jpg',NULL,'Dan Harmon, Justin Roiland','Justin Roiland, Chris Parnell, Spencer Grammer',0,NULL),(10,2,'Sherlock',2010,'PG-12',88,7.00,14.00,'In this modernized version of the Conan Doyle characters, using his detective plots, Sherlock Holmes lives in early 21st century London and acts more cocky towards Scotland Yard\'s detective inspector Lestrade because he\'s actually less confident. Doctor Watson is now a fairly young veteran of the Afghan war, less adoring and more active.','sherlock_poster.jpg',NULL,'Mark Gatiss, Steven Moffat','Benedict Cumberbatch, Martin Freeman, Una Stubbs',33,'2018-05-26');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,7 +264,7 @@ CREATE TABLE `reviews` (
   KEY `fk_reviews_users` (`user_id`),
   CONSTRAINT `fk_reviews_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reviews_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +273,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (22,1,1,'I really liked this movie.','2018-04-29 16:50:29'),(23,1,1,'fine','2018-04-29 16:51:05');
+INSERT INTO `reviews` VALUES (22,1,1,'I really liked this movie.','2018-04-29 16:50:29'),(23,1,1,'fine','2018-04-29 16:51:05'),(24,4,3,'I\'ve always enjoyed watching Homer.','2018-05-03 10:33:48'),(25,4,1,'5/7 would watch again.','2018-05-03 10:48:02');
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,7 +291,7 @@ CREATE TABLE `tvseries` (
   PRIMARY KEY (`product_id`),
   KEY `fk_tvseries_products_idx` (`product_id`),
   CONSTRAINT `fk_tvseries_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +300,7 @@ CREATE TABLE `tvseries` (
 
 LOCK TABLES `tvseries` WRITE;
 /*!40000 ALTER TABLE `tvseries` DISABLE KEYS */;
-INSERT INTO `tvseries` VALUES (4,1,NULL),(5,1,NULL),(6,1,NULL);
+INSERT INTO `tvseries` VALUES (4,1,NULL),(5,1,NULL),(6,1,NULL),(9,1,NULL),(10,1,NULL);
 /*!40000 ALTER TABLE `tvseries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,7 +327,7 @@ CREATE TABLE `user_has_favorite_products` (
 
 LOCK TABLES `user_has_favorite_products` WRITE;
 /*!40000 ALTER TABLE `user_has_favorite_products` DISABLE KEYS */;
-INSERT INTO `user_has_favorite_products` VALUES (1,2),(2,2);
+INSERT INTO `user_has_favorite_products` VALUES (3,1),(1,2),(2,2),(1,5),(3,8);
 /*!40000 ALTER TABLE `user_has_favorite_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,7 +382,7 @@ CREATE TABLE `user_has_watchlist_products` (
 
 LOCK TABLES `user_has_watchlist_products` WRITE;
 /*!40000 ALTER TABLE `user_has_watchlist_products` DISABLE KEYS */;
-INSERT INTO `user_has_watchlist_products` VALUES (1,1),(2,1),(3,1),(1,2),(1,4),(1,5);
+INSERT INTO `user_has_watchlist_products` VALUES (1,1),(2,1),(1,2),(1,4),(1,5),(3,6),(3,8);
 /*!40000 ALTER TABLE `user_has_watchlist_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -411,7 +411,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `EMAIL_UNIQUE` (`email`),
   KEY `USERNAME_INDEX` (`username`),
   KEY `EMAIL_INDEX` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -420,7 +420,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,0,'sgekov','svetoslav_gekov@abv.bg','$2a$10$1jk0yGGk90M1Bhi6V.4iJO1fcqI77czYaCj9esf0DEAZM7ocIH7fy','Svetoslav','Gekov','2018-04-01','0882022041','2018-05-02 13:47:01','Picture_Svetoslav_Gekov.jpg',9838.13),(2,0,'mdimitrov','mario0.bg@abv.bg','$2a$10$0/PmI5dkHCtW.7T/wQbSr.AogH65p4fSaPpGC8TmhFAoaIbHnf6um','Mario','Dimitrov','2018-04-01',NULL,'2018-04-29 13:51:26',NULL,200.00),(3,1,'admin','admin@filmoteka.bg','$2a$10$BhejaMOwKu8AOxnK/M0d3OxF6dtgnTqr2fMdck/2rW/C3o1w7jJwm','Admin','Adminov','2018-04-01',NULL,'2018-05-02 20:12:03',NULL,4987.15);
+INSERT INTO `users` VALUES (1,0,'sgekov','svetoslav_gekov@abv.bg','$2a$10$1jk0yGGk90M1Bhi6V.4iJO1fcqI77czYaCj9esf0DEAZM7ocIH7fy','Svetoslav','Gekov','2018-04-01','0882022041','2018-05-03 07:47:48','Picture_Svetoslav_Gekov.jpg',9838.13),(2,0,'mdimitrov','mario0.bg@abv.bg','$2a$10$0/PmI5dkHCtW.7T/wQbSr.AogH65p4fSaPpGC8TmhFAoaIbHnf6um','Mario','Dimitrov','2018-04-01',NULL,'2018-04-29 13:51:26',NULL,200.00),(3,1,'admin','admin@filmoteka.bg','$2a$10$BhejaMOwKu8AOxnK/M0d3OxF6dtgnTqr2fMdck/2rW/C3o1w7jJwm','Admin','Adminov','2018-04-01','0889853350','2018-05-03 07:52:10',NULL,4987.15);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -433,4 +433,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-02 23:15:09
+-- Dump completed on 2018-05-03 11:06:34
