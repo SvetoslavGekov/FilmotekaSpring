@@ -197,7 +197,7 @@
 									<div class="w3-theme">New Review</div>
 									<textarea rows="7" cols="50" style="resize:none" name="content" id="reviewcont"
 										placeholder="${ sessionScope.USER.firstName }, tell us what you think about this product..."
-										maxlength="480" minlength="5";
+										maxlength="480" minlength="5"
 									></textarea>
 									<div class="w3-button w3-theme w3-small w3-round-large" 
 										onclick="addReview(document.getElementById('reviewcont').value, ${ product.id })">Submit Review

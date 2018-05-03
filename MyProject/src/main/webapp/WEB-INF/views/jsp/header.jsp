@@ -40,7 +40,7 @@
 		
 		<c:choose>
     		<c:when test="${ sessionScope.USER != null }">
-       		 	<div class="w3-dropdown-hover w3-right">
+       		 	<div class="w3-dropdown-hover w3-right" style="margin-right:1%">
 				  	<button class=" w3-button w3-hover-teal" onclick="location.href='auth/account'" title="More"><b>${ sessionScope.USER.firstName} ${ sessionScope.USER.lastName}<b></button>     
 				 	 <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
 						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='auth/myproducts'"><b>My Products</b></a>
