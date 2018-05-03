@@ -74,7 +74,7 @@ public final class OrderDao implements IOrderDao {
 			ps.setInt(1, orderId);
 			try(ResultSet rs = ps.executeQuery()){
 				//Create a list of product IDs
-				Set<Integer> productIDs = new HashSet<>();
+				List<Integer> productIDs = new ArrayList<>();
 				List<Date> validities = new ArrayList<>();
 				
 				//Populate products collection

@@ -31,6 +31,7 @@ import com.filmoteka.util.BCrypt;
 
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class UserDao implements IUserDao {
 
@@ -207,27 +208,13 @@ public class UserDao implements IUserDao {
 				.prepareStatement("SELECT product_id, validity FROM user_has_products WHERE user_id = ?;")) {
 			ps.setInt(1, userId);
 			try (ResultSet rs = ps.executeQuery()) {
-				//Create a list of the user's  products and their validities
-				Set<Integer> productIDs = new HashSet<>();
-				List<Date> validities = new ArrayList<>();
 				
 				while (rs.next()) {
 					// Get products from the website collection
 					int productId = rs.getInt("product_id");
 					Date validity = rs.getDate("validity");
 					
-					productIDs.add(productId);
-					validities.add(validity);
-				}
-				
-				//Check if user has any products at all
-				if(!productIDs.isEmpty()) {
-					//Get all products as 1 query and put them in the map
-					List<Product> products = new ArrayList<>(ProductDao.getInstance().getProductsByIdentifiers(productIDs));
-					for(int i = 0; i < products.size(); i++) {
-						Date validity = validities.get(i);
-						userProducts.put(products.get(i), validity != null ? validity.toLocalDate() : null);
-					}
+					userProducts.put(ProductDao.getInstance().getProductById(productId), validity != null ? validity.toLocalDate() : null);
 				}
 			}
 		}
@@ -284,7 +271,7 @@ public class UserDao implements IUserDao {
 	@Override
 	public Set<Order> getUserOrdersById(int userId) throws SQLException, InvalidOrderDataException,
 	InvalidProductDataException, InvalidGenreDataException, InvalidProductCategoryDataException {
-		Set<Order> orders = new HashSet<Order>();
+		Set<Order> orders = new TreeSet<Order>();
 		try (PreparedStatement ps = connection.prepareStatement("SELECT order_id FROM orders WHERE user_id = ? ORDER BY date DESC;")) {
 			ps.setInt(1, userId);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -384,7 +371,7 @@ public class UserDao implements IUserDao {
 		try(Statement s = connection.createStatement()){
 			try(ResultSet rs = s.executeQuery(query)){
 				//Create a map of the user and all his products(Identifiers)
-				Map<User, Set<Integer>> userProducts = new TreeMap<>(); 
+				Map<User, List<Integer>> userProducts = new TreeMap<>(); 
 				
 				while(rs.next()) {
 					//Create user and product identifiers
@@ -400,16 +387,16 @@ public class UserDao implements IUserDao {
 					//Put instances in resulting map
 					if(!userProducts.containsKey(user)) {
 						//If no such user is in the map -> create new entry with new array list
-						userProducts.put(user, new HashSet<Integer>());
+						userProducts.put(user, new ArrayList<Integer>());
 					}
 					//Add product to array list
 					userProducts.get(user).add(rs.getInt("product_id"));
 				}
 				
 				//Create all products per user (faster than single queries to the database).
-				for (Entry<User, Set<Integer>> e: userProducts.entrySet()) {
+				for (Entry<User, List<Integer>> e: userProducts.entrySet()) {
 					User user = e.getKey();
-					Set<Integer> products = e.getValue();
+					List<Integer> products = e.getValue();
 					if(!expiringProducts.containsKey(user)) {
 						expiringProducts.put(user, new ArrayList<Product>());
 					}

@@ -2,11 +2,14 @@ package com.filmoteka.controller;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -34,9 +37,9 @@ public class CollectionsController {
 			// Get the user from the session
 			User user = (User) session.getAttribute("USER");
 			// Get user's favorites
-			Set<Integer> identifiers = user.getFavourites();
+			List<Integer> identifiers = new ArrayList<Integer>(user.getFavourites());
 			// Create a map of: type --> collection of products
-			Collection<Product> myFavourites = new HashSet<>();
+			Collection<Product> myFavourites = new ArrayList<>();
 			
 			myFavourites.addAll(ProductDao.getInstance().getProductsByIdentifiers(identifiers));
 			
@@ -83,7 +86,7 @@ public class CollectionsController {
 			User user = (User) session.getAttribute("USER");
 
 			// Get user's products
-			Map<Product, LocalDate> myProducts = new HashMap<>(UserDao.getInstance().getUserProductsById(user.getUserId()));
+			Map<Product, LocalDate> myProducts = new TreeMap<>(UserDao.getInstance().getUserProductsById(user.getUserId()));
 		
 			m.addAttribute("collection", "Products");
 			m.addAttribute("cart", myProducts);
@@ -101,7 +104,7 @@ public class CollectionsController {
 			// Get the user from the session
 			User user = (User) session.getAttribute("USER");
 			// Get user's watchList
-			Set<Integer> identifiers = user.getWatchList();
+			List<Integer> identifiers = new ArrayList<Integer>(user.getWatchList());
 			// Create a map of: type --> collection of products
 			Collection<Product> myWatchList = new HashSet<>();
 			

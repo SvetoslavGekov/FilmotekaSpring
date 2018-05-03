@@ -225,9 +225,9 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Collection<Product> getProductsByIdentifiers(Set<Integer> identifiers) throws SQLException, InvalidProductDataException,
+	public Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException {
-		Collection<Product> selectedProducts = new HashSet<>();
+		Collection<Product> selectedProducts = new ArrayList<>();
 		
 		//Check if the collection is not null or empty
 		if(identifiers != null && !identifiers.isEmpty()) {
@@ -259,7 +259,7 @@ public final class ProductDao implements IProductDao {
 	}
 
 	@Override
-	public Map<Integer, Collection<Genre>> getProductGenresById(Set<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException{
+	public Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException{
 		Map<Integer, Collection<Genre>> productGenres = new HashMap<>();
 		
 		//Building the query
@@ -298,7 +298,7 @@ public final class ProductDao implements IProductDao {
 	
 	@Override
 	public Collection<Genre> getProductGenresById(int id) throws SQLException, InvalidGenreDataException {
-		Collection<Genre> productGenres = new HashSet<>();
+		Collection<Genre> productGenres = new ArrayList<>();
 		try (PreparedStatement ps = con
 				.prepareStatement("SELECT genre_id FROM product_has_genres WHERE product_id = ?;")) {
 			ps.setInt(1, id);
@@ -313,7 +313,7 @@ public final class ProductDao implements IProductDao {
 	}
 	
 	@Override
-	public Map<Integer, Map<Integer, Double>> getProductRatersById(Set<Integer> productIdentifiers) throws SQLException{
+	public Map<Integer, Map<Integer, Double>> getProductRatersById(List<Integer> productIdentifiers) throws SQLException{
 		Map<Integer, Map<Integer, Double>> productRaters = new HashMap<>();
 		
 		//Building the query
@@ -498,7 +498,7 @@ public final class ProductDao implements IProductDao {
 				+ "	AND (p.rent_cost IS NULL OR (p.rent_cost >= ? AND p.rent_cost <= ?)) ");
 				
 		//Add genres if any
-		Set<Integer> genresIDs = new HashSet<>();
+		List<Integer> genresIDs = new ArrayList<>();
 		for (Genre genre : filter.getGenres()) {
 			genresIDs.add(genre.getId());
 		}

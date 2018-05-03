@@ -25,7 +25,7 @@ public interface IProductDao {
 	
 	Map<Integer,Double> getProductRatersById(int movieId) throws SQLException;
 	
-	Collection<Product> getProductsByIdentifiers(Set<Integer> identifiers) throws SQLException, InvalidProductDataException,
+	Collection<Product> getProductsByIdentifiers(List<Integer> identifiers) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException;
 	
 	Product getProductById(int productId) throws SQLException, InvalidProductDataException, InvalidGenreDataException,
@@ -55,8 +55,8 @@ public interface IProductDao {
 	Collection<Product> getProductsOnSale(Integer limit) throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException;
 	
-	Map<Integer, Map<Integer, Double>> getProductRatersById(Set<Integer> productIdentifiers) throws SQLException;
+	Map<Integer, Map<Integer, Double>> getProductRatersById(List<Integer> productIdentifiers) throws SQLException;
 	
-	Map<Integer, Collection<Genre>> getProductGenresById(Set<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException;
+	Map<Integer, Collection<Genre>> getProductGenresById(List<Integer> productIdentifiers) throws SQLException, InvalidGenreDataException;
 	
 }
