@@ -36,9 +36,9 @@
 			<!-- Products section -->
 			<br>
 			<!-- Total cost of the order is not correct when refresh -->
-			<!--<p class="w3-panel w3-text-theme w3-left w3-xxlarge"><b>Total price:</b></p>
+			<p class="w3-panel w3-text-theme w3-left w3-xxlarge"><b>Total price:</b></p>
 			<span class="w3-panel w3-text-red w3-left w3-xxlarge"><fmt:formatNumber value="${ order.totalCost }" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
-			-->
+			
 			<span class="w3-panel w3-text-red w3-right w3-xxlarge"><i>${ order.date }</i></span>
 			<div id ="contents" class="w3-container menus" style="width:70%; margin-right:15% ; margin-left:15%">
 				<p class="w3-panel w3-center w3-text-theme w3-xxlarge"><b>Order ${ order.id }</b></p>
