@@ -97,7 +97,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerUser(@RequestParam("username") String username,
+	public synchronized String registerUser(@RequestParam("username") String username,
 			@RequestParam("password") String password,
 			@RequestParam("email") String email,
 			@RequestParam("firstName") String firstName,
@@ -124,7 +124,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "auth/updateProfile", method = RequestMethod.POST)
-	public String updateProfile(HttpSession session, 
+	public synchronized String updateProfile(HttpSession session, 
 								@RequestParam("firstname") String firstName,
 								@RequestParam("lastname") String lastName,
 								@RequestParam("email") String email,

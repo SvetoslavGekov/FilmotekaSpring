@@ -65,7 +65,7 @@ public class AdministratorController {
 	}
 
 	@RequestMapping(value = "/adm/editProduct/{productID}", method = RequestMethod.POST)
-	public String editProduct(@ModelAttribute Product existingProduct, BindingResult result,
+	public synchronized String editProduct(@ModelAttribute Product existingProduct, BindingResult result,
 			@RequestParam("posterFile") MultipartFile posterFile,
 			@RequestParam("trailerFile") MultipartFile trailerFile) throws Exception {
 		try {
@@ -151,7 +151,7 @@ public class AdministratorController {
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.POST)
-	public String saveProduct(@ModelAttribute Product newProduct, BindingResult result,
+	public synchronized String saveProduct(@ModelAttribute Product newProduct, BindingResult result,
 			@RequestParam("posterFile") MultipartFile posterFile,
 			@RequestParam("trailerFile") MultipartFile trailerFile,
 			@RequestParam("category") Integer category)
