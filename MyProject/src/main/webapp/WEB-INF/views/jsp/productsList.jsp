@@ -37,10 +37,16 @@
 	<p class="w3-panel w3-text-theme w3-center w3-xxlarge"><b>My ${ collection }</b></p>
 	<c:forEach var="product" items="${products}">
 	<div class="w3-display-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
-			<c:if test="${ (collection != 'Products') && (collection != 'Order')}">
-				<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"
-				onclick="addOrRemoveFromCollection('${ collection }', ${ product.id })" >&#10006</button>
-			</c:if>
+			<c:choose>
+	 			 <c:when test="${ (collection == 'Favorites')}">
+	 			 	<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"
+						onclick="location.href='auth/removefromfavs?productID=${product.id}'" >&#10006</button>
+	  			</c:when>
+	  			<c:otherwise>
+	  				<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"
+						onclick="location.href='auth/removefromWatchList?productID=${product.id}'" >&#10006</button>
+	  			</c:otherwise>
+			</c:choose>
 		<div class="w3-row-padding">
 			<div class="w3-col w3-container w3-margin" style="width:25%;">
 				<div class="w3-container w3-padding">
@@ -103,11 +109,11 @@
 	          		<span class="w3-medium">New price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
 	          	</c:when>
 	          	<c:otherwise>
-	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/><i class="fa fa-euro"></i></span>
 	          	</c:otherwise>
 				</c:choose>
 				
-				<!-- Buying price -->
+				<!-- Renting price -->
 				<br><br>
 				<span class="w3-medium w3-text-black">Renting</span>
 				<c:choose>
@@ -131,21 +137,5 @@
 </div>
 </body>
 <script src="js/userInteractions.js"></script>
-<script type="text/javascript">
-function addOrRemoveFromCollection(collectionName, productID){
-	switch (collectionName) {
-	    case "Favorites":
-	    	addProductToFavorites(productID);
-	        break;
-	    case "WatchList":
-	    	addProductToWatchList(productID);
-	        break;
-	    case "Cart":
-	    	addProductToCart(productID, false);
-	        break;
-	    default: break;
-	}
-}
-</script>
 
 </html>
