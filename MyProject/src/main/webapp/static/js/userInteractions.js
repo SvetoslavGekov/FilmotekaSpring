@@ -163,9 +163,9 @@ function addReview(reviewContent, productID) {
 	//add the review only if it is between 3 and 480 characters
 	if(reviewContent.length < 3 || reviewContent.length > 480){
 		if(reviewContent.length > 480){
-			alert("What is the meaning of a too long review? That's pretty annoying for the other customers.");
-		}else{
-			alert("What is the meaning of a too short review? Help other customers make the right choice.");
+			alert("The size of your review exceeds the given limit of 480 characters. Please keep it short and simple.");
+		}else if (reviewContent.length < 3 ){
+			alert("Your review is too short. Please add some more flavor.");
 		}
 		return;
 	}
@@ -259,22 +259,22 @@ function showAlert(message, type){
 
 function swapAddToFavorites(element, type){
 	if(type == 1){
-		element.classList = "fa fa-heart-o w3-xxlarge w3-text-red";
+		element.classList = "w3-button fa fa-heart-o w3-xxlarge w3-text-red";
 		element.setAttribute("title", "Remove from favorites");
 	}
 	if(type == 2){
-		element.classList = "fa fa-heart w3-xxlarge w3-text-red";
+		element.classList = "w3-button fa fa-heart w3-xxlarge w3-text-red";
 		element.setAttribute("title", "Add to favorites");
 	}
 }
 
 function swapAddToWatchlist(element,type){
 	if(type == 1){
-		element.classList = "fa fa-eye-slash w3-xxlarge w3-text-green";
+		element.classList = "w3-button fa fa-eye-slash w3-xxlarge w3-text-green";
 		element.setAttribute("title", "Remove from watchlist");
 	}
 	if(type == 2){
-		element.classList = "fa fa-eye w3-xxlarge w3-text-green";
+		element.classList = "w3-button fa fa-eye w3-xxlarge w3-text-green";
 		element.setAttribute("title", "Add to watchlist");
 	}
 }

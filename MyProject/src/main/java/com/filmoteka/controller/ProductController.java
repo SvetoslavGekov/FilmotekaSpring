@@ -70,19 +70,22 @@ public class ProductController {
 			
 			boolean isInFavorites = false;
 			boolean isInWatchlist = false;
+			double userRating = 0d;
 			
 			//Check if there is a user logged in the session
 			User user = (User) session.getAttribute("USER");
 			if(user != null) {
-				//Look if the product is favored or added to the watchlist
+				//Look if the product is favored, added to the watchlist or rated by the user
 				isInFavorites = user.getFavourites().contains(productId);
 				isInWatchlist = user.getWatchList().contains(productId);
+				userRating = product.getRaters().containsKey(user.getUserId()) ? product.getRaters().get(user.getUserId()) : 0d;;
 			}
 			
 			//Add product reviews to the model
 			m.addAttribute("reviews", reviews);
 			m.addAttribute("isInFavorites", isInFavorites);
 			m.addAttribute("isInWatchlist", isInWatchlist);
+			m.addAttribute("userRating", userRating);
 
 			// Return the product view
 			return "product";

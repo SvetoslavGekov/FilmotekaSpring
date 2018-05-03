@@ -92,21 +92,31 @@
 								<span class="w3-large w3-wide">${product.duration} minutes</span><br>
 								<c:choose >
 									<c:when test="${not isInFavorites }">
-										<i onclick="addProductToFavorites(${product.id},this)" title="Add to favorites" class="fa fa-heart w3-xxlarge w3-text-red"></i>
+										<i onclick="addProductToFavorites(${product.id},this)" title="Add to favorites" class="w3-button fa fa-heart w3-xxlarge w3-text-red"></i>
 									</c:when>
 									<c:otherwise>
-										<i onclick="addProductToFavorites(${product.id},this)" title="Remove from favorites" class="fa fa-heart-o w3-xxlarge w3-text-red"></i>
+										<i onclick="addProductToFavorites(${product.id},this)" title="Remove from favorites" class="w3-button fa fa-heart-o w3-xxlarge w3-text-red"></i>
 									</c:otherwise>
 								</c:choose>
 								
 								<c:choose >
 								<c:when test="${not isInWatchlist }">
-										<i onclick="addProductToWatchList(${product.id},this)" title="Add to watchlist"	class="fa fa-eye w3-xxlarge w3-text-green"></i>
+										<i onclick="addProductToWatchList(${product.id},this)" title="Add to watchlist"	class="w3-button fa fa-eye w3-xxlarge w3-text-green"></i>
 									</c:when>
 									<c:otherwise>
-										<i onclick="addProductToWatchList(${product.id},this)" title="Remove from watchlist"	class="fa fa-eye-slash w3-xxlarge w3-text-green"></i>
+										<i onclick="addProductToWatchList(${product.id},this)" title="Remove from watchlist"	class="w3-button fa fa-eye-slash w3-xxlarge w3-text-green"></i>
 									</c:otherwise>
 								</c:choose>
+									<button class="w3-button fa fa-star" onClick="showOrHideContent('rate')">Rate product</button>
+									<c:if test="${sessionScope.USER.isAdmin }">
+										<button class="w3-button fa fa-edit" onclick="location.href='adm/editProduct/${product.id}'"> Edit Product</button>
+									</c:if>
+									<span id="rate" class="rating w3-medium" style="display:none">
+									
+									<c:forEach begin="1" end="10" varStatus="loop">
+		   							 	<span title="Rate ${11 - loop.index}" onClick="rateProduct(${ product.id }, ${11 - loop.index})">&#9734;</span>
+									</c:forEach>
+									</span>
 								<br>
 								<hr>
 							</div>
@@ -124,7 +134,7 @@
 					  		
 					  		<!-- Pg Rating -->
 				  			<div class="w3-tag w3-round w3-green w3-tiny" style="padding:3px">
-								<div class="w3-tag w3-round w3-green w3-border w3-border-white">
+								<div class="w3-tag w3-round w3-green w3-border w3-border-white" title="PG Rating">
 									${product.pgRating}
 								</div>
 							</div>
@@ -133,12 +143,15 @@
 							<!-- Viewer Rating -->
 							<div class="w3-tag w3-round w3-vivid-reddish-purple w3-tiny" style="padding:3px">
 							  <i class="fa fa-star-o"></i>
-							  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
+							  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white" title="Viewer Rating">
 									<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
 							  </div>
 							  
 							</div>								
-							<span class="w3-small w3-text-black">(Votes: ${product.raters.size()})</span>					
+							<span class="w3-small w3-text-black" title="Total votes">(Votes: ${product.raters.size()})</span>
+							<c:if test="${userRating > 0 }">
+								<span class="w3-tiny w3-text-black">(Your rating: ${userRating})</span>
+							</c:if>				
 							</div>
 							
 							<div class="w3-container" style="margin-top:10px">
@@ -172,89 +185,63 @@
 								<div class="w3-container w3-border" style="margin-bottom:10px">
 									<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
 								</div>
-								<button id="addreviewbtn" onclick="showOrHideContent('addreview')">Add review</button>
-								<button id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</button>
+								<div class="w3-container w3-left" style="margin-bottom:10px">
+									<div class="w3-button w3-small w3-theme w3-round-large" id="addreviewbtn" onclick="showOrHideContent('addreview')">Write a review</div>
+									<div class="w3-button w3-small w3-theme w3-round-large" id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</div><br>
+								</div>
+								 
+								
+								<!--Add Reviews  -->
+								
+								<div id="addreview" class = "w3-container w3-left" style="display:none" style="margin-top:20px">
+									<div class="w3-theme">New Review</div>
+									<textarea rows="7" cols="50" style="resize:none" name="content" id="reviewcont"
+										placeholder="${ sessionScope.USER.firstName }, tell us what you think about this product..."
+										maxlength="480" minlength="5";
+									></textarea>
+									<div class="w3-button w3-theme w3-small w3-round-large" 
+										onclick="addReview(document.getElementById('reviewcont').value, ${ product.id })">Submit Review
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					<!-- Reviews  -->
-					<div>
-					
-					</div>
-					<div id="addreview" class = "w3-container" style="display:none" style="margin-top:10px">
-						<textarea rows="7" cols="50" style="resize:none" name="content"
-							placeholder="${ sessionScope.USER.firstName }, tell us what you think about this product..."
-							maxlength="480" minlength="5"
-						></textarea>
-					</div>
+						
+					<!-- Show Reviews -->
+					<div id="reviews" style="display:none" style="margin-top:4%">
+					<div class="w3-container w3-theme">Reviews</div>
+						<c:choose>
+							<c:when test="${not empty reviews }">
+								<c:forEach var="review" items="${reviews}">
+								<table class="review" style="margin-top:2%">
+									<thead>
+										<tr><th>${ review.username }</th></tr>
+									</thead>
+									<tbody>
+										<tr><td>${ review.content }</td></tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td>
+												${ review.dateTime.dayOfMonth} 
+							                    ${ review.dateTime.month} 
+							                    ${ review.dateTime.year} at 
+							                    ${ review.dateTime.hour}:${ review.dateTime.minute}:${ review.dateTime.second }
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<h3 align="center"><i>Be the first to write a review</i></h3>
+							</c:otherwise>
+						</c:choose>
+					</div>					
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<!-- Adding review -->
-	<div id="addreview" style="display:none" style="margin-top:10px">
-		<table width="500" align="center" style="margin-top:1%">
-					<thead>
-						<tr>
-						<th align="left">${ sessionScope.USER.username }</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-						<td>
-							<textarea rows="7" cols="70" style="resize:none" name="content" id="reviewcont"
-									placeholder="${ sessionScope.USER.firstName }, what you think about this product..."
-								maxlength="480" minlength="5"></textarea>
-						</td>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr>
-						<td align="right"><button onclick="addReview(document.getElementById('reviewcont').value, ${ product.id })">Submit</button></td>
-						</tr>
-					</tfoot>
-		</table>
-	</div>
-	
-	
-	
-	<!-- Review tables -->
-	<div id="reviews" style="display:none" style="margin-top:4%">
-	<c:choose>
-		<c:when test="${not empty reviews }">
-		<c:forEach var="review" items="${reviews}">
-			<table class="review" align="right" style="margin-top:2%">
-				<thead>
-					<tr>
-					<th>${ review.username }</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					<td>${ review.content }</td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td>
-							${ review.dateTime.dayOfMonth} 
-		                    ${ review.dateTime.month} 
-		                    ${ review.dateTime.year} at 
-		                    ${ review.dateTime.hour}:${ review.dateTime.minute}:${ review.dateTime.second }
-						</td>
-					</tr>
-				</tfoot>
-			</table>
-		</c:forEach>
-		</c:when>
-		
-		<c:otherwise>
-			<h3 align="center"><i>Be the first to write a review</i></h3>
-		</c:otherwise>
-	</c:choose>
 	</div>	
-	
 </body>
 
 <script src="js/userInteractions.js">
