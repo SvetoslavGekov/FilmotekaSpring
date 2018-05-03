@@ -34,7 +34,7 @@
 		<div class="w3-bar-item " style="width:30%">
 			<form method = "GET" action="search">
 				<i class="fa fa-search"></i>
-				<input type="search" placeholder="Search..." name="word" required></input>
+				<input type="search" placeholder="Search..." name="word" required maxlength="100"></input>
 			</form>
 		</div>
 		

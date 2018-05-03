@@ -186,6 +186,7 @@ function addReview(reviewContent, productID) {
 		}
 		else if (this.readyState == 4 && this.status == 200) {
 			showAlert("Added review:\n"+reviewContent+"\n For product with id = "+productID, 1);
+			window.location.reload();
 			return;
 		}
 	};

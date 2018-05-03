@@ -22,6 +22,7 @@ import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidProductQueryInfoException;
 import com.filmoteka.model.Product;
+import com.filmoteka.model.Review;
 import com.filmoteka.model.SimpleProductFactory;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
@@ -631,14 +632,14 @@ public final class ProductDao implements IProductDao {
 		return filter;
 	}
 
-	public void addReview(int userID, int productID, String reviewContent) throws SQLException {
+	public void addReview(Review review, int userID) throws SQLException {
 		
 		String sql = "INSERT INTO reviews(product_id, user_id, content) VALUES (?,?,?);";
 		PreparedStatement s = con.prepareStatement(sql);
 		
-			s.setInt(1, productID);
+			s.setLong(1, review.getProductId());
 			s.setInt(2, userID);
-			s.setString(3, reviewContent);
+			s.setString(3, review.getContent());
 			s.executeUpdate();
 	}
 	

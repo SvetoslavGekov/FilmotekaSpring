@@ -88,19 +88,19 @@
 							    <!-- Description -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-tv"></i> Description: </label>
 							    <div class="w3-rest" style="margin-bottom:15px;">
-							      <form:textarea class="w3-text" style="font-size:12px;" path="description" rows="5" cols="44" maxlength="1000"/>
+							      <form:textarea class="w3-text" style="font-size:12px; resize:none;" path="description" rows="5" cols="44" maxlength="1000"/>
 							    </div>
 							    
 							    <!-- Writers -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-pencil-square-o"></i> Writers: </label>
 							    <div class="w3-rest" style="margin-bottom:15px;">
-							      <form:textarea class="w3-text" style="font-size:12px;" path="writers" rows="3" cols="44" maxlength="200"/>
+							      <form:textarea class="w3-text" style="font-size:12px; resize:none;" path="writers" rows="3" cols="44" maxlength="200"/>
 							    </div>
 							    
 							    <!-- Actors -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-user"></i> Actors: </label>
 							    <div class="w3-rest" style="margin-bottom:15px;">
-							      <form:textarea class="w3-text" style="font-size:12px;" path="actors" rows="3" cols="44" maxlength="1000"/>
+							      <form:textarea class="w3-text" style="font-size:12px; resize:none;" path="actors" rows="3" cols="44" maxlength="1000"/>
 							    </div>							    
 							</div>
 							
