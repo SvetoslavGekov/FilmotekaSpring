@@ -13,6 +13,8 @@ import com.filmoteka.model.nomenclatures.ProductCategory;
 
 @Component
 public class TVSeries extends Product {
+	private static final byte MAX_SEASON = 127;
+	
 	//Optional fields
 	private int season;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -64,7 +66,7 @@ public class TVSeries extends Product {
 	
 	//Setters
 	public void setSeason(int season) {
-		if(season >= 0) {
+		if(season >= 0 && season <= MAX_SEASON) {
 			this.season = season;
 		}
 		else {

@@ -206,7 +206,7 @@
 	          	</c:otherwise>
 				</c:choose>
 				
-				<!-- Buying price -->
+				<!-- Renting price -->
 				<br><br>
 				<span class="w3-medium w3-text-black">Renting</span>
 				<c:choose>

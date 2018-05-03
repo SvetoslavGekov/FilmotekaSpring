@@ -33,9 +33,6 @@ public final class Supp {
 			if(!Character.isLetter(ch)) {
 				return false;
 			}
-			if(Character.isUpperCase(ch)) {
-				return false;
-			}
 		}
 		return true;
 	}

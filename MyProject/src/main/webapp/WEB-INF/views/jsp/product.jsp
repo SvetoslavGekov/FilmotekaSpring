@@ -5,6 +5,14 @@
 <!DOCTYPE html >
 <html>
 <head>
+<style>
+.fa {
+    font-size: 50px;
+    cursor: pointer;
+    user-select: none;
+}
+</style>
+
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -43,6 +51,30 @@
 							<div class="w3-container ">
 								<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round w3-margin w3-center"
 								 style="width:100%; height:350px; margin-bottom:5%;">
+								 
+								 <!-- Pricing -->
+								 <span class="">Price:<br></span>
+								<c:if test="${product.originalBuyCost != product.buyCost }">
+								<span class="w3-tag w3-round-large w3-red"><del>${product.originalBuyCost }  <i class="fa fa-euro"></i></del></span>
+								</c:if>
+								<span class="w3-tag w3-round-large w3-green"><fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},true)">Buy</span>
+								<br>
+								<span class="">Renting price:<br></span>
+								<c:if test="${product.originalBuyCost != product.buyCost }">
+								<span class="w3-tag w3-round-large w3-red"><del>${product.originalRentCost }  <i class="fa fa-euro"></i></del></span>
+								</c:if>
+								<span class="w3-tag w3-round-large w3-green"><fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},false)">Rent</span>
+								<br>
+								
+								<c:if test="${product.originalBuyCost != product.buyCost }">
+								<span class="w3-tax w3-large w3-theme">Save ${product.salePercent }% now!</span>
+								</c:if>
+							</div>
+							
+							<div class="w3-container">
+	
 							</div>
 						</div>
 						
@@ -58,6 +90,34 @@
 								
 								<!-- Duration -->
 								<span class="w3-large w3-wide">${product.duration} minutes</span><br>
+								<c:choose >
+									<c:when test="${not isInFavorites }">
+										<i onclick="addProductToFavorites(${product.id},this)" title="Add to favorites" class="w3-button fa fa-heart w3-xxlarge w3-text-red"></i>
+									</c:when>
+									<c:otherwise>
+										<i onclick="addProductToFavorites(${product.id},this)" title="Remove from favorites" class="w3-button fa fa-heart-o w3-xxlarge w3-text-red"></i>
+									</c:otherwise>
+								</c:choose>
+								
+								<c:choose >
+								<c:when test="${not isInWatchlist }">
+										<i onclick="addProductToWatchList(${product.id},this)" title="Add to watchlist"	class="w3-button fa fa-eye w3-xxlarge w3-text-green"></i>
+									</c:when>
+									<c:otherwise>
+										<i onclick="addProductToWatchList(${product.id},this)" title="Remove from watchlist"	class="w3-button fa fa-eye-slash w3-xxlarge w3-text-green"></i>
+									</c:otherwise>
+								</c:choose>
+									<button class="w3-button fa fa-star" onClick="showOrHideContent('rate')">Rate product</button>
+									<c:if test="${sessionScope.USER.isAdmin }">
+										<button class="w3-button fa fa-edit" onclick="location.href='adm/editProduct/${product.id}'"> Edit Product</button>
+									</c:if>
+									<span id="rate" class="rating w3-medium" style="display:none">
+									
+									<c:forEach begin="1" end="10" varStatus="loop">
+		   							 	<span title="Rate ${11 - loop.index}" onClick="rateProduct(${ product.id }, ${11 - loop.index})">&#9734;</span>
+									</c:forEach>
+									</span>
+								<br>
 								<hr>
 							</div>
 							
@@ -74,7 +134,7 @@
 					  		
 					  		<!-- Pg Rating -->
 				  			<div class="w3-tag w3-round w3-green w3-tiny" style="padding:3px">
-								<div class="w3-tag w3-round w3-green w3-border w3-border-white">
+								<div class="w3-tag w3-round w3-green w3-border w3-border-white" title="PG Rating">
 									${product.pgRating}
 								</div>
 							</div>
@@ -83,12 +143,15 @@
 							<!-- Viewer Rating -->
 							<div class="w3-tag w3-round w3-vivid-reddish-purple w3-tiny" style="padding:3px">
 							  <i class="fa fa-star-o"></i>
-							  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
+							  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white" title="Viewer Rating">
 									<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
 							  </div>
 							  
 							</div>								
-							<span class="w3-small w3-text-black">(Votes: ${product.raters.size()})</span>					
+							<span class="w3-small w3-text-black" title="Total votes">(Votes: ${product.raters.size()})</span>
+							<c:if test="${userRating > 0 }">
+								<span class="w3-tiny w3-text-black">(Your rating: ${userRating})</span>
+							</c:if>				
 							</div>
 							
 							<div class="w3-container" style="margin-top:10px">
@@ -116,149 +179,69 @@
 										<span class="w3-medium"><b> ${product.finishedAiring}</b></span>
 									</c:when>
 								</c:choose>
+								
+								<div class="w3-container w3-theme w3-text-vivid-white" style="margin-top: 15px;">Description:
+								</div>
+								<div class="w3-container w3-border" style="margin-bottom:10px">
+									<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
+								</div>
+								<div class="w3-container w3-left" style="margin-bottom:10px">
+									<div class="w3-button w3-small w3-theme w3-round-large" id="addreviewbtn" onclick="showOrHideContent('addreview')">Write a review</div>
+									<div class="w3-button w3-small w3-theme w3-round-large" id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</div><br>
+								</div>
+								 
+								
+								<!--Add Reviews  -->
+								
+								<div id="addreview" class = "w3-container w3-left" style="display:none" style="margin-top:20px">
+									<div class="w3-theme">New Review</div>
+									<textarea rows="7" cols="50" style="resize:none" name="content" id="reviewcont"
+										placeholder="${ sessionScope.USER.firstName }, tell us what you think about this product..."
+										maxlength="480" minlength="5";
+									></textarea>
+									<div class="w3-button w3-theme w3-small w3-round-large" 
+										onclick="addReview(document.getElementById('reviewcont').value, ${ product.id })">Submit Review
+									</div>
+								</div>
 							</div>
-							
 						</div>
 					</div>
-				<div class="w3-container w3-theme w3-text-vivid-white">
-					Description:
-				</div>
-				<div class="w3-container w3-border" style="margin-bottom:10px">
-					<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
-				</div>
+						
+					<!-- Show Reviews -->
+					<div id="reviews" style="display:none" style="margin-top:4%">
+					<div class="w3-container w3-theme">Reviews</div>
+						<c:choose>
+							<c:when test="${not empty reviews }">
+								<c:forEach var="review" items="${reviews}">
+								<table class="review" style="margin-top:2%">
+									<thead>
+										<tr><th>${ review.username }</th></tr>
+									</thead>
+									<tbody>
+										<tr><td>${ review.content }</td></tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td>
+												${ review.dateTime.dayOfMonth} 
+							                    ${ review.dateTime.month} 
+							                    ${ review.dateTime.year} at 
+							                    ${ review.dateTime.hour}:${ review.dateTime.minute}:${ review.dateTime.second }
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<h3 align="center"><i>Be the first to write a review</i></h3>
+							</c:otherwise>
+						</c:choose>
+					</div>					
 				</div>
 			</div>
 		</div>
-	</div>
-
-
-
-
-
-
-
-
-	<!-- Visualize the product information -->
-	<div class = "product" style="margin-top:10%">
-		<table cellspacing="0" cellpading="0" border="1">
-			<tbody>
-				<tr>
-					<td class ="image" rowspawn="2" valign="top">
-						<div>
-							<img class = "poster" width="100%" alt = "${product.poster }" title = "${product.name }" 
-								src="getPic?pic=${product.poster}">
-						</div>
-						<div>
-							<button float="left" onClick="addProductToFavorites(${product.id})">To Favorites</button>
-							<button  onClick="addProductToWatchList(${product.id})">To Watch list</button>
-							<button float="left" onClick="addProductToCart(${product.id},true)">Buy</button>
-							<button  onClick="addProductToCart(${product.id},false)">Rent</button>
-							<button float="left" onClick="showOrHideContent('rate')">Add rating</button>
-							
-							<div id="rate" class="rating" style="display:none">
-							<c:forEach begin="1" end="10" varStatus="loop">
-   							 	<span onClick="rateProduct(${ product.id }, ${11 - loop.index})">&#9734;</span>
-							</c:forEach>
-							</div>
-							
-						</div>
-					</td>
-					<td>
-						<h4>${product.name}</h4>
-						<p>PgRating: ${product.pgRating}</p>
-						<p>Duration: ${product.duration}</p><br>
-						<span>Genres<br>
-						<c:forEach var="genre" items="${product.genres }">
-							<span >${genre.value }</span><span class = ghost>|</span>
-						</c:forEach>
-						</span>
-						<div ><h5>Description:</h5>${product.description }</div>
-						<div><h5>Writers:</h5><span>${product.writers }</span></div>
-						<div><h5>Actors:</h5><span>${product.actors }</span></div>
-						
-						<c:choose>
-							<c:when test="${product.productCategory.id == 1 }">
-								<div><h5>Director:</h5><span>${product.director}</span></div>
-							</c:when>
-							
-							<c:when test="${product.productCategory.id == 2 }">
-								<div><h5>Season:</h5><span>${product.season}</span></div>
-								<div><h5>Finished airing:</h5><span>${product.finishedAiring}</span></div>
-								
-							</c:when>
-						</c:choose>
-						<button id="addreviewbtn" onclick="showOrHideContent('addreview')">Add review</button>
-						<button id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	
-	
-	<!-- Adding review -->
-	<div id="addreview" style="display:none" style="margin-top:10px">
-		<table width="500" align="center" style="margin-top:1%">
-					<thead>
-						<tr>
-						<th align="left">${ sessionScope.USER.username }</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-						<td>
-							<textarea rows="7" cols="70" style="resize:none" name="content" id="reviewcont"
-									placeholder="${ sessionScope.USER.firstName }, what you think about this product..."
-								maxlength="480" minlength="5"></textarea>
-						</td>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr>
-						<td align="right"><button onclick="addReview(document.getElementById('reviewcont').value, ${ product.id })">Submit</button></td>
-						</tr>
-					</tfoot>
-		</table>
-	</div>
-	
-	
-	
-	<!-- Review tables -->
-	<div id="reviews" style="display:none" style="margin-top:4%">
-	<c:choose>
-		<c:when test="${not empty reviews }">
-		<c:forEach var="review" items="${reviews}">
-			<table class="review" align="right" style="margin-top:2%">
-				<thead>
-					<tr>
-					<th>${ review.username }</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					<td>${ review.content }</td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td>
-							${ review.dateTime.dayOfMonth} 
-		                    ${ review.dateTime.month} 
-		                    ${ review.dateTime.year} at 
-		                    ${ review.dateTime.hour}:${ review.dateTime.minute}:${ review.dateTime.second }
-						</td>
-					</tr>
-				</tfoot>
-			</table>
-		</c:forEach>
-		</c:when>
-		
-		<c:otherwise>
-			<h3 align="center"><i>Be the first to write a review</i></h3>
-		</c:otherwise>
-	</c:choose>
 	</div>	
-	
 </body>
 
 <script src="js/userInteractions.js">

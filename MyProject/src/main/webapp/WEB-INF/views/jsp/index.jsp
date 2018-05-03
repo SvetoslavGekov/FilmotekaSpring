@@ -79,8 +79,8 @@ span.signup,
 			<div class="w3-row w3-section">
 			  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user w3-text-theme"></i></div>
 			    <div class="w3-rest">
-			      <input class="w3-input w3-border" name="username" type="text" placeholder="Enter Username"
-			      	required pattern="^(?=.*[a-z]).{4,}" title="At least 4 characters long">
+			      <input class="w3-input w3-border" name="username" type="text" placeholder="Enter Username" maxlength="45"
+			      	required pattern="^(?=.*[a-z]).(?=.*[A-Z]).{4,}" title="At least 4 characters long (no special symbols, no numbers, latin letters only)">
 			    </div>
 			</div>
 			
@@ -88,7 +88,7 @@ span.signup,
 			<div class="w3-row w3-section">
 				<div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o w3-text-theme"></i></div>
 			    <div class="w3-rest">
-			      <input class="w3-input w3-border" name="email" type="email" placeholder="Enter Email"
+			      <input class="w3-input w3-border" name="email" type="email" placeholder="Enter Email" maxlength="45"
 			      	title="Your email should look something like myemail@myprovider.com">
 			    </div>
 			</div>
@@ -97,7 +97,7 @@ span.signup,
 			<div class="w3-row w3-section">
 			  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-key w3-text-theme"></i></div>
 			    <div class="w3-rest">
-			      <input class="w3-input w3-border" name="password" type="password" placeholder="Enter Password"
+			      <input class="w3-input w3-border" name="password" type="password" placeholder="Enter Password" maxlength="60"
 			      	required pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$" 
 			      	title="Your password should be atleast 6 characters containing: 1 Uppercase letter, 1 Lowercase letter and 1 number">
 			    </div>
@@ -107,14 +107,18 @@ span.signup,
 			<div class="w3-row w3-section">
 			  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-address-card-o w3-text-theme"></i></div>
 			    <div class="w3-rest">
-			      <input class="w3-input w3-border" name="firstName" type="text" placeholder="Enter First Name" required >
+			      <input class="w3-input w3-border" name="firstName" type="text" placeholder="Enter First Name" required 
+					pattern="[A-Za-z]{1,45}" title="Not including numbers or special characters (latin letters only)" 
+					style="text-transform: capitalize;" maxlength="45">
 			    </div>
 			</div>
 			
 			<div class="w3-row w3-section">
 			  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-address-card-o w3-text-theme"></i></div>
 			    <div class="w3-rest">
-			      <input class="w3-input w3-border" name="lastName" type="text" placeholder="Enter Last Name" required >
+			      <input class="w3-input w3-border" name="lastName" type="text" placeholder="Enter Last Name" required 
+			      pattern="[A-Za-z]{1,45}" title="Not including numbers or special characters (latin letters only)" 
+			      style="text-transform: capitalize;" maxlength="45">
 			    </div>
 			</div>
 			

@@ -42,7 +42,7 @@ function addProductToCart(id, willBuy) {
 
 
 
-function addProductToFavorites(id) {
+function addProductToFavorites(id, element) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 500){
@@ -60,10 +60,12 @@ function addProductToFavorites(id) {
 			var result = (this.responseText);
 			if(result === 'true'){
 				showAlert("Product added to favorites.", 1);
+				swapAddToFavorites(element,1);
 				return;
 			}
 			else if (result === 'false'){
 				showAlert("Product removed from favorites.", 1);
+				swapAddToFavorites(element,2);
 				return;
 			}
 		}
@@ -75,7 +77,7 @@ function addProductToFavorites(id) {
 	xhttp.send("productID=" + id);
 }
 
-function addProductToWatchList(id) {
+function addProductToWatchList(id,element) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 500){
@@ -93,10 +95,12 @@ function addProductToWatchList(id) {
 			var result = (this.responseText);
 			if(result === 'true'){
 				showAlert("Product added to watchlist.", 1);
+				swapAddToWatchlist(element,1);
 				return;
 			}
 			else if (result === 'false'){
 				showAlert("Product removed from watchlist.", 1);
+				swapAddToWatchlist(element,2);
 				return;
 			}
 		}
@@ -159,9 +163,9 @@ function addReview(reviewContent, productID) {
 	//add the review only if it is between 3 and 480 characters
 	if(reviewContent.length < 3 || reviewContent.length > 480){
 		if(reviewContent.length > 480){
-			alert("What is the meaning of a too long review? That's pretty annoying for the other customers.");
-		}else{
-			alert("What is the meaning of a too short review? Help other customers make the right choice.");
+			alert("The size of your review exceeds the given limit of 480 characters. Please keep it short and simple.");
+		}else if (reviewContent.length < 3 ){
+			alert("Your review is too short. Please add some more flavor.");
 		}
 		return;
 	}
@@ -213,6 +217,7 @@ function openPassFields(){
 }
 
 function showAlert(message, type){
+	
 	var div = document.createElement("div");
 	
 	if(type ==1){
@@ -252,3 +257,24 @@ function showAlert(message, type){
 	},2000);
 }
 
+function swapAddToFavorites(element, type){
+	if(type == 1){
+		element.classList = "w3-button fa fa-heart-o w3-xxlarge w3-text-red";
+		element.setAttribute("title", "Remove from favorites");
+	}
+	if(type == 2){
+		element.classList = "w3-button fa fa-heart w3-xxlarge w3-text-red";
+		element.setAttribute("title", "Add to favorites");
+	}
+}
+
+function swapAddToWatchlist(element,type){
+	if(type == 1){
+		element.classList = "w3-button fa fa-eye-slash w3-xxlarge w3-text-green";
+		element.setAttribute("title", "Remove from watchlist");
+	}
+	if(type == 2){
+		element.classList = "w3-button fa fa-eye w3-xxlarge w3-text-green";
+		element.setAttribute("title", "Add to watchlist");
+	}
+}

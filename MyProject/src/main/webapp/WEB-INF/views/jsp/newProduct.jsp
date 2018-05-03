@@ -52,7 +52,7 @@
 								<!-- Product name -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-commenting-o"></i> Product Name*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="name" type="text" required="required"/>
+							      <form:input class="w3-input w3-border" path="name" type="text" required="required" maxlength="150"/>
 							    </div>
 							    
 							    <!-- Release year -->
@@ -64,43 +64,43 @@
 							    <!-- PG Rating -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-info-circle"></i> PG Rating*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="pgRating" type="text" required="required"/>
+							      <form:input class="w3-input w3-border" path="pgRating" type="text" required="required" maxlength="10"/>
 							    </div>
 							    
 							    <!-- Duration -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-clock-o"></i> Duration*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="duration" type="number" required="required" min="1"/>
+							      <form:input class="w3-input w3-border" path="duration" type="number" required="required" min="1" max="65535"/>
 							    </div>
 							    
 							    <!-- Price -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-euro"></i> Price*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="originalBuyCost" type="number" required="required" min="1"/>
+							      <form:input class="w3-input w3-border" path="originalBuyCost" type="number" required="required" min="1" max="99999"/>
 							    </div>
 							    
 								<!-- Rent cost -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-euro"></i> Rent cost*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="originalRentCost" type="number" required="required" min="1"/>
+							      <form:input class="w3-input w3-border" path="originalRentCost" type="number" required="required" min="1"  max="99999"/>
 							    </div>
 							    
 							    <!-- Description -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-tv"></i> Description: </label>
 							    <div class="w3-rest" style="margin-bottom:15px;">
-							      <form:textarea class="w3-text" style="font-size:12px;" path="description" rows="5" cols="44"/>
+							      <form:textarea class="w3-text" style="font-size:12px;" path="description" rows="5" cols="44" maxlength="1000"/>
 							    </div>
 							    
 							    <!-- Writers -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-pencil-square-o"></i> Writers: </label>
 							    <div class="w3-rest" style="margin-bottom:15px;">
-							      <form:textarea class="w3-text" style="font-size:12px;" path="writers" rows="3" cols="44"/>
+							      <form:textarea class="w3-text" style="font-size:12px;" path="writers" rows="3" cols="44" maxlength="200"/>
 							    </div>
 							    
 							    <!-- Actors -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-user"></i> Actors: </label>
 							    <div class="w3-rest" style="margin-bottom:15px;">
-							      <form:textarea class="w3-text" style="font-size:12px;" path="actors" rows="3" cols="44"/>
+							      <form:textarea class="w3-text" style="font-size:12px;" path="actors" rows="3" cols="44" maxlength="1000"/>
 							    </div>							    
 							</div>
 							
@@ -112,19 +112,19 @@
 									 style="width:50%; height:300px; margin-bottom:5%;"><br>
 								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-image-o"></i> Poster Image: ${product.poster} </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <input class="w3-input w3-border" type="file" name="posterFile" accept=".jpg"/>
+							      <input class="w3-input w3-border" type="file" name="posterFile" accept=".jpg" maxlength="200"/>
 							    </div>
 
 								<!-- Trailer -->
 								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-movie-o"></i> Trailer: ${product.trailer} </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <input class="w3-input w3-border" type="file" name="trailerFile" accept=".avi"/>
+							      <input class="w3-input w3-border" type="file" name="trailerFile" accept=".avi" maxlength="200"/>
 							    </div>
 	
 								<!-- Sale percent -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-percent"></i> Sale Percent: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="salePercent" type="number"/>
+							      <form:input class="w3-input w3-border" path="salePercent" type="number" max="99"/>
 							    </div>
 							    
 								<!-- Sale validity-->
@@ -140,7 +140,7 @@
 									<!-- Director-->
 								  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-bullhorn"></i> Director: </label>
 								    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-								      <form:input class="w3-input w3-border" path="director" type="text"/>
+								      <form:input class="w3-input w3-border" path="director" type="text" maxlength="80"/>
 								    </div>
 					          	</c:when>
 					          	
@@ -148,7 +148,7 @@
 									<!-- Season-->
 								  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-hourglass-o"></i> Season: </label>
 								    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-								      <form:input class="w3-input w3-border" path="season" type="number"/>
+								      <form:input class="w3-input w3-border" path="season" type="number" max="127"/>
 								    </div>
 								    
 									<!-- Finished Airing Date-->

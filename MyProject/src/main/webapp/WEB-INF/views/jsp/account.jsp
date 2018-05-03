@@ -84,28 +84,28 @@
 	                	<div class="container" >
 	                		<label for="profilePicture"><b>Profile picture:</b></label>
 	                		<div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-user w3-text-theme"></i></div>
-	                      <input class="w3-section w3-padding w3-text-hover-teal" type="file" name="profilePicture" accept=".jpg"/>
+	                      <input class="w3-section w3-padding w3-text-hover-teal" type="file" name="profilePicture" accept=".jpg" maxlength="200"/>
 	                    </div>
 	                    <hr>
 	                    <div class="container" >
 	                      <label for="firstname"><b>First Name:</b></label>
 	                      	<div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-address-card-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="text" placeholder="Enter your first name" name="firstname" value="${ sessionScope.USER.firstName }"
-							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;" required>
+							 pattern="[A-Za-z]{1,45}" title="Not including numbers or special characters (latin letters only)" style="text-transform: capitalize;" required maxlength="45">
 	                    </div>
 	                    <hr>
 	                    <div class="container" >
 	                      <label for="lastname"><b>Last Name:</b></label>
 	                      <div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-address-card-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="text" placeholder="Enter your last name" name="lastname" value="${ sessionScope.USER.lastName }"
-							 pattern="[A-Za-z]{1,32}" title="Not including numbers or special characters" style="text-transform: capitalize;" required>
+							 pattern="[A-Za-z]{1,45}" title="Not including numbers or special characters (latin letters only)" style="text-transform: capitalize;" required maxlength="45">
 	                    </div>
 	                     <hr>
 	                    <div class="container" >
 	                       <label for="email"><b>Email:</b></label>
 	                      	 <div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-envelope-o w3-text-theme"></i></div>
 							 <input class="w3-input w3-border" type="email" placeholder="Enter your email address" name="email" value="${ sessionScope.USER.email }"
-				 	 			pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+				 	 			pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required maxlength="45">
 	                    </div>
 	                    <hr>
 	                    <div class="container" >
@@ -123,14 +123,14 @@
 	                    <div style="display:none" id="passwordfield">
 	                   		 <div class="container" >
 				 	 			<label for="cpass"><b>Current password:</b></label>
-				 	 			<input class="w3-input w3-border" type="password" id="cpass" placeholder="Enter your password" name="currentPass" >
+				 	 			<input class="w3-input w3-border" type="password" id="cpass" placeholder="Enter your password" name="currentPass" maxlength="45">
 				 	 		</div>
 				 	 		<hr>
 				 	 		<div class="container" >
 					 	 		<label for="npass"><b>New password:</b></label>
-					 	 		<input class="w3-input w3-border" type="password" id="npass"  placeholder="Enter the new passsword" name="newPass1"><br>
+					 	 		<input class="w3-input w3-border" type="password" id="npass"  placeholder="Enter the new passsword" name="newPass1" maxlength="45"><br>
 					 	 		<hr>
-					 			<input class="w3-input w3-border" type="password" id="npass2"  placeholder="Repeat the new password" name="newPass2"><br>
+					 			<input class="w3-input w3-border" type="password" id="npass2"  placeholder="Repeat the new password" name="newPass2" maxlength="45"><br>
 					 		</div>
 				 		</div>
 				 		<hr>
