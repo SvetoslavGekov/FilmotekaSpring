@@ -27,6 +27,7 @@
 				<div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
 					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/1'"><b>New Movie</b></a>
 					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/2'"><b>New TV Series</b></a>
+					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/omdbAPI'"><b>New Movie With API</b></a>
 				</div>
 			</div>
 		</c:if>

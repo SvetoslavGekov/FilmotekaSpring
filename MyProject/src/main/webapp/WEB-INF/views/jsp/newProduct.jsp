@@ -111,6 +111,7 @@
 								<img src="getPic?pic=${product.poster}" title="${product.name}" class = "w3-round w3-border"
 									 style="width:50%; height:300px; margin-bottom:5%;"><br>
 								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-image-o"></i> Poster Image: ${product.poster} </label>
+								<form:input path="poster" type="hidden"/>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
 							      <input class="w3-input w3-border" type="file" name="posterFile" accept=".jpg" maxlength="200"/>
 							    </div>
@@ -118,7 +119,7 @@
 								<!-- Trailer -->
 								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-movie-o"></i> Trailer: ${product.trailer} </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <input class="w3-input w3-border" type="file" name="trailerFile" accept=".avi" maxlength="200"/>
+							      <input class="w3-input w3-border" type="file" name="trailerFile" accept=".mp4" maxlength="200"/>
 							    </div>
 	
 								<!-- Sale percent -->

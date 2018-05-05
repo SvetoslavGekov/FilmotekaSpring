@@ -218,13 +218,13 @@
 					<div class="w3-container w3-theme">Trailer</div>
 						<c:choose>
 							<c:when test="${ empty product.trailer }">
-								<br><h2>There is no trailer to show</h2>
+								<br><h2>Sorry, we don't have the trailer for this product.</h2>
 							</c:when>
 							<c:when test="${fn:startsWith( product.trailer , 'https://www.youtube.com/embed')}">
 								<br><iframe class="w3-border" style="width:100%; height:500px;" src="${ product.trailer }"></iframe>
 							</c:when>
 							<c:otherwise>
-								<br><video class="w3-border" style="width:100%; height:500px;" controls controlsList="nodownload" 
+								<br><video class="w3-border" style="width:100%; height:500px;" controls  
 											onclick="this.paused? this.play() : this.pause()">
 								 		 <source src="getTrailer?trailer=${ product.trailer }" type="video/mp4">
 								  	</video>
