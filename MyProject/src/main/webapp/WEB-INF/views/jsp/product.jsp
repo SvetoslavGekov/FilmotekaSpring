@@ -150,9 +150,9 @@
 							  </div>
 							  
 							</div>								
-							<span class="w3-small w3-text-black" title="Total votes">(Votes: ${product.raters.size()})</span>
+							<span class="w3-tiny w3-text-black" title="Total votes">(Votes: ${product.raters.size()})</span>
 							<c:if test="${userRating > 0 }">
-								<span class="w3-tiny w3-text-black">(Your rating: ${userRating})</span>
+								<span class="w3-tiny w3-text-black">(You rated: ${userRating})</span>
 							</c:if>				
 							</div>
 							

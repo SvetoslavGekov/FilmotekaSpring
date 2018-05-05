@@ -76,13 +76,13 @@
 							    <!-- Price -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-euro"></i> Price*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="originalBuyCost" type="number" required="required" min="1" max="99999"/>
+							      <form:input class="w3-input w3-border" path="originalBuyCost" type="number" required="required" min="1" max="99999" step="0.1"/>
 							    </div>
 							    
 								<!-- Rent cost -->
 							  	<label class="w3-text-theme"><i class="w3-xlarge fa fa-euro"></i> Rent cost*: </label>
 							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
-							      <form:input class="w3-input w3-border" path="originalRentCost" type="number" required="required" min="1"  max="99999"/>
+							      <form:input class="w3-input w3-border" path="originalRentCost" type="number" required="required" min="1"  max="99999" step="0.1"/>
 							    </div>
 							    
 							    <!-- Description -->
