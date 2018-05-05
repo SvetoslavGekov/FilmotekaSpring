@@ -50,6 +50,7 @@ import com.google.gson.JsonObject;
 @Controller
 public class AdministratorController {
 	private static final String OMDB_API_KEY = "8d55e2c0";
+	private static final String YOUTUBE_TRAILER_URL = "https://www.youtube.com/embed/";
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
 
 	@RequestMapping(value = "adm/omdbAPI", method = RequestMethod.GET)
@@ -86,7 +87,8 @@ public class AdministratorController {
 	@RequestMapping(value = "/adm/editProduct/{productID}", method = RequestMethod.POST)
 	public synchronized String editProduct(@ModelAttribute Product existingProduct, BindingResult result,
 			@RequestParam("posterFile") MultipartFile posterFile,
-			@RequestParam("trailerFile") MultipartFile trailerFile) throws Exception {
+			@RequestParam("trailerFile") MultipartFile trailerFile,
+			@RequestParam("trailerURL") String trailerURL) throws Exception {
 		try {
 			// Check for binding errors
 			if (result.hasErrors()) {
@@ -98,8 +100,11 @@ public class AdministratorController {
 				String posterFilePath = FilesController.uploadPoster(posterFile, null);
 				existingProduct.setPoster(posterFilePath);
 			}
-			
-			if (!trailerFile.isEmpty()) {
+			// Set trailerURL if is valid 
+			if(Supp.isNotNullOrEmpty(trailerURL) && trailerURL.startsWith(YOUTUBE_TRAILER_URL, 0)) {
+				existingProduct.setTrailer(trailerURL);
+			}
+			else if (!trailerFile.isEmpty()) {
 				String trailerFilePath = FilesController.uploadTrailer(trailerFile, null);
 				existingProduct.setTrailer(trailerFilePath);
 			}

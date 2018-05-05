@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-food.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-vivid.css">
 <link rel="stylesheet" href="css/color-theme.css">
+<link rel="stylesheet" href="css/input_trailer_options.css">
 
 <title>FilmotekaBG Administration</title>
 
@@ -118,8 +119,16 @@
 
 								<!-- Trailer -->
 								<label class="w3-text-theme"><i class="w3-xlarge fa fa-file-movie-o"></i> Trailer: ${product.trailer} </label>
-							    <div class="w3-rest" style="margin-bottom:15px; width:75%;">
+								
+								<br><input type="radio" class="likeFile" name="bn"/> FILE
+								&emsp;<input type="radio" class="likeUrl" name="bn" checked="checked" /> URL
+								
+							    <div id="trailerFILE" class="w3-rest" style="margin-bottom:15px; width:75%;">
 							      <input class="w3-input w3-border" type="file" name="trailerFile" accept=".mp4" maxlength="200"/>
+							    </div>
+							    <div id="trailerURL" class="w3-rest" style="margin-bottom:15px; width:75%;">
+							      <input class="w3-input w3-border" type="text" name="trailerURL" pattern="https?://www.youtube.com/embed/.+" title="Include https://www.youtube.com/embed/"
+							      		placeholder="URL address of the trailer..." maxlength="55" value="https://www.youtube.com/embed/"/>
 							    </div>
 	
 								<!-- Sale percent -->
