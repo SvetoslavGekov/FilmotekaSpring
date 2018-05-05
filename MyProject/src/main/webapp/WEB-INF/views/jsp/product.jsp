@@ -2,6 +2,8 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+
 <!DOCTYPE html >
 <html>
 <head>
@@ -187,7 +189,10 @@
 								</div>
 								<div class="w3-container w3-left" style="margin-bottom:10px">
 									<div class="w3-button w3-small w3-theme w3-round-large" id="addreviewbtn" onclick="showOrHideContent('addreview')">Write a review</div>
-									<div class="w3-button w3-small w3-theme w3-round-large" id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</div><br>
+									<div class="w3-button w3-small w3-theme w3-round-large" id="reviewsbtn" onclick="showOrHideContent('reviews')">Show reviews</div>
+									<c:if test="${not empty product.trailer}">
+									<div class="w3-button w3-small w3-theme w3-round-large" id="trailerbtn" onclick="showOrHideContent('trailer')">Watch Trailer</div><br>
+									</c:if>
 								</div>
 								 
 								
@@ -206,6 +211,27 @@
 							</div>
 						</div>
 					</div>
+					
+										
+					<!-- Show Trailer -->
+					<div id="trailer" style="display:none" style="margin-top:4%">
+					<div class="w3-container w3-theme">Trailer</div>
+						<c:choose>
+							<c:when test="${ empty product.trailer }">
+								<br><h2>There is no trailer to show</h2>
+							</c:when>
+							<c:when test="${fn:startsWith( product.trailer , 'https://www.youtube.com/embed')}">
+								<br><iframe class="w3-border" style="width:100%; height:500px;" src="${ product.trailer }"></iframe>
+							</c:when>
+							<c:otherwise>
+								<br><video class="w3-border" style="width:100%; height:500px;" controls controlsList="nodownload" 
+											onclick="this.paused? this.play() : this.pause()">
+								 		 <source src="getTrailer?trailer=${ product.trailer }" type="video/mp4">
+								  	</video>
+							</c:otherwise>		
+						</c:choose>
+					</div>	
+					
 						
 					<!-- Show Reviews -->
 					<div id="reviews" style="display:none" style="margin-top:4%">
@@ -231,13 +257,14 @@
 										</tr>
 									</tfoot>
 								</table>
-								</c:forEach>
+								</c:forEach><br>
 							</c:when>
 							<c:otherwise>
-								<h3 align="center"><i>Be the first to write a review</i></h3>
+								<h3 align="center"><i>Be the first to write a review</i></h3><br>
 							</c:otherwise>
 						</c:choose>
-					</div>					
+					</div>
+				
 				</div>
 			</div>
 		</div>

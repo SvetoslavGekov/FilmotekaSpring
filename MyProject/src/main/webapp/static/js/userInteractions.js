@@ -129,7 +129,10 @@ function rateProduct(id, rating) {
 			return;
 		}
 		else if (this.readyState == 4 && this.status == 200) {
+			
 			showAlert("Product successfully rated.", 1);
+			//history.go(0); --> same function as location.reload();
+			location.reload();
 			return;
 		}
 	};
@@ -145,15 +148,13 @@ function redirectToUnauthorizedPage(){
 	window.location.href = "";
 }
 
-//If these functions are here(userInteractions.js), my btns can't find them
-// so thay are now in product.jsp
-
 function showOrHideContent(btnid){
 	if(document.getElementById(btnid).style.display == 'block'){
 		document.getElementById(btnid).style.display = 'none';
 	}
 	else{
 		document.getElementById(btnid).style.display = 'block';
+	    document.getElementById(btnid).scrollIntoView(); //Jump to the section
 	}
 }
 
@@ -221,7 +222,7 @@ function showAlert(message, type){
 	
 	var div = document.createElement("div");
 	
-	if(type ==1){
+	if(type == 1){
 		//Success
 		div.className += "w3-panel w3-green w3-display-container w3-round-xxlarge w3-bottom";
 	}

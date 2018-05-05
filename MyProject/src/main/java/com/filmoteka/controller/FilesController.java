@@ -111,4 +111,20 @@ public class FilesController {
 		
 		return byteArray;
 	}
+	
+	@RequestMapping(value = "/getTrailer", method = RequestMethod.GET)
+	@ResponseBody
+	public byte[] getTrailer(@RequestParam("trailer") String trailer) throws FileNotFoundException, IOException {
+
+		//Grab the file where the trailer is saved at
+		File f = new File(TRAILERS_FILEPATH + File.separator + trailer);
+		
+		byte[] byteArray = new byte[(int) f.length()];
+		//Write the video in a byte array and return it
+		try(BufferedInputStream is = new BufferedInputStream(new FileInputStream(f));){
+			is.read(byteArray);
+		}
+		
+		return byteArray;
+	}
 }

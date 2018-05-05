@@ -80,8 +80,9 @@ public class AdministratorController {
 				String posterFilePath = FilesController.uploadPoster(posterFile, null);
 				existingProduct.setPoster(posterFilePath);
 			}
+			
 			if (!trailerFile.isEmpty()
-					&& FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("avi")) {
+					&& FilenameUtils.getExtension(trailerFile.getOriginalFilename()).equalsIgnoreCase("avi")) {
 				String trailerFilePath = FilesController.uploadTrailer(trailerFile, null);
 				existingProduct.setTrailer(trailerFilePath);
 			}
