@@ -131,7 +131,6 @@ function rateProduct(id, rating) {
 		else if (this.readyState == 4 && this.status == 200) {
 			
 			showAlert("Product successfully rated.", 1);
-			//history.go(0); --> same function as location.reload();
 			location.reload();
 			return;
 		}

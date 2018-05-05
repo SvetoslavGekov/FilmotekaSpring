@@ -1,13 +1,22 @@
 package com.filmoteka.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +31,7 @@ import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.model.Movie;
+import com.filmoteka.model.MovieAPI;
 import com.filmoteka.model.Product;
 import com.filmoteka.model.SimpleProductFactory;
 import com.filmoteka.model.TVSeries;
@@ -32,11 +42,20 @@ import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
+import com.filmoteka.util.Supp;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 @Controller
 public class AdministratorController {
+	private static final String OMDB_API_KEY = "8d55e2c0";
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
 
+	@RequestMapping(value = "adm/omdbAPI", method = RequestMethod.GET)
+	public String showProductAPIPage() {
+		return "newProductApi";
+	}
 	
 	@RequestMapping(value = "/adm/editProduct/{productID}", method = RequestMethod.GET)
 	public String showFormForExistingProduct(Model m, @PathVariable("productID") Integer productID) throws Exception {
@@ -75,14 +94,12 @@ public class AdministratorController {
 			}
 
 			// Upload poster and trailer if any
-			if (!posterFile.isEmpty()
-					&& FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("jpg")) {
+			if (!posterFile.isEmpty()) {
 				String posterFilePath = FilesController.uploadPoster(posterFile, null);
 				existingProduct.setPoster(posterFilePath);
 			}
 			
-			if (!trailerFile.isEmpty()
-					&& FilenameUtils.getExtension(trailerFile.getOriginalFilename()).equalsIgnoreCase("avi")) {
+			if (!trailerFile.isEmpty()) {
 				String trailerFilePath = FilesController.uploadTrailer(trailerFile, null);
 				existingProduct.setTrailer(trailerFilePath);
 			}
@@ -162,15 +179,19 @@ public class AdministratorController {
 			if (result.hasErrors()) {
 				throw new InvalidProductDataException("Invalid form data was entered. Please follow the input hints.");
 			}
-
+			
+			System.out.println(newProduct.getPoster());
 			// Upload poster and trailer if any
-			if (!posterFile.isEmpty()
-					&& FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("jpg")) {
+			if (!posterFile.isEmpty()) {
 				String posterFilePath = FilesController.uploadPoster(posterFile, null);
 				newProduct.setPoster(posterFilePath);
 			}
-			if (!trailerFile.isEmpty()
-					&& FilenameUtils.getExtension(posterFile.getOriginalFilename()).equalsIgnoreCase("avi")) {
+			else if(newProduct.getPoster() != null && newProduct.getPoster().contains("https:")){
+				String posterFilePath = FilesController.uploadPosterFromURL(newProduct.getPoster(), newProduct.getName());
+				newProduct.setPoster(posterFilePath);
+			}
+			
+			if (!trailerFile.isEmpty()) {
 				String trailerFilePath = FilesController.uploadTrailer(trailerFile, null);
 				newProduct.setTrailer(trailerFilePath);
 			}
@@ -208,6 +229,168 @@ public class AdministratorController {
 		catch (NumberFormatException e) {
 			throw new Exception("Invalid form data entered. Please follow the form hints.", e);
 		}
+	}
+	
+	@RequestMapping(value = "adm/omdbAPI", method = RequestMethod.POST)
+	public String loadAPIResults(@RequestParam("query") String query, Model model) throws Exception {
+		//Check if query is not empty or null
+		if(Supp.isNotNullOrEmpty(query)) {
+			query = query.trim().replace(" ", "%20");
+			//Create a new search URL to the OMDb API and a HTTPConnection
+			URL url = new URL("http://www.omdbapi.com/?s="+query+"&type=movie&apikey="+OMDB_API_KEY);
+			
+			//Create and open the connection to the API
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			
+			//Get the input stream from the response 
+			InputStream responseBodyStream;
+			if(connection.getResponseCode() == 200) {
+				responseBodyStream = connection.getInputStream();
+			}
+			else {
+				throw new Exception("An error occured while accessing the OMDB API.");
+			}
+			
+			//Read the data in a String buffer
+			StringBuffer sb = new StringBuffer();
+			int b = responseBodyStream.read();
+			while(b != -1) {
+				sb.append((char) b);
+				b = responseBodyStream.read();
+			}
+			
+			//Put the data from the buffer into a string variable
+			String jsonString = sb.toString();
+			
+			//Create a JSON object from the string
+			JsonParser parser = new JsonParser();
+			JsonObject jsonObj = parser.parse(jsonString).getAsJsonObject();
+			boolean statusIsTrue = jsonObj.get("Response").getAsBoolean();
+			
+			//Check if the status is true
+			if(statusIsTrue) {
+				//Create a list of API Movies
+				List<MovieAPI> apiMovies = new ArrayList<>();
+				
+				JsonArray jsonMovies = jsonObj.get("Search").getAsJsonArray();
+				for(int i = 0; i < jsonMovies.size(); i++) {
+					JsonObject movie = jsonMovies.get(i).getAsJsonObject();
+					String title = movie.get("Title").getAsString();
+					String year = movie.get("Year").getAsString();
+					String imdbID = movie.get("imdbID").getAsString();
+					String poster = movie.get("Poster").getAsString();
+					String type = movie.get("Type").getAsString();
+					
+					apiMovies.add(new MovieAPI(title, year, imdbID, poster, type));
+				}
+				
+				model.addAttribute("apiMovies", apiMovies);
+			}
+			else {
+				throw new Exception("An error occured while accessing the API. Please try again later.");
+			}
+		}
+		else {
+			throw new Exception("You've entered invalid search parameters. Please follow the input hints.");
+		}
+		
+		return "newProductApi";
+	}
+	
+	@RequestMapping(value = "/adm/newMovie/{imdbID}", method = RequestMethod.GET)
+	public String loadNewAPIMovieForm(Model model,
+			@PathVariable("imdbID") String imdbID,
+			HttpServletRequest request) throws Exception {
+		try {
+			//Set the category in the request (for movie)
+			request.setAttribute("category", 1);
+			
+			//Create a new search URL to the OMDb API and a HTTPConnection
+			URL url = new URL("http://www.omdbapi.com/?i="+imdbID+"&apikey="+ OMDB_API_KEY);
+			
+			//Create and open the connection to the API
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			
+			//Get the input stream from the response 
+			InputStream responseBodyStream;
+			if(connection.getResponseCode() == 200) {
+				responseBodyStream = connection.getInputStream();
+			}
+			else {
+				throw new Exception("An error occured while accessing the OMDB API.");
+			}
+			
+			//Read the data in a String buffer
+			StringBuffer sb = new StringBuffer();
+			int b = responseBodyStream.read();
+			while(b != -1) {
+				sb.append((char) b);
+				b = responseBodyStream.read();
+			}
+			
+			//Put the data from the buffer into a string variable
+			String jsonString = sb.toString();
+			
+			//Create a JSON object from the string
+			JsonParser parser = new JsonParser();
+			JsonObject jsonObj = parser.parse(jsonString).getAsJsonObject();
+			boolean statusIsTrue = jsonObj.get("Response").getAsBoolean();
+			
+			
+			if(statusIsTrue) {
+				//Grab the data from the JSON
+				String name = jsonObj.get("Title").getAsString();
+				LocalDate releaseDate = LocalDate.now().withYear(Integer.parseInt(jsonObj.get("Year").getAsString()));
+				String pgRating = jsonObj.get("Rated").getAsString();
+				String director = jsonObj.get("Director").getAsString();
+				String actors = jsonObj.get("Actors").getAsString();
+				String writers = jsonObj.get("Writer").getAsString();
+				String description = jsonObj.get("Plot").getAsString();
+				String poster = jsonObj.get("Poster").getAsString();
+				String durationString = jsonObj.get("Runtime").getAsString().replace(" min", "").trim();
+				int duration = Integer.parseInt(durationString);
+				
+				//Create the movie instance and set it's attributes
+				Movie movie = new Movie();
+				movie.setName(name);
+				movie.setProductCategory(ProductCategoryDao.getInstance().getProductCategoryById(1));//For movie
+				movie.setReleaseDate(releaseDate);
+				movie.setDuration(duration);
+				movie.setPgRating(pgRating);
+				movie.setDirector(director);
+				movie.setActors(actors);
+				movie.setWriters(writers);
+				movie.setDescription(description);
+				movie.setPoster(poster);
+				
+				// Create the Collection of available product genres
+				ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+
+				// Add the product and the genres to the model
+				model.addAttribute("product", movie);
+				model.addAttribute("genres", genres);
+				model.addAttribute("mode",true); //Mode for creating new items
+			}
+			else {
+				throw new Exception();
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("An error occured while creating the movie from the API.",e);
+		}
+		
+		return "newProduct";
+	}
+	
+	@RequestMapping(value = "/adm/newMovie/{imdbID}", method = RequestMethod.POST)
+	public String createMovieWithApi(@ModelAttribute Product newProduct, BindingResult result,
+			@RequestParam("posterFile") MultipartFile posterFile,
+			@RequestParam("trailerFile") MultipartFile trailerFile,
+			@RequestParam("category") Integer category) throws Exception{
+		return saveProduct(newProduct, result, posterFile, trailerFile, category);
 	}
 	
 	// Pretty important code for instantiating abstract classes in MVC forms (acts

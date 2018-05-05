@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class User implements Comparable<User> {
+public class User{
 	// Fields
 	private static final int RENT_PERIOD = 8; // days
 	private static final short MAX_STRING_FIELD_LENGTHS = 45;
@@ -320,11 +320,6 @@ public class User implements Comparable<User> {
 	
 	public String hashPassword() {
 		return BCrypt.hashpw(this.password, BCrypt.gensalt());
-	}
-
-	@Override
-	public int compareTo(User o) {
-		return this.username.compareTo(o.getUsername());
 	}
 	
 	@Override
