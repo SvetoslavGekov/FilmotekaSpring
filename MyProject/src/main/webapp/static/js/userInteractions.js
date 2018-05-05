@@ -130,6 +130,7 @@ function rateProduct(id, rating) {
 		}
 		else if (this.readyState == 4 && this.status == 200) {
 			showAlert("Product successfully rated.", 1);
+			location.reload();
 			return;
 		}
 	};

@@ -535,6 +535,8 @@ public final class ProductDao implements IProductDao {
 				ps.setInt(paramCounter++, genre_id);
 			}
 			
+			System.out.println(ps);
+			
 			try(ResultSet rs = ps.executeQuery()){
 				while(rs.next()) {
 					filteredProducts.add(getProductById(rs.getInt("product_id")));

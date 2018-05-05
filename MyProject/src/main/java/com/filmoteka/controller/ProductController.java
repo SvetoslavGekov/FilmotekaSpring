@@ -330,6 +330,7 @@ public class ProductController {
 		}
 		catch (SQLException | InvalidProductDataException | InvalidGenreDataException | InvalidProductCategoryDataException | InvalidReviewDataException e) {
 			//Return an entity with a status code for Internal Server Error (handling is done via JS)
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

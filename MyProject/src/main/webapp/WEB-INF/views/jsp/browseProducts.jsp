@@ -100,12 +100,12 @@
 				<div class="slidecontainer">
                 <span>Minimum: <span id="minBuyCost">${newFilter.minBuyCost}</span></span>
   				<form:input path="minBuyCost" type="range" min="${filter.minBuyCost}" max="${filter.maxBuyCost}" value="${newFilter.minBuyCost}" class="slider" id="minBuyCostSlider" 
-  					oninput="getSliderValue('minBuyCostSlider','minBuyCost')"/>
+  					oninput="getSliderValue('minBuyCostSlider','minBuyCost')" step="0.1"/>
 				</div>
                 <div class="slidecontainer">
                 <span>Maximum: <span id="maxBuyCost">${newFilter.maxBuyCost}</span></span>
   				<form:input path="maxBuyCost" type="range" min="${filter.minBuyCost}" max="${filter.maxBuyCost}" value="${newFilter.maxBuyCost}" class="slider" id="maxBuyCostSlider" 
-  					oninput="getSliderValue('maxBuyCostSlider','maxBuyCost')"/>
+  					oninput="getSliderValue('maxBuyCostSlider','maxBuyCost')" step="0.1"/>
 				</div>	
     	</div>
     </div>
@@ -116,12 +116,12 @@
 				<div class="slidecontainer">
                 <span>Minimum: <span id="minRentCost">${newFilter.minRentCost}</span></span>
   				<form:input path="minRentCost" type="range" min="${filter.minRentCost}" max="${filter.maxRentCost}" value="${newFilter.minRentCost}" class="slider" id="minRentCostSlider" 
-  					oninput="getSliderValue('minRentCostSlider','minRentCost')"/>
+  					oninput="getSliderValue('minRentCostSlider','minRentCost')" step="0.1"/>
 				</div>
                 <div class="slidecontainer">
                 <span>Maximum: <span id="maxRentCost">${newFilter.maxRentCost}</span></span>
   				<form:input path="maxRentCost" type="range" min="${filter.minRentCost}" max="${filter.maxRentCost}" value="${newFilter.maxRentCost}" class="slider" id="maxRentCostSlider" 
-  					oninput="getSliderValue('maxRentCostSlider','maxRentCost')"/>
+  					oninput="getSliderValue('maxRentCostSlider','maxRentCost')" step="0.1"/>
 				</div>	
     	</div>
     </div>   
@@ -129,6 +129,8 @@
 	<div class="w3-panel">
         <button type = "button" onclick="openOrCloseSection('genresSection')" class="w3-small w3-container w3-btn w3-block w3-theme-d2 w3-left-align">Genres</button>
     	<div id="genresSection" class="w3-container w3-show  w3-padding ">
+    		<span class="w3-button w3-container w3-theme w3-small" onclick="deselectAllGenres()">Deselect All</span><br>
+    		<span class="w3-button w3-container w3-theme w3-small" onclick="selectAllGenres()">Select All</span><br>
     		<form:checkboxes path="genres" items="${genres}" itemLabel="value" itemValue="id" delimiter="<br/>"/>
     	</div>
     </div>
@@ -229,4 +231,26 @@
 	</div>
 </div>
 </body>
+
+<script type="text/javascript">
+
+function deselectAllGenres(){
+	var checkboxes = document.getElementById("genresSection").getElementsByTagName('input');
+	for(var i = 0; i < checkboxes.length; i++){
+		if(checkboxes[i].type == "checkbox"){
+			checkboxes[i].checked = false;
+		}
+	}
+}
+
+function selectAllGenres(){
+	var checkboxes = document.getElementById("genresSection").getElementsByTagName('input');
+	for(var i = 0; i < checkboxes.length; i++){
+		if(checkboxes[i].type == "checkbox"){
+			checkboxes[i].checked = true;
+		}
+	}
+}
+
+</script>
 </html>
