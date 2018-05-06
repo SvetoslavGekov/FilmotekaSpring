@@ -128,7 +128,7 @@
 							    </div>
 							    <div id="trailerURL" class="w3-rest" style="margin-bottom:15px; width:75%;">
 							      <input class="w3-input w3-border" type="text" name="trailerURL" pattern="https?://www.youtube.com/embed/.+" title="Include https://www.youtube.com/embed/"
-							      		placeholder="URL address of the trailer..." maxlength="55" value="https://www.youtube.com/embed/"/>
+							      		placeholder="URL address of the trailer..." maxlength="55" />
 							    </div>
 	
 								<!-- Sale percent -->

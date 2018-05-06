@@ -2,28 +2,17 @@ package com.filmoteka.manager;
 
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.model.dao.nomenclatures.GenreDao;
 import com.filmoteka.model.nomenclatures.Genre;
-
+@Component
 public final class GenreManager {
 	//Fields
-	private static GenreManager instance;
+	@Autowired
 	private GenreDao dao;
-	
-	//Constructor
-	private GenreManager() {
-		//Instantiate the dao object
-		dao = GenreDao.getInstance();
-	}
-	
-	//Methods
-	public synchronized static GenreManager getInstance() {
-		if(instance == null) {
-			instance = new GenreManager();
-		}
-		return instance;
-	}
 	
 	public void createNewGenre(String genreName) throws SQLException, InvalidGenreDataException {
 		//Create new genre with the given data

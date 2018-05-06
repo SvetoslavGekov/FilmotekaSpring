@@ -9,8 +9,10 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,24 +41,34 @@ import com.filmoteka.util.ProductQueryInfo;
 
 
 @Controller
+@Component
 public class ProductController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
-	
 	private static final double MAX_RATING = 10d;
 	private static final double MIN_RATING = 1d;
-	
 	private static final int MAX_REVIEW_CHARS = 480;
 	private static final int MIN_REVIEW_CHARS = 3;
-	
 	private static final Integer TOP_ITEMS_COUNT = new Integer(5);
 	
+	@Autowired
+	private ProductDao productDao;
+	@Autowired
+	private ReviewDao reviewDao;
+	@Autowired
+	private TVSeriesDao tvsDao;
+	@Autowired
+	private MovieDao movieDao;
+	@Autowired
+	private UserManager userManager;
+	@Autowired
+	private GenreDao genreDao;
 	
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
 	public String loadProductPage(Model m, @PathVariable("id") Integer productId,
 			HttpSession session) throws Exception {
 		try {
 			// Grab the product from the database
-			Product product = ProductDao.getInstance().getProductById(productId);
+			Product product = productDao.getProductById(productId);
 
 			//Check if the product exists
 			if(product == null) {
@@ -67,7 +79,7 @@ public class ProductController {
 			m.addAttribute("product", product);
 			
 			//Get reviews of the product
-			List<Review> reviews = ReviewDao.getInstance().getReviewsByProductId(product.getId());
+			List<Review> reviews = reviewDao.getReviewsByProductId(product.getId());
 			
 			
 			boolean isInFavorites = false;
@@ -105,13 +117,13 @@ public class ProductController {
 			// Create a map of: category --> list of products
 			Map<String, List<Product>> groupedProducts = new TreeMap<>();
 			// Get top 5 of
-			groupedProducts.put("On Sale", (List<Product>) ProductDao.getInstance().getProductsOnSale(new Integer(TOP_ITEMS_COUNT))); // On sale
+			groupedProducts.put("On Sale", (List<Product>) productDao.getProductsOnSale(new Integer(TOP_ITEMS_COUNT))); // On sale
 			groupedProducts.put("Most Popular",
-					(List<Product>) ProductDao.getInstance().getMostPopularProducts(new Integer(TOP_ITEMS_COUNT))); // Most Popular
+					(List<Product>) productDao.getMostPopularProducts(new Integer(TOP_ITEMS_COUNT))); // Most Popular
 			groupedProducts.put("Highest Rated",
-					(List<Product>) ProductDao.getInstance().getHighestRatedProducts(new Integer(TOP_ITEMS_COUNT))); // Highest rated
+					(List<Product>) productDao.getHighestRatedProducts(new Integer(TOP_ITEMS_COUNT))); // Highest rated
 			groupedProducts.put("Cheapest",
-					(List<Product>) ProductDao.getInstance().getCheapestProducts(new Integer(TOP_ITEMS_COUNT))); // Cheapest
+					(List<Product>) productDao.getCheapestProducts(new Integer(TOP_ITEMS_COUNT))); // Cheapest
 
 			// Set the products in the model
 			m.addAttribute("products", groupedProducts);
@@ -129,9 +141,8 @@ public class ProductController {
 			// Create a map of: type --> list of products
 			Map<String, List<Product>> productsBySearch = new TreeMap<>();
 
-			productsBySearch.put("Movies", (List<Product>) MovieDao.getInstance().getMoviesBySubstring(substring)); // Movies
-			productsBySearch.put("TV Series",
-					(List<Product>) TVSeriesDao.getInstance().getTVSeriesBySubstring(substring)); // TV Series
+			productsBySearch.put("Movies", (List<Product>)movieDao.getMoviesBySubstring(substring)); // Movies
+			productsBySearch.put("TV Series",(List<Product>) tvsDao.getTVSeriesBySubstring(substring)); // TV Series
 
 			// Set the products in the model
 			m.addAttribute("products", productsBySearch);
@@ -150,7 +161,7 @@ public class ProductController {
 			User user = (User) session.getAttribute("USER");
 
 			// Get product from database
-			Product product = ProductDao.getInstance().getProductById(productID);
+			Product product = productDao.getProductById(productID);
 
 			// Check if the productId is valid
 			if (product == null) {
@@ -158,7 +169,7 @@ public class ProductController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			// Check the result of adding or removing the product from the favorites
-			boolean isAdded = UserManager.getInstance().addOrRemoveProductFromFavorites(user, product);
+			boolean isAdded = userManager.addOrRemoveProductFromFavorites(user, product);
 
 			// Return the result and an OK status
 			return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
@@ -179,7 +190,7 @@ public class ProductController {
 				User user = (User) session.getAttribute("USER");
 
 				// Get product from database
-				Product product = ProductDao.getInstance().getProductById(productId);
+				Product product = productDao.getProductById(productId);
 				
 				// Check if the productId and rating are valid
 				if (product == null || rating > MAX_RATING || rating < MIN_RATING) {
@@ -188,7 +199,7 @@ public class ProductController {
 				}
 				
 				// Rate product
-				ProductDao.getInstance().rateProduct(user, product, rating);
+				productDao.rateProduct(user, product, rating);
 				
 				System.out.println("\nRated product from "+user.getFirstName()+" with rate = "+rating);
 				
@@ -210,7 +221,7 @@ public class ProductController {
 				User user = (User) session.getAttribute("USER");
 	
 				// Get product from database
-				Product product = ProductDao.getInstance().getProductById(productID);
+				Product product = productDao.getProductById(productID);
 	
 				// Check if the productId is valid
 				if (product == null) {
@@ -218,7 +229,7 @@ public class ProductController {
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 				}
 				// Check the result of adding or removing the product from the watchlist
-				boolean isAdded = UserManager.getInstance().addOrRemoveProductFromWatchlist(user, product);
+				boolean isAdded = userManager.addOrRemoveProductFromWatchlist(user, product);
 	
 				// Return the result and an OK status
 				return new ResponseEntity<Boolean>(isAdded, HttpStatus.OK);
@@ -234,14 +245,14 @@ public class ProductController {
 	public String loadProductBrowsingPage(Model m) throws Exception {
 		try {
 			// Grab the default products filter from the database (1 for the default stats and 1 for the input)
-			ProductQueryInfo filter = ProductDao.getInstance().getFilterInfo();
-			ProductQueryInfo newFilter = ProductDao.getInstance().getFilterInfo();
+			ProductQueryInfo filter = productDao.getFilterInfo();
+			ProductQueryInfo newFilter = productDao.getFilterInfo();
 
 			// Grab the products from the database
-			List<Product> products = new ArrayList<>(ProductDao.getInstance().getAllProducts());
+			List<Product> products = new ArrayList<>(productDao.getAllProducts());
 
 			// Create the Collection of available product genres
-			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+			ArrayList<Genre> genres = new ArrayList<>(genreDao.getAllGenres().values());
 
 			// Add the filter and products to the model
 			m.addAttribute("genres", genres);
@@ -275,16 +286,16 @@ public class ProductController {
 			// Set genres
 			List<Genre> newFilterGenres = new ArrayList<>();
 			for (Genre genre : newFilter.getGenres()) {
-				newFilterGenres.add(GenreDao.getInstance().getGenreById(Integer.valueOf(genre.getValue())));
+				newFilterGenres.add(genreDao.getGenreById(Integer.valueOf(genre.getValue())));
 			}
 			newFilter.setGenres(newFilterGenres);
 
 			System.out.println(newFilter);
 
 			//Get the static information again (genres and default filter)
-			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
-			ProductQueryInfo filter = ProductDao.getInstance().getFilterInfo();
-			List<Product> products = ProductDao.getInstance().getFilteredProducts(newFilter);
+			ArrayList<Genre> genres = new ArrayList<>(genreDao.getAllGenres().values());
+			ProductQueryInfo filter = productDao.getFilterInfo();
+			List<Product> products = productDao.getFilteredProducts(newFilter);
 			
 			// Add the filter and products to the model
 			m.addAttribute("genres", genres);
@@ -310,7 +321,7 @@ public class ProductController {
 			User user = (User) session.getAttribute("USER");
 
 			// Get product from database
-			Product product = ProductDao.getInstance().getProductById(productId);
+			Product product = productDao.getProductById(productId);
 			
 			// Check if the productId and reviewContent length are valid
 			if (product == null || reviewContent.length() > MAX_REVIEW_CHARS || reviewContent.length() < MIN_REVIEW_CHARS) {
@@ -320,7 +331,7 @@ public class ProductController {
 			
 			Review review = new Review(productId, user.getUsername(), reviewContent, LocalDateTime.now());
 			// Add review to product
-			ProductDao.getInstance().addReview(review, user.getUserId());
+			productDao.addReview(review, user.getUserId());
 			
 			System.out.println("\n"+"Added review content:\n"+reviewContent+"\nFor product with id = "+productId+"\nFROM: "+user.getFirstName()+"\n\n");
 			

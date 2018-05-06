@@ -3,7 +3,6 @@ package com.filmoteka.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
@@ -31,7 +30,7 @@ public final class Supp {
 		//Check if each symbol is a lowercase letter
 		for(int i = 0; i < username.length(); i++) {
 			char ch = username.charAt(i);
-			if(!Character.isLetter(ch)) {
+			if(!Character.isLetterOrDigit(ch)) {
 				return false;
 			}
 		}

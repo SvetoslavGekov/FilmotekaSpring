@@ -89,7 +89,7 @@ span.signup,
 				<div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o w3-text-theme"></i></div>
 			    <div class="w3-rest">
 			      <input class="w3-input w3-border" name="email" type="email" placeholder="Enter Email" maxlength="45" required
-			      	title="Your email should look something like myemail@myprovider.com">
+			      	pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"	title="Your email should look something like myemail@myprovider.com">
 			    </div>
 			</div>
 			

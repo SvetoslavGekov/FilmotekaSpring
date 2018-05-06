@@ -1,17 +1,17 @@
 package com.filmoteka.model.dao;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
@@ -23,24 +23,14 @@ import com.filmoteka.model.Product;
 
 import java.util.TreeMap;
 
+@Component
 public final class OrderDao implements IOrderDao {
 	//Fields
-	private static OrderDao instance;
-	private Connection con;
+	@Autowired
+	private DBManager dbManager;
 	
-	//Constructors
-	private OrderDao() {
-		// Create the connection object from the DBManager
-		this.con = DBManager.getInstance().getCon();  
-	}
-	
-	//Methods
-	public synchronized static OrderDao getInstance() {
-		if(instance == null) {
-			instance = new OrderDao();
-		}
-		return instance;
-	}
+	@Autowired
+	private ProductDao productDao;
 	
 	@Override
 	public Order getOrderById(int orderId) throws SQLException, InvalidOrderDataException,
@@ -51,7 +41,7 @@ public final class OrderDao implements IOrderDao {
 		Map<Product, LocalDate> products = getOrderProductsById(orderId);
 		
 		//Get the basic order information
-		try(PreparedStatement ps = con.prepareStatement("SELECT order_id, user_id, date, total_cost FROM orders WHERE order_id = ?;")){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT order_id, user_id, date, total_cost FROM orders WHERE order_id = ?;")){
 			ps.setInt(1, orderId);
 			try(ResultSet rs = ps.executeQuery()){
 				//Grab the user by his Id
@@ -70,7 +60,7 @@ public final class OrderDao implements IOrderDao {
 	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Map<Product, LocalDate> orderProducts = new TreeMap<>();
 		
-		try(PreparedStatement ps = con.prepareStatement("SELECT order_id, product_id, validity FROM order_has_products WHERE order_id = ?;")){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT order_id, product_id, validity FROM order_has_products WHERE order_id = ?;")){
 			ps.setInt(1, orderId);
 			try(ResultSet rs = ps.executeQuery()){
 				//Create a list of product IDs
@@ -85,7 +75,7 @@ public final class OrderDao implements IOrderDao {
 //					products.put(pr, validity != null ? validity.toLocalDate() : null);
 				}
 				//Grab a list of products
-				List<Product> products = new ArrayList<>(ProductDao.getInstance().getProductsByIdentifiers(productIDs));
+				List<Product> products = new ArrayList<>(productDao.getProductsByIdentifiers(productIDs));
 				
 				//Fill the final collection
 				for(int i = 0; i < products.size(); i++){
@@ -106,12 +96,12 @@ public final class OrderDao implements IOrderDao {
 
 	@Override
 	public void saveOrder(Order order) throws SQLException, InvalidOrderDataException {
-		synchronized (con) {
+		synchronized (dbManager.getCon()) {
 			//Set autocommiting to false
-			con.setAutoCommit(false);
+			dbManager.getCon().setAutoCommit(false);
 			
 			//Add order to the orders table
-			try(PreparedStatement ps = con.prepareStatement("INSERT INTO orders (user_id, date, total_cost) VALUES (?, ?, ?);",
+			try(PreparedStatement ps = dbManager.getCon().prepareStatement("INSERT INTO orders (user_id, date, total_cost) VALUES (?, ?, ?);",
 					PreparedStatement.RETURN_GENERATED_KEYS)) {
 				ps.setInt(1, order.getUserId());
 				ps.setDate(2, java.sql.Date.valueOf(order.getDate()));
@@ -129,16 +119,16 @@ public final class OrderDao implements IOrderDao {
 				saveOrderProducts(order);
 				
 				//If all the queries are successful
-				con.commit();
+				dbManager.getCon().commit();
 			}
 			catch (SQLException e) {
 				//Rollback DB and rethrow the exception
-				con.rollback();
+				dbManager.getCon().rollback();
 				throw e;
 			}
 			finally {
 				//Return the autocommiting to true
-				con.setAutoCommit(true);
+				dbManager.getCon().setAutoCommit(true);
 			}
 		}
 	}
@@ -149,7 +139,7 @@ public final class OrderDao implements IOrderDao {
 		int orderId = order.getId();
 		Map<Product,LocalDate> products = order.getShoppingCart();
 		
-		try(PreparedStatement ps = con.prepareStatement("INSERT INTO order_has_products (order_id, product_id, validity) VALUES (?, ?, ?);")){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("INSERT INTO order_has_products (order_id, product_id, validity) VALUES (?, ?, ?);")){
 			//Set statement parameters for each product and add to batch
 			for (Entry<Product, LocalDate> e : products.entrySet()) {
 				LocalDate date = e.getValue();
@@ -166,7 +156,7 @@ public final class OrderDao implements IOrderDao {
 
 	public boolean isUserOwnerOfOrder(Integer orderId, int userId) throws SQLException {
 		String sql = "SELECT user_id FROM orders WHERE order_id = ?";
-		try(PreparedStatement ps = con.prepareStatement(sql)){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql)){
 			//Set the id
 			ps.setInt(1, orderId);
 			try(ResultSet rs = ps.executeQuery()){

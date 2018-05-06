@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
 import com.filmoteka.exceptions.InvalidProductDataException;
@@ -15,31 +18,19 @@ import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.UserDao;
 import com.filmoteka.util.MailManager;
-
+@Component
 public final class ExpiringProductsNotifier implements Callable<Boolean> {
 	//Fields
 	private static final String MESSAGE_SUBJECT = "FilmotekaBG - rented products are expiring soon";
-	private static ExpiringProductsNotifier instance;
-	
-	//Constructors
-	private ExpiringProductsNotifier() {
-		
-	}
-	
-	//Methods
-	public static ExpiringProductsNotifier getInstance() {
-		if(instance == null) {
-			instance = new ExpiringProductsNotifier();
-		}
-		return instance;
-	}
+	@Autowired
+	private UserDao userDao;
 	
 	@Override
 	public Boolean call() {
 			try {
 				//Collect all users that need to be notified in a map
-				 Map<User, List<Product>> expiringProducts = UserDao.getInstance().getExpiringProducts();
-				
+				 Map<User, List<Product>> expiringProducts = userDao.getExpiringProducts();
+				 
 				//Compose message for each one
 				for (Entry<User,List<Product>> e: expiringProducts.entrySet()) {
 					User user = e.getKey();

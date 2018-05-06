@@ -1,13 +1,10 @@
 package com.filmoteka.controller;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +12,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.FilenameUtils;
-import org.joda.time.format.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,15 +40,27 @@ import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 import com.filmoteka.util.Supp;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Controller
+@Component
 public class AdministratorController {
 	private static final String OMDB_API_KEY = "8d55e2c0";
 	private static final String YOUTUBE_TRAILER_URL = "https://www.youtube.com/embed/";
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
+	
+	@Autowired
+	private ProductDao productDao;
+	@Autowired
+	private GenreDao genreDao;
+	@Autowired
+	private MovieDao movieDao;
+	@Autowired
+	private TVSeriesDao tvsDao;
+	@Autowired
+	private ProductCategoryDao productCategoryDao;
 
 	@RequestMapping(value = "adm/omdbAPI", method = RequestMethod.GET)
 	public String showProductAPIPage() {
@@ -62,14 +71,14 @@ public class AdministratorController {
 	public String showFormForExistingProduct(Model m, @PathVariable("productID") Integer productID) throws Exception {
 		// Grab the product that's being edited
 		try {
-			Product product = ProductDao.getInstance().getProductById(productID);
+			Product product = productDao.getProductById(productID);
 			//Check if product exists
 			if(product == null) {
 				throw new Exception("You've attempted to edit a product that does not exists!");
 			}
 			
 			// Create the Collection of available product genres
-			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+			ArrayList<Genre> genres = new ArrayList<>(genreDao.getAllGenres().values());
 
 			// Add the product and it's genres to the model
 			m.addAttribute("product", product);
@@ -112,17 +121,17 @@ public class AdministratorController {
 			// Set genres
 			Set<Genre> newProductGenres = new HashSet<>();
 			for (Genre genre : existingProduct.getGenres()) {
-				newProductGenres.add(GenreDao.getInstance().getGenreById(Integer.valueOf(genre.getValue())));
+				newProductGenres.add(genreDao.getGenreById(Integer.valueOf(genre.getValue())));
 			}
 			existingProduct.setGenres(newProductGenres);
 
 			// Update in DAO
 			switch (existingProduct.getProductCategory().getId()) {
 			case 1:
-				MovieDao.getInstance().updateMovie((Movie) existingProduct);
+				movieDao.updateMovie((Movie) existingProduct);
 				break;
 			case 2:
-				TVSeriesDao.getInstance().updateTVSeries((TVSeries) existingProduct);
+				tvsDao.updateTVSeries((TVSeries) existingProduct);
 				break;
 			default:
 				throw new Exception(
@@ -135,20 +144,19 @@ public class AdministratorController {
 		catch (SQLException | InvalidProductDataException | InvalidGenreDataException e) {
 			throw new Exception(dbError, e);
 		}
-		
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.GET)
 	public String showFormForNewProduct(Model m,
 			@PathVariable("category") Integer category,
-			HttpServletRequest request) throws SQLException, InvalidProductDataException{
+			HttpServletRequest request) throws Exception{
 
 		try {		
 			//Set the category in the request
 			request.setAttribute("category", category);
 			
 			// Grab the category of the product that's being created
-			ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(category);
+			ProductCategory productCategory = productCategoryDao.getProductCategoryById(category);
 			
 			// Create a product based on the given category
 			Product product = SimpleProductFactory.createProductStub(category);
@@ -157,7 +165,7 @@ public class AdministratorController {
 			product.setProductCategory(productCategory);
 
 			// Create the Collection of available product genres
-			ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+			ArrayList<Genre> genres = new ArrayList<>(genreDao.getAllGenres().values());
 
 			// Add the product and the genres to the model
 			m.addAttribute("product", product);
@@ -170,7 +178,7 @@ public class AdministratorController {
 		catch (SQLException | InvalidProductCategoryDataException | InvalidGenreDataException e) {
 			//Error when readin data from the DB
 			throw new SQLException(dbError,e);
-		}
+		}		
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.POST)
@@ -202,23 +210,23 @@ public class AdministratorController {
 			}
 
 			// Set product category
-			ProductCategory productcategory = ProductCategoryDao.getInstance().getProductCategoryById(category);
+			ProductCategory productcategory = productCategoryDao.getProductCategoryById(category);
 			newProduct.setProductCategory(productcategory);
 
 			// Set genres
 			Set<Genre> newProductGenres = new HashSet<>();
 			for (Genre genre : newProduct.getGenres()) {
-				newProductGenres.add(GenreDao.getInstance().getGenreById(Integer.valueOf(genre.getValue())));
+				newProductGenres.add(genreDao.getGenreById(Integer.valueOf(genre.getValue())));
 			}
 			newProduct.setGenres(newProductGenres);
 
 			// Save in DAO
 			switch (newProduct.getProductCategory().getId()) {
 			case 1:
-				MovieDao.getInstance().saveMovie((Movie) newProduct);
+				movieDao.saveMovie((Movie) newProduct);
 				break;
 			case 2:
-				TVSeriesDao.getInstance().saveTVSeries((TVSeries) newProduct);
+				tvsDao.saveTVSeries((TVSeries) newProduct);
 				break;
 			default:
 				throw new Exception(
@@ -230,9 +238,6 @@ public class AdministratorController {
 		}
 		catch (SQLException | InvalidGenreDataException | InvalidProductCategoryDataException e ) {
 			throw new SQLException(dbError, e);
-		}
-		catch (NumberFormatException e) {
-			throw new Exception("Invalid form data entered. Please follow the form hints.", e);
 		}
 	}
 	
@@ -293,7 +298,7 @@ public class AdministratorController {
 				model.addAttribute("apiMovies", apiMovies);
 			}
 			else {
-				throw new Exception("An error occured while accessing the API. Please try again later.");
+				return "newProductApi";
 			}
 		}
 		else {
@@ -360,7 +365,7 @@ public class AdministratorController {
 				//Create the movie instance and set it's attributes
 				Movie movie = new Movie();
 				movie.setName(name);
-				movie.setProductCategory(ProductCategoryDao.getInstance().getProductCategoryById(1));//For movie
+				movie.setProductCategory(productCategoryDao.getProductCategoryById(1));//For movie
 				movie.setReleaseDate(releaseDate);
 				movie.setDuration(duration);
 				movie.setPgRating(pgRating);
@@ -371,7 +376,7 @@ public class AdministratorController {
 				movie.setPoster(poster);
 				
 				// Create the Collection of available product genres
-				ArrayList<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+				ArrayList<Genre> genres = new ArrayList<>(genreDao.getAllGenres().values());
 
 				// Add the product and the genres to the model
 				model.addAttribute("product", movie);
@@ -406,7 +411,7 @@ public class AdministratorController {
 			HttpServletRequest req) throws Exception {
 		Product product = null;
 		if (productID != null && productID != 0) {
-			product = ProductDao.getInstance().getProductById(productID);
+			product = productDao.getProductById(productID);
 			if(product == null) {
 				throw new Exception("You've attempted to edit a product that does not exist!");
 			}
@@ -418,4 +423,6 @@ public class AdministratorController {
 		product = SimpleProductFactory.createProductStub(category);
 		return product;
 	}
+	
+
 }
