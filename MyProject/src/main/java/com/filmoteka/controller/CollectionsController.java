@@ -11,6 +11,8 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +27,16 @@ import com.filmoteka.model.dao.ProductDao;
 import com.filmoteka.model.dao.UserDao;
 
 @Controller
+@Component
 public class CollectionsController {
-	
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
+	
+	@Autowired
+	private ProductDao productDao;
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	private UserManager userManager;
 	
 	@RequestMapping(value = "/auth/favourites", method = RequestMethod.GET)
 	public String loadFavoriteProducts(Model m, HttpSession session) throws Exception {
@@ -39,7 +48,7 @@ public class CollectionsController {
 			// Create a map of: type --> collection of products
 			Collection<Product> myFavourites = new ArrayList<>();
 			
-			myFavourites.addAll(ProductDao.getInstance().getProductsByIdentifiers(identifiers));
+			myFavourites.addAll(productDao.getProductsByIdentifiers(identifiers));
 			
 			m.addAttribute("collection","Favorites");
 			m.addAttribute("products", myFavourites);
@@ -55,7 +64,7 @@ public class CollectionsController {
 		try {
 			// Get user from session and product from DB
 			User user = (User) session.getAttribute("USER");
-			Product product = ProductDao.getInstance().getProductById(productID);
+			Product product = productDao.getProductById(productID);
 
 			// Check if the productId is valid
 			if (product == null) {
@@ -64,7 +73,7 @@ public class CollectionsController {
 			}
 			
 			// Remove product from shopping cart
-			UserManager.getInstance().addOrRemoveProductFromFavorites(user, product);
+			userManager.addOrRemoveProductFromFavorites(user, product);
 
 			System.out.println("\nRemoved product from favorites:");
 
@@ -84,7 +93,7 @@ public class CollectionsController {
 			User user = (User) session.getAttribute("USER");
 
 			// Get user's products
-			Map<Product, LocalDate> myProducts = new TreeMap<>(UserDao.getInstance().getUserProductsById(user.getUserId()));
+			Map<Product, LocalDate> myProducts = new TreeMap<>(userDao.getUserProductsById(user.getUserId()));
 		
 			m.addAttribute("collection", "Products");
 			m.addAttribute("cart", myProducts);
@@ -106,7 +115,7 @@ public class CollectionsController {
 			// Create a map of: type --> collection of products
 			Collection<Product> myWatchList = new HashSet<>();
 			
-			myWatchList.addAll(ProductDao.getInstance().getProductsByIdentifiers(identifiers));
+			myWatchList.addAll(productDao.getProductsByIdentifiers(identifiers));
 			
 			m.addAttribute("collection","WatchList");
 			m.addAttribute("products", myWatchList);
@@ -122,7 +131,7 @@ public class CollectionsController {
 		try {
 			// Get user from session and product from DB
 			User user = (User) session.getAttribute("USER");
-			Product product = ProductDao.getInstance().getProductById(productID);
+			Product product = productDao.getProductById(productID);
 
 			// Check if the productId is valid
 			if (product == null) {
@@ -131,7 +140,7 @@ public class CollectionsController {
 			}
 			
 			// Remove product from watchList
-			UserManager.getInstance().addOrRemoveProductFromWatchlist(user, product);
+			userManager.addOrRemoveProductFromWatchlist(user, product);
 
 			System.out.println("\nRemoved product from watchlist:");
 

@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class User{
+public class User implements Comparable<User>{
 	// Fields
 	private static final int RENT_PERIOD = 8; // days
 	private static final short MAX_STRING_FIELD_LENGTHS = 45;
@@ -329,6 +329,11 @@ public class User{
 						+ "%n%nProducts: %s %n%nFavorites: %s %n%nWatchlist: %s",
 				this.userId, this.username, this.firstName, this.lastName, this.email, this.phone,
 				this.registrationDate, this.lastLogin, this.products, this.favourites, this.watchList);
+	}
+
+	@Override
+	public int compareTo(User o) {
+		return this.getUserId() - o.getUserId();
 	}
 
 

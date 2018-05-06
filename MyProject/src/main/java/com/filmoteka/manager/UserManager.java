@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.exceptions.InsufficientFundsException;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidOrderDataException;
@@ -19,23 +22,12 @@ import com.filmoteka.model.Product;
 import com.filmoteka.model.User;
 import com.filmoteka.model.dao.UserDao;
 import com.filmoteka.util.Supp;
-
+@Component
 public class UserManager {
-
-	private static UserManager instance;
+	@Autowired
 	private UserDao dao;
-
-	private UserManager() {
-		// Instantiate the dao object
-		this.dao = UserDao.getInstance();
-	}
-
-	public static synchronized UserManager getInstance() {
-		if (instance == null) {
-			instance = new UserManager();
-		}
-		return instance;
-	}
+	@Autowired
+	private OrderManager orderManager;
 
 	public synchronized boolean register(String firstName, String lastName, String username, String password,
 			String email) throws InvalidUserDataException, SQLException {
@@ -128,7 +120,7 @@ public class UserManager {
 		double userMoney = user.getMoney();
 		if (cartPrice <= userMoney) {
 			// Create new order and add it to the DB and user's collection
-			Order order = OrderManager.getInstance().createNewOrder(user, LocalDate.now(), shoppingCart);
+			Order order = orderManager.createNewOrder(user, LocalDate.now(), shoppingCart);
 			user.addOrder(order);
 
 			// Transfer money

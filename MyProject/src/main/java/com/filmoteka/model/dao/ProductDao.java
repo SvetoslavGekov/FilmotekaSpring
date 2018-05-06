@@ -1,6 +1,5 @@
 package com.filmoteka.model.dao;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
@@ -31,32 +33,22 @@ import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 import com.filmoteka.util.ProductQueryInfo;
 import com.filmoteka.util.Supp;
-
+@Component
 public final class ProductDao implements IProductDao {
 	private static final String DEFAULT_FILTER_ORDERED_BY = "name";
-	// Fields
-	private static ProductDao instance;
-	private Connection con;
-
-	// Constructors
-	private ProductDao() {
-		// Create the connection object from the DBManager
-		this.con = DBManager.getInstance().getCon();
-	}
-
-	// Methods
-	public synchronized static ProductDao getInstance() {
-		if (instance == null) {
-			instance = new ProductDao();
-		}
-		return instance;
-	}
+	//Fields
+	@Autowired
+	private DBManager dbManager;
+	@Autowired
+	private ProductCategoryDao productCategoryDao;
+	@Autowired
+	private GenreDao genreDao;
 
 	@Override
 	public void saveProduct(Product p) throws SQLException, InvalidProductDataException {
 		// Methods is never called for a "product" (synchronization is made for concrete
 		// classes)
-		try (PreparedStatement ps = con.prepareStatement(
+		try (PreparedStatement ps = dbManager.getCon().prepareStatement(
 				"INSERT INTO products (name, category_id, release_year, pg_rating, duration, rent_cost, buy_cost, description,"
 						+ "poster, trailer, writers, actors, sale_percent, sale_validity)"
 						+ " VALUES (?,?,YEAR(?),?,?,?,?,?,?,?,?,?,?,?)",
@@ -98,8 +90,8 @@ public final class ProductDao implements IProductDao {
 		// Methods is never called for a "product" (synchronization is made for concrete
 		// classes)
 		// Update the basic information
-		try (PreparedStatement ps = con
-				.prepareStatement("UPDATE products SET name = ?, category_id = ?, release_year = ?, pg_rating = ?,"
+		try (PreparedStatement ps = dbManager.getCon().prepareStatement(
+						"UPDATE products SET name = ?, category_id = ?, release_year = ?, pg_rating = ?,"
 						+ " duration = ?, rent_cost = ?, buy_cost = ?, description = ?, poster = ?, trailer = ?, writers = ?,"
 						+ "actors = ?, sale_percent = ?, sale_validity = ? WHERE product_id = ?")) {
 			// Non Mandatory Dates
@@ -132,7 +124,7 @@ public final class ProductDao implements IProductDao {
 
 	private void saveProductGenresById(int productId, Set<Genre> genres) throws SQLException {
 		// Delete all the product's genres
-		try (PreparedStatement ps = con.prepareStatement("DELETE FROM product_has_genres WHERE product_id = ?;")) {
+		try (PreparedStatement ps = dbManager.getCon().prepareStatement("DELETE FROM product_has_genres WHERE product_id = ?;")) {
 			ps.setInt(1, productId);
 			ps.executeUpdate();
 		}
@@ -140,7 +132,7 @@ public final class ProductDao implements IProductDao {
 		// Update all the genres if any
 		Set<Genre> pGenres = genres;
 		if (!pGenres.isEmpty()) {
-			Statement st = con.createStatement();
+			Statement st = dbManager.getCon().createStatement();
 			for (Genre genre : pGenres) {
 				st.addBatch(String.format("INSERT INTO product_has_genres VALUES(%d,%d);", productId, genre.getId()));
 			}
@@ -160,7 +152,7 @@ public final class ProductDao implements IProductDao {
 				"LEFT JOIN movies AS m USING (product_id) " + 
 				"LEFT JOIN tvseries AS tv USING (product_id)" +
 				"WHERE p.product_id = ?";
-		try(PreparedStatement ps = con.prepareStatement(sql)){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql)){
 			ps.setInt(1, productId);
 		
 			//If a product matches the criteria
@@ -169,13 +161,13 @@ public final class ProductDao implements IProductDao {
 					
 					Date saleValidity = rs.getDate("sale_validity");
 					Date finishedAiring = rs.getDate("finished_airing");
-					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = productCategoryDao.getProductCategoryById(rs.getInt("category_id"));
 					
 					//Collect the product's genres
-					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(productId));
+					Set<Genre> genres = new HashSet<>(getProductGenresById(productId));
 					
 					//Collect the product's raters
-					Map<Integer, Double> raters = new TreeMap<>(ProductDao.getInstance().getProductRatersById(productId));
+					Map<Integer, Double> raters = new TreeMap<>(getProductRatersById(productId));
 					
 					//Create the product
 					product = SimpleProductFactory.createProduct(productId, //Product id
@@ -214,7 +206,7 @@ public final class ProductDao implements IProductDao {
 		//Query to select all products
 		String sql = "SELECT product_id FROM products;";
 		
-		try(PreparedStatement ps = con.prepareStatement(sql)){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql)){
 			try(ResultSet rs = ps.executeQuery()){
 				while(rs.next()) {
 					allProducts.add(getProductById(rs.getInt("product_id")));
@@ -240,7 +232,7 @@ public final class ProductDao implements IProductDao {
 			
 			int paramCounter = 1;
 			//Create the prepared statement
-			try(PreparedStatement ps = con.prepareStatement(sql.toString())){
+			try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql.toString())){
 				
 				//Set the parameters for each id
 				for (Integer productId : identifiers) {
@@ -272,7 +264,7 @@ public final class ProductDao implements IProductDao {
 			sql.append("ORDER BY product_id ASC;");
 			
 			int paramCounter = 1;
-			try(PreparedStatement ps = con.prepareStatement(sql.toString())){
+			try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql.toString())){
 				//Assign a parameter value for each identifier in the list
 				for (Integer id : productIdentifiers) {
 					ps.setInt(paramCounter++, id);
@@ -282,7 +274,7 @@ public final class ProductDao implements IProductDao {
 					while(rs.next()) {
 						//Fill the collection
 						Integer productId = rs.getInt("product_id");
-						Genre genre = GenreDao.getInstance().getGenreById(rs.getInt("genre_id"));
+						Genre genre = genreDao.getGenreById(rs.getInt("genre_id"));
 						
 						if(!productGenres.containsKey(productId)) {
 							productGenres.put(productId, new ArrayList<Genre>());
@@ -299,12 +291,11 @@ public final class ProductDao implements IProductDao {
 	@Override
 	public Collection<Genre> getProductGenresById(int id) throws SQLException, InvalidGenreDataException {
 		Collection<Genre> productGenres = new ArrayList<>();
-		try (PreparedStatement ps = con
-				.prepareStatement("SELECT genre_id FROM product_has_genres WHERE product_id = ?;")) {
+		try (PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT genre_id FROM product_has_genres WHERE product_id = ?;")) {
 			ps.setInt(1, id);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					Genre g = GenreDao.getInstance().getGenreById(rs.getInt("genre_id"));
+					Genre g = genreDao.getGenreById(rs.getInt("genre_id"));
 					productGenres.add(g);
 				}
 			}
@@ -325,7 +316,7 @@ public final class ProductDao implements IProductDao {
 			Supp.inClauseAppender(sql, productIdentifiers);
 			
 			int paramCounter = 1;
-			try(PreparedStatement ps = con.prepareStatement(sql.toString())){
+			try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql.toString())){
 				//Assign a parameter value for each identifier in the list
 				for (Integer id : productIdentifiers) {
 					ps.setInt(paramCounter++, id);
@@ -356,8 +347,7 @@ public final class ProductDao implements IProductDao {
 	public Map<Integer, Double> getProductRatersById(int movieId) throws SQLException {
 		Map<Integer, Double> productRaters = new HashMap<>();
 
-		try (PreparedStatement ps = con
-				.prepareStatement("SELECT user_id, rating FROM product_has_raters WHERE product_id = ?");) {
+		try (PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT user_id, rating FROM product_has_raters WHERE product_id = ?");) {
 			ps.setInt(1, movieId);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
@@ -371,7 +361,7 @@ public final class ProductDao implements IProductDao {
 	@Override
 	public void deleteExpiredProducts() throws SQLException {
 		String sql = "DELETE FROM user_has_products WHERE validity < CURDATE();";
-		try (Statement st = con.createStatement()) {
+		try (Statement st = dbManager.getCon().createStatement()) {
 			st.executeUpdate(sql);
 		}
 	}
@@ -388,7 +378,7 @@ public final class ProductDao implements IProductDao {
 			sql = sql.concat("  LIMIT ?;");
 		}
 		
-		try(PreparedStatement st =con.prepareStatement(sql)){
+		try(PreparedStatement st =dbManager.getCon().prepareStatement(sql)){
 			if(limit != null) {
 				st.setInt(1, limit);
 			}
@@ -414,7 +404,7 @@ public final class ProductDao implements IProductDao {
 			sql = sql +"  LIMIT ?;";
 		}
 		
-		try(PreparedStatement st =con.prepareStatement(sql)){
+		try(PreparedStatement st =dbManager.getCon().prepareStatement(sql)){
 			if(limit != null) {
 				st.setInt(1, limit);
 			}
@@ -441,7 +431,7 @@ public final class ProductDao implements IProductDao {
 			sql = sql +"  LIMIT ?;";
 		}
 		
-		try(PreparedStatement st =con.prepareStatement(sql)){
+		try(PreparedStatement st =dbManager.getCon().prepareStatement(sql)){
 			//Set limit if not ommited
 			if(limit != null) {
 				st.setInt(1, limit);
@@ -467,7 +457,7 @@ public final class ProductDao implements IProductDao {
 			sql = sql +"  LIMIT ?;";
 		}
 		
-		try(PreparedStatement st =con.prepareStatement(sql)){
+		try(PreparedStatement st =dbManager.getCon().prepareStatement(sql)){
 			if(limit != null) {
 				st.setInt(1, limit);
 			}
@@ -517,7 +507,7 @@ public final class ProductDao implements IProductDao {
 		//Initialize a counter for setting the parameters
 		int paramCounter = 1;
 		
-		try(PreparedStatement ps = con.prepareStatement(query.toString())){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(query.toString())){
 			String name = filter.getName();
 			//Set the first set of parameters
 			ps.setString(paramCounter++, name != null ? "%"+name+"%" : "%%"); //Like name
@@ -558,7 +548,7 @@ public final class ProductDao implements IProductDao {
 		String updateRatingOfProduct = "UPDATE product_has_raters SET rating = ? WHERE product_id = ? AND user_id = ?;";
 		String insertRatingOfProduct = "INSERT INTO product_has_raters(product_id, user_id, rating) VALUES(?,?,?);";
 		// Check if this user already has rated the product
-		try(PreparedStatement ps1 = con.prepareStatement(updateRatingOfProduct)){
+		try(PreparedStatement ps1 = dbManager.getCon().prepareStatement(updateRatingOfProduct)){
 			ps1.setDouble(1, rating);
 			ps1.setInt(2, product.getId());
 			ps1.setInt(3, user.getUserId());
@@ -568,7 +558,7 @@ public final class ProductDao implements IProductDao {
 			// If User has not been rate this product (affected rows are 0)
 			if(rowsAffected < 1){
 				// Insert the new rater into the database
-				try(PreparedStatement ps2 = con.prepareStatement(insertRatingOfProduct);){
+				try(PreparedStatement ps2 = dbManager.getCon().prepareStatement(insertRatingOfProduct);){
 					ps2.setInt(1, product.getId());
 					ps2.setInt(2, user.getUserId());
 					ps2.setDouble(3, rating);
@@ -591,7 +581,7 @@ public final class ProductDao implements IProductDao {
 		
 		String delProductQuery = "DELETE FROM products WHERE product_id = ?;";
 		
-		try(PreparedStatement ps = con.prepareStatement(delProductQuery)){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(delProductQuery)){
 			ps.setInt(1, productID);
 			ps.executeUpdate();
 		}
@@ -608,10 +598,10 @@ public final class ProductDao implements IProductDao {
 				"	MIN(buy_cost) minBuyCost, MAX(buy_cost) maxBuyCost,\r\n" + 
 				"	MIN(rent_cost) minRentCost, MAX(rent_cost) maxRentCost FROM products;";
 		
-		List<Genre> genres = new ArrayList<>(GenreDao.getInstance().getAllGenres().values());
+		List<Genre> genres = new ArrayList<>(genreDao.getAllGenres().values());
 		
 		//Create a statement
-		try(Statement st = con.createStatement()){
+		try(Statement st = dbManager.getCon().createStatement()){
 			//Execute statement and collect data
 			try(ResultSet rs = st.executeQuery(sql)){
 				if(rs.next()) {
@@ -637,7 +627,7 @@ public final class ProductDao implements IProductDao {
 	public void addReview(Review review, int userID) throws SQLException {
 		
 		String sql = "INSERT INTO reviews(product_id, user_id, content) VALUES (?,?,?);";
-		PreparedStatement s = con.prepareStatement(sql);
+		PreparedStatement s = dbManager.getCon().prepareStatement(sql);
 		
 			s.setLong(1, review.getProductId());
 			s.setInt(2, userID);

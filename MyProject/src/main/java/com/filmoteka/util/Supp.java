@@ -30,7 +30,7 @@ public final class Supp {
 		//Check if each symbol is a lowercase letter
 		for(int i = 0; i < username.length(); i++) {
 			char ch = username.charAt(i);
-			if(!Character.isLetter(ch)) {
+			if(!Character.isLetterOrDigit(ch)) {
 				return false;
 			}
 		}

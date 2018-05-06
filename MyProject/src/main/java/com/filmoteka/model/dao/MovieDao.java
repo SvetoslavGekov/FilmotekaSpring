@@ -1,6 +1,5 @@
 package com.filmoteka.model.dao;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.exceptions.InvalidProductCategoryDataException;
@@ -22,76 +24,67 @@ import com.filmoteka.model.dao.nomenclatures.ProductCategoryDao;
 import com.filmoteka.model.nomenclatures.Genre;
 import com.filmoteka.model.nomenclatures.ProductCategory;
 
+@Component
 public final class MovieDao implements IMovieDao {
 	//Fields
-	private static MovieDao instance;
-	private Connection con;
+	@Autowired
+	private DBManager dbManager;
+	@Autowired
+	private ProductDao productDao;
+	@Autowired
+	private ProductCategoryDao productCategoryDao;
 	
-	//Constructors
-	private MovieDao() {
-		//Create the connection object from the DBManager
-		this.con = DBManager.getInstance().getCon();
-	}
-	
-	//Methods
-	public synchronized static MovieDao getInstance() {
-		if(instance == null) {
-			instance = new MovieDao();
-		}
-		return instance;
-	}
-
 	@Override
 	//Save a newly created movie with the basic mandatory fields
 	public void saveMovie(Movie m) throws SQLException, InvalidProductDataException {
-		synchronized (con) {
-			con.setAutoCommit(false);
+		synchronized (dbManager.getCon()) {
+			dbManager.getCon().setAutoCommit(false);
 			try {
 				//Insert the movie in the products table
-				ProductDao.getInstance().saveProduct(m);
+				productDao.saveProduct(m);
 				
 				//Insert the movie in the movies table
-				try(PreparedStatement ps = con.prepareStatement("INSERT INTO movies (product_id, director) VALUES (?,?);")){
+				try(PreparedStatement ps = dbManager.getCon().prepareStatement("INSERT INTO movies (product_id, director) VALUES (?,?);")){
 					ps.setInt(1, m.getId());
 					ps.setString(2, m.getDirector());
 					ps.executeUpdate();
 				}
-				con.commit();
+				dbManager.getCon().commit();
 			}
 			catch(SQLException e) {
 				//Rollback 
-				con.rollback();
+				dbManager.getCon().rollback();
 				throw e;
 			}
 			finally {
-				con.setAutoCommit(true);
+				dbManager.getCon().setAutoCommit(true);
 			}
 		}
 	}
 
 	@Override
 	public void updateMovie(Movie m) throws SQLException {
-		synchronized (con) {
-			con.setAutoCommit(false);
+		synchronized (dbManager.getCon()) {
+			dbManager.getCon().setAutoCommit(false);
 			try {
 				//Update the product basic information
-				ProductDao.getInstance().updateProduct(m);
+				productDao.updateProduct(m);
 				
 				//Update the movie specific information
-				try(PreparedStatement ps = con.prepareStatement("UPDATE movies SET director = ? WHERE product_id = ?;")){
+				try(PreparedStatement ps = dbManager.getCon().prepareStatement("UPDATE movies SET director = ? WHERE product_id = ?;")){
 					ps.setString(1, m.getDirector()); //Movie director
 					ps.setInt(2, m.getId()); //Movie Id
 					ps.executeUpdate();
 				}
-				con.commit();
+				dbManager.getCon().commit();
 			}
 			catch (SQLException e) {
 				//Rollback
-				con.rollback();
+				dbManager.getCon().rollback();
 				throw e;
 			}
 			finally {
-				con.setAutoCommit(true);
+				dbManager.getCon().setAutoCommit(true);
 			}
 		}
 		
@@ -101,7 +94,7 @@ public final class MovieDao implements IMovieDao {
 	public Collection<Movie> getAllMovies() throws SQLException, InvalidProductDataException,
 	InvalidGenreDataException, InvalidProductCategoryDataException {
 		Collection<Movie> allMovies = new ArrayList<Movie>();
-		try(PreparedStatement ps = con.prepareStatement("SELECT m.director, p.product_id, p.name, p.category_id, p.release_year, p.pg_rating,"
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT m.director, p.product_id, p.name, p.category_id, p.release_year, p.pg_rating,"
 				+ " p.duration, p.rent_cost, p.buy_cost, p.description, p.poster, p.trailer, p.writers, p.actors,"
 				+ " p.sale_percent, p.sale_validity FROM movies AS m" + 
 				"	INNER JOIN products AS p USING (product_id);")){
@@ -111,13 +104,13 @@ public final class MovieDao implements IMovieDao {
 					
 					int movieId = rs.getInt("product_id");
 					Date saleValidity = rs.getDate("sale_validity");
-					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = productCategoryDao.getProductCategoryById(rs.getInt("category_id"));
 					
 					//Collect the movie's genres
-					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(movieId));
+					Set<Genre> genres = new HashSet<>(productDao.getProductGenresById(movieId));
 					
 					//Collect the movie's raters
-					Map<Integer, Double> raters = new TreeMap<>(ProductDao.getInstance().getProductRatersById(movieId));
+					Map<Integer, Double> raters = new TreeMap<>(productDao.getProductRatersById(movieId));
 					
 					//Construct the new movie
 					Movie m = new Movie(movieId, //Movie ID
@@ -162,20 +155,20 @@ public final class MovieDao implements IMovieDao {
 					+ "WHERE p.name LIKE ?;";
 		
 		Collection<Product> allMoviesBySubStr = new ArrayList<Product>();
-		try(PreparedStatement ps = con.prepareStatement(sql)){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql)){
 			ps.setString(1, '%'+substring+'%');
 			try(ResultSet rs = ps.executeQuery();){
 				while(rs.next()) {
 					
 					int movieId = rs.getInt("product_id");
 					Date saleValidity = rs.getDate("sale_validity");
-					ProductCategory productCategory = ProductCategoryDao.getInstance().getProductCategoryById(rs.getInt("category_id"));
+					ProductCategory productCategory = productCategoryDao.getProductCategoryById(rs.getInt("category_id"));
 					
 					//Collect the movie's genres
-					Set<Genre> genres = new HashSet<>(ProductDao.getInstance().getProductGenresById(movieId));
+					Set<Genre> genres = new HashSet<>(productDao.getProductGenresById(movieId));
 					
 					//Collect the movie's raters
-					Map<Integer, Double> raters = new TreeMap<>(ProductDao.getInstance().getProductRatersById(movieId));
+					Map<Integer, Double> raters = new TreeMap<>(productDao.getProductRatersById(movieId));
 					
 					//Construct the new movie
 					//Construct the new movie

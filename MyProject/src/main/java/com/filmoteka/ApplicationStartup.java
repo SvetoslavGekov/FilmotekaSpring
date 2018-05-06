@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,12 @@ import com.filmoteka.util.taskExecutors.ExpiringProductsNotifier;
 
 @Component
 public class ApplicationStartup {
-	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(10).withMinute(42).withSecond(20);
+
+	@Autowired
+	private ExpiringProductsNotifier expProductsNotifier;
+	@Autowired
+	private ExpiredProductsDeleter expProductsDeleter;
+	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(16).withMinute(52).withSecond(10);
 	private static final List<CustomTaskExecutor> TASKS = new ArrayList<CustomTaskExecutor>();
 	
 	@EventListener()
@@ -23,8 +29,8 @@ public class ApplicationStartup {
 		//Source -> https://stackoverflow.com/questions/3994860/how-to-execute-jobs-just-after-spring-loads-application-context
 		if(event.getApplicationContext().getParent() == null) {
 			//Add all utility tasks
-			TASKS.add(new CustomTaskExecutor(ExpiringProductsNotifier.getInstance())); //Expiring products notifier
-			TASKS.add(new CustomTaskExecutor(ExpiredProductsDeleter.getInstance())); // Expired products deleter
+			TASKS.add(new CustomTaskExecutor(expProductsNotifier)); //Expiring products notifier
+			TASKS.add(new CustomTaskExecutor(expProductsDeleter)); // Expired products deleter
 			
 			//Start all task at the same time
 			for (CustomTaskExecutor taskExecutor : TASKS) {

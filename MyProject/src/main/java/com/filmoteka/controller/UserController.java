@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +29,14 @@ import com.filmoteka.util.BCrypt;
 
 
 @Controller
+@Component
 public class UserController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
+	
+	@Autowired
+	private UserManager userManger;
+	@Autowired
+	private UserDao userDao;
 
 	@RequestMapping(value = "/unauthorized", method = RequestMethod.GET)
 	public String redirectToHome(HttpServletResponse response) {
@@ -58,7 +66,7 @@ public class UserController {
 		// Check if the credentials are valid
 		User user;
 		try {
-			user = UserManager.getInstance().logIn(username, password);
+			user = userManger.logIn(username, password);
 		}
 		catch (InvalidProductDataException | SQLException | InvalidUserDataException | InvalidOrderDataException
 				| InvalidGenreDataException | InvalidProductCategoryDataException e) {
@@ -104,17 +112,17 @@ public class UserController {
 			@RequestParam("lastName") String lastName) throws Exception {
 		try {
 			//Check if the given user parameters are valid
-			if(!UserManager.getInstance().isValidUserRegistrationData(username, password, email)) {
+			if(!userManger.isValidUserRegistrationData(username, password, email)) {
 				throw new InvalidFormDataException("You've entered incorrect registration data in your form. Please follow the input hints.");
 			}
 			
 			//Check if there are no users with the same username or email
-			if(UserManager.getInstance().hasUserWithSameCredentials(username, email)) {
+			if(userManger.hasUserWithSameCredentials(username, email)) {
 				String message= "The selected username or email is already taken by another user.";
 				throw new Exception(message);
 			}
 			//Register user
-			UserManager.getInstance().register(firstName, lastName, username, password, email);
+			userManger.register(firstName, lastName, username, password, email);
 			//Redirect to the login form again
 			return "index";
 		}
@@ -173,7 +181,7 @@ public class UserController {
 		String oldEmail = user.getEmail();
 		user.setEmail(email);
 		//Check if the entered email is not already taken
-		if(!UserDao.getInstance().isEmailFree(user.getEmail(), user.getUserId())) {
+		if(!userDao.isEmailFree(user.getEmail(), user.getUserId())) {
 			user.setEmail(oldEmail);
 			throw new Exception("The email you've entered has already been taken by another user.");
 		}
@@ -184,7 +192,7 @@ public class UserController {
 			String profilePicturePath = FilesController.uploadUserImage(profilePicture, null);
 			user.setProfilePicture(profilePicturePath);
 		}
-		UserDao.getInstance().updateUser(user);
+		userDao.updateUser(user);
 	
 		return "account";
 	}

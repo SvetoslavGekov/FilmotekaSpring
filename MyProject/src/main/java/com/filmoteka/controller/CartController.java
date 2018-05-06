@@ -8,8 +8,10 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +31,14 @@ import com.filmoteka.model.dao.ProductDao;
 
 @Controller
 @RequestMapping(value ="/auth")
+@Component
 public class CartController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
+	
+	@Autowired
+	private ProductDao productDao;
+	@Autowired
+	private UserManager userManager;
 
 	@RequestMapping(value = "/cart", method = RequestMethod.GET)
 	public String loadCartPage(Model m, HttpSession session) {
@@ -62,7 +70,7 @@ public class CartController {
 			User user = (User) session.getAttribute("USER");
 
 			// Get product from database
-			Product product = ProductDao.getInstance().getProductById(productId);
+			Product product = productDao.getProductById(productId);
 			
 			// Check if the productId is valid
 			if (product == null) {
@@ -71,7 +79,7 @@ public class CartController {
 			}
 			
 			// Add product to shopping cart
-			boolean isAddedToCart = UserManager.getInstance().addProductToShoppingCart(user, product, willBuy);
+			boolean isAddedToCart = userManager.addProductToShoppingCart(user, product, willBuy);
 			
 			System.out.println("\nAdded product to cart:");
 			for (Entry<Product,LocalDate> e: user.getShoppingCart().entrySet()) {
@@ -94,7 +102,7 @@ public class CartController {
 		try {
 			// Get user from session and product from DB
 			User user = (User) session.getAttribute("USER");
-			Product product = ProductDao.getInstance().getProductById(productID);
+			Product product = productDao.getProductById(productID);
 
 			// Check if the productId is valid
 			if (product == null) {
@@ -103,7 +111,7 @@ public class CartController {
 			}
 			
 			// Remove product from shopping cart
-			UserManager.getInstance().removeProductFromShoppingCart(user, product);
+			userManager.removeProductFromShoppingCart(user, product);
 
 			System.out.println("\nRemoved product from cart:");
 			for (Entry<Product, LocalDate> e : user.getShoppingCart().entrySet()) {
@@ -127,8 +135,7 @@ public class CartController {
 			User user = (User) session.getAttribute("USER");
 			
 			//Attempt to buy products in cart
-			
-			UserManager.getInstance().buyProductsInCart(user);
+			userManager.buyProductsInCart(user);
 			
 			for (Order order : user.getOrdersHistory()) {
 				System.out.printf("Id:%d	User:%d	Date:%s	Price:%.2f%n",order.getId(), order.getUserId(),

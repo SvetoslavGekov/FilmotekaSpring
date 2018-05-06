@@ -1,38 +1,30 @@
 package com.filmoteka.model.dao.nomenclatures;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidGenreDataException;
 import com.filmoteka.model.nomenclatures.Genre;
 
+@Component
 public final class GenreDao implements IGenreDao {
 	//Fields
-	private static GenreDao instance;
-	private Connection con;
+	@Autowired
+	private DBManager dbManager;
 
-	//Constructor
-	private GenreDao() {
-		//Create the connection object from the DBManager
-		this.con = DBManager.getInstance().getCon();
+	public GenreDao() {
 	}
 	
-	//Methods
-	public synchronized static GenreDao getInstance() {
-		if(instance == null) {
-			instance = new GenreDao();
-		}
-		return instance;
-	}
-
 	@Override
 	public void saveGenre(Genre g) throws SQLException, InvalidGenreDataException {
-		try(PreparedStatement ps = con.prepareStatement("INSERT INTO genres (value) VALUES(?);", PreparedStatement.RETURN_GENERATED_KEYS)){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("INSERT INTO genres (value) VALUES(?);", PreparedStatement.RETURN_GENERATED_KEYS)){
 			ps.setString(1, g.getValue());
 			//If the insertion is successful
 			if(ps.executeUpdate() > 0) {
@@ -47,7 +39,7 @@ public final class GenreDao implements IGenreDao {
 
 	@Override
 	public void updateGenre(Genre g) throws SQLException {
-		try(PreparedStatement ps = con.prepareStatement("UPDATE genres SET value = ? WHERE genre_id = ?;")){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("UPDATE genres SET value = ? WHERE genre_id = ?;")){
 			ps.setString(1, g.getValue());
 			ps.setInt(2, g.getId());
 			ps.executeUpdate();
@@ -57,7 +49,7 @@ public final class GenreDao implements IGenreDao {
 	@Override
 	public Map<Integer,Genre> getAllGenres() throws SQLException, InvalidGenreDataException {
 		TreeMap<Integer, Genre> allGenres = new TreeMap<Integer,Genre>();
-		try(PreparedStatement ps = con.prepareStatement("SELECT genre_id, value FROM genres ORDER BY genre_id;");){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT genre_id, value FROM genres ORDER BY genre_id;");){
 			try(ResultSet rs = ps.executeQuery();){
 				//While there are genres to be created
 				while(rs.next()) {
@@ -73,7 +65,7 @@ public final class GenreDao implements IGenreDao {
 	@Override
 	public Genre getGenreById(int id) throws SQLException, InvalidGenreDataException {
 		Genre genre = null;
-		try(PreparedStatement ps = con.prepareStatement("SELECT genre_id, value FROM genres WHERE genre_id = ?;")){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement("SELECT genre_id, value FROM genres WHERE genre_id = ?;")){
 			ps.setInt(1, id);
 			try(ResultSet rs = ps.executeQuery()){
 				//Check if there is anything returned from the query

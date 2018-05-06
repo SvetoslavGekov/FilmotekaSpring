@@ -1,11 +1,13 @@
 package com.filmoteka.model.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.filmoteka.dao.dbManager.DBManager;
 import com.filmoteka.exceptions.InvalidOrderDataException;
@@ -13,26 +15,11 @@ import com.filmoteka.exceptions.InvalidProductDataException;
 import com.filmoteka.exceptions.InvalidReviewDataException;
 import com.filmoteka.exceptions.InvalidUserDataException;
 import com.filmoteka.model.Review;
-
+@Component
 public class ReviewDao implements IReviewDao {
-	
-	// Fields
-	private static ReviewDao instance;
-	private Connection con;
-
-	// Constructors
-	private ReviewDao() {
-		// Create the connection object from the DBManager
-		this.con = DBManager.getInstance().getCon();
-	}
-
-	// Methods
-	public synchronized static ReviewDao getInstance() {
-		if (instance == null) {
-			instance = new ReviewDao();
-		}
-		return instance;
-	}
+	//Fields
+	@Autowired
+	private DBManager dbManager;
 	
 	@Override
 	public List<Review> getReviewsByUserId(int userID) throws SQLException, InvalidUserDataException, 
@@ -43,7 +30,7 @@ public class ReviewDao implements IReviewDao {
 						"JOIN users AS u ON r.user_id = u.user_id\r\n" + 
 						"WHERE u.user_id = ? ORDER BY r.date_time DESC;";
 		
-		try(PreparedStatement ps = con.prepareStatement(sql);){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql);){
 			ps.setInt(1, userID);
 		
 			try(ResultSet rs = ps.executeQuery()){
@@ -74,7 +61,7 @@ public class ReviewDao implements IReviewDao {
 						"JOIN users AS u ON r.user_id = u.user_id\r\n" + 
 						"WHERE r.product_id = ? ORDER BY r.date_time DESC;";
 		
-		try(PreparedStatement ps = con.prepareStatement(sql);){
+		try(PreparedStatement ps = dbManager.getCon().prepareStatement(sql);){
 			ps.setInt(1, productID);
 		
 			try(ResultSet rs = ps.executeQuery()){

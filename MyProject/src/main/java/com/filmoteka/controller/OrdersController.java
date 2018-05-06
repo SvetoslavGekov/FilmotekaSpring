@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +21,12 @@ import com.filmoteka.model.dao.OrderDao;
 
 @Controller
 @RequestMapping(value="/auth")
+@Component
 public class OrdersController {
 	private static final String dbError = "An error occured while accessing the database. Please try again later!";
+	
+	@Autowired
+	private OrderDao orderDao;
 	
 	@RequestMapping(value = "/orders", method = RequestMethod.GET)
 	public String loadCartPage(Model m, HttpSession session) throws SQLException, InvalidOrderDataException, InvalidProductDataException {
@@ -42,12 +48,12 @@ public class OrdersController {
 		try {
 			//Check if the requested order belongs to the user in the first place
 			User user = (User) session.getAttribute("USER");
-			if(!OrderDao.getInstance().isUserOwnerOfOrder(orderId, user.getUserId())) {
+			if(!orderDao.isUserOwnerOfOrder(orderId, user.getUserId())) {
 				throw new Exception("You've attempted to view an order that does not belong to you!");
 			}
 			
 			//Grab the order from the database
-			Order order = OrderDao.getInstance().getOrderById(orderId);
+			Order order = orderDao.getOrderById(orderId);
 			
 			//Add the order to the model
 			m.addAttribute("order", order);
