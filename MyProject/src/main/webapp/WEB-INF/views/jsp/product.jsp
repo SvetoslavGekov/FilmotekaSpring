@@ -198,7 +198,7 @@
 								
 								<!--Add Reviews  -->
 								
-								<div id="addreview" class = "w3-container w3-left" style="display:none" style="margin-top:20px">
+								<div id="addreview" class = "w3-container w3-left w3-animate-right" style="display:none" style="margin-top:20px">
 									<div class="w3-theme">New Review</div>
 									<textarea rows="7" cols="50" style="resize:none" name="content" id="reviewcont"
 										placeholder="${ sessionScope.USER.firstName }, tell us what you think about this product..."
@@ -221,10 +221,10 @@
 								<br><h2>Sorry, we don't have the trailer for this product.</h2>
 							</c:when>
 							<c:when test="${fn:startsWith( product.trailer , 'https://www.youtube.com/embed')}">
-								<br><iframe class="w3-border" style="width:100%; height:500px;" src="${ product.trailer }"></iframe>
+								<br><iframe class="w3-border w3-animate-zoom" style="width:100%; height:500px;" src="${ product.trailer }"></iframe>
 							</c:when>
 							<c:otherwise>
-								<br><video class="w3-border" style="width:100%; height:500px;" controls  
+								<br><video class="w3-border w3-animate-zoom" style="width:100%; height:500px;" controls  
 											onclick="this.paused? this.play() : this.pause()">
 								 		 <source src="getTrailer?trailer=${ product.trailer }" type="video/mp4">
 								  	</video>
@@ -239,7 +239,7 @@
 						<c:choose>
 							<c:when test="${not empty reviews }">
 								<c:forEach var="review" items="${reviews}">
-								<table class="review" style="margin-top:2%">
+								<table class="review w3-animate-left" style="margin-top:2%">
 									<thead>
 										<tr><th>${ review.username }</th></tr>
 									</thead>

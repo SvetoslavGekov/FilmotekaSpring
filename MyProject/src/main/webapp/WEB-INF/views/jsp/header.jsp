@@ -16,23 +16,24 @@
 
 	<!-- Navbar -->
 	<div id="navigation" class="w3-top">
-	  <div id="barItems" class="w3-bar w3-2017-lapis-blue  w3-card-4">
-		<button class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='main'"><b>Home</b></button>
-		<button class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='browse'"><b>Browse products</b></button>
+	  <div id="barItems" class="w3-bar w3-2017-lapis-blue w3-card-4">
+	  	<img alt="User Pic"  src="img/logo.png" id="profile-image1" class="w3-bar-item w3-animate-fading"  height="42" onclick="location.href='main'">
+		<button class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='main'"><b>Home</b></button>
+		<button class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='browse'"><b>Browse products</b></button>
 		
 		<!-- If user is admin (add additional menus) -->
 		<c:if test="${sessionScope.USER.isAdmin }">
 			<div class="w3-dropdown-hover">
-				<button class="w3-button w3-hover-teal"><b>Administrative</b></button>
+				<button class="w3-button w3-hover-teal w3-round-large"><b>Administrative</b></button>
 				<div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
-					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/1'"><b>New Movie</b></a>
-					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/newProduct/2'"><b>New TV Series</b></a>
-					<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='adm/omdbAPI'"><b>New Movie With API</b></a>
+					<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='adm/newProduct/1'"><b>New Movie</b></a>
+					<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='adm/newProduct/2'"><b>New TV Series</b></a>
+					<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='adm/omdbAPI'"><b>New Movie With API</b></a>
 				</div>
 			</div>
 		</c:if>
 		
-		<div class="w3-bar-item " style="width:30%">
+		<div class="w3-bar-item" style="width:30%">
 			<form method = "GET" action="search">
 				<i class="fa fa-search"></i>
 				<input type="search" placeholder="Search..." name="word" required maxlength="100"></input>
@@ -42,14 +43,14 @@
 		<c:choose>
     		<c:when test="${ sessionScope.USER != null }">
        		 	<div class="w3-dropdown-hover w3-right" style="margin-right:1%">
-				  	<button class=" w3-button w3-hover-teal" onclick="location.href='auth/account'" title="More"><b>${ sessionScope.USER.firstName} ${ sessionScope.USER.lastName}<b></button>     
+				  	<button class=" w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/account'" title="More"><b>${ sessionScope.USER.firstName} ${ sessionScope.USER.lastName}</b></button>     
 				 	 <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
-						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='auth/myproducts'"><b>My Products</b></a>
-						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='auth/favourites'"><b>My Favorites</b></a>
-						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='auth/watchlist'"><b>My WatchList</b></a>
-						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='auth/cart'"><b>My Cart</b></a>
-						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='auth/orders'"><b>My Order History</b></a>
-						<a class="w3-bar-item w3-button w3-hover-teal" onclick="location.href='logout'"><b>Logout</b></a>
+						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/myproducts'"><b>My Products</b></a>
+						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/favourites'"><b>My Favorites</b></a>
+						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/watchlist'"><b>My WatchList</b></a>
+						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/cart'"><b>My Cart</b></a>
+						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/orders'"><b>My Order History</b></a>
+						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='logout'"><b>Logout</b></a>
 				 	</div>
 			    </div>
    			</c:when>    

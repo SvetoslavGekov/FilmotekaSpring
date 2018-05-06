@@ -36,7 +36,7 @@
 <div id ="contents" class="w3-container menus" style="width:70%; margin-right:15%; margin-left:15%">
 	<p class="w3-panel w3-text-theme w3-center w3-xxlarge"><b>My ${ collection }</b></p>
 	<c:forEach var="product" items="${products}">
-	<div class="w3-display-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
+	<div class="w3-display-container w3-border w3-round-xxlarge w3-white w3-animate-left" style="margin-top:2%">
 			<c:choose>
 	 			 <c:when test="${ (collection == 'Favorites')}">
 	 			 	<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"

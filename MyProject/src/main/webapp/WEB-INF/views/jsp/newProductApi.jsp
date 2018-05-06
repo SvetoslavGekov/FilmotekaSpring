@@ -60,10 +60,10 @@
 											  <span class="w3-medium w3-text-theme "><b>Released:</b>
 											  	<span class="w3-small w3-text-black ">${movie.year}</span>
 											  </span><br>
-											  <span class="w3-medium w3-text-theme "><b>IMDB identificator:</b>
+											  <span class="w3-medium w3-text-theme "><b>IMDB identifier:</b>
 											  	<span class="w3-small w3-text-black ">${movie.imdbID}</span>
 											  </span><br>
-											   <button type="submit" class=" w3-button w3-medium w3-text-theme "
+											   <button type="submit" class=" w3-button w3-medium w3-text-theme w3-round-large"
 											   	onclick="location.href='adm/newMovie/${movie.imdbID}'"><b>Create movie from API</b>
 											  </button><br>
 							              </div>

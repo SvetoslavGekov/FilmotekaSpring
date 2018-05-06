@@ -181,10 +181,10 @@
 						<div class="w3-panel">
 						<c:choose>
 							<c:when test="${ mode == false}">
-								<input class="w3-button w3-small w3-theme" type="submit" value="Save changes"/>
+								<input class="w3-button w3-small w3-theme w3-round-large" type="submit" value="Save changes"/>
 							</c:when>
 							<c:otherwise>
-								<input class="w3-button w3-small w3-theme" type="submit" value="Create product"/>
+								<input class="w3-button w3-small w3-theme w3-round-large" type="submit" value="Create product"/>
 							</c:otherwise>
 						</c:choose>
 						</div>

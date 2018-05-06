@@ -23,7 +23,7 @@
 	
 	
 	<!-- Content -->
-    <div class="container" style="margin-top:7%">    
+    <div class="container w3-animate-zoom" style="margin-top:7%">    
           <div class="row">
                <div class="panel panel-default">
                 <div class="panel-heading">  <h4 >User Profile</h4></div>
@@ -66,7 +66,7 @@
 	                      ${ sessionScope.USER.lastLogin.hour}:${ sessionScope.USER.lastLogin.minute}
 	                    </div>
 	                    <br>        
-	                    <button class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal" onclick="showOrHideContent('editAccount')">Edit profile</button>
+	                    <button class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal w3-round-large" onclick="showOrHideContent('editAccount')">Edit profile</button>
 	                </div>
           		</div>
       		</div>
@@ -74,7 +74,7 @@
     </div>
 		
 	<!-- Edit Profile -->
-    <div id="editAccount" style='display:none' class="container" style="margin-top:7%">    
+    <div id="editAccount" style='display:none' class="container w3-animate-right" style="margin-top:7%">    
           <div class="row">
                <div class="panel panel-default">
                 <div class="panel-heading">  <h4 >Update Profile</h4></div>
@@ -117,7 +117,7 @@
 	                    <hr>
 	                    <div class="container" >
 	                   		 <div class="w3-col" style="width:50px"><i class="w3-xlarge fa fa-key w3-text-theme"></i></div>
-	                    	<button id="change_pass_btn" class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal" onclick="openPassFields()">Change Password</button>
+	                    	<button id="change_pass_btn" class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal w3-round-large" onclick="openPassFields()">Change Password</button>
 	                    </div>
 	                    <hr>
 	                    <div style="display:none" id="passwordfield">
@@ -135,8 +135,8 @@
 				 		</div>
 				 		<hr>
 					 	<div class="container" >
-					 			<button type="submit" class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal">Save Changes</button><br>
-					 			<button type="reset" class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal">Reset</button>
+					 			<button type="submit" class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal w3-round-large">Save Changes</button><br>
+					 			<button type="reset" class="w3-button w3-section w3-theme w3-ripple w3-padding w3-hover-teal w3-round-large">Reset</button>
 		                </div>
 		            </div> 
 		           </form>	

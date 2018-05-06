@@ -37,7 +37,7 @@
 	  				<div class="w3-row-padding">
 	  					<p class="w3-panel w3-text-theme w3-center w3-xlarge"><b>${entry.key}</b></p>
 			  			<c:forEach var="product" items="${entry.value}">
-			  			<div class="w3-col" style="width:18%">
+			  			<div class="w3-col w3-animate-zoom" style="width:18%">
 			  				<div class = "w3-vivid-bluish-green w3-round-large" style="border:25px">
 			  					<p class = "w3-center w3-small w3-wide"><b>${product.name}</b></p>
 			  					<div class="w3-display-container w3-white">

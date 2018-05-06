@@ -44,7 +44,7 @@
 				<p class="w3-panel w3-center w3-text-theme w3-xxlarge"><b>Order ${ order.id }</b></p>
 				<c:forEach var="entry" items="${order.shoppingCart}">
 					<c:set var = "product" value = "${entry.key }"></c:set>
-				<div class="w3-display-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
+				<div class="w3-display-container w3-border w3-round-xxlarge w3-white w3-animate-bottom" style="margin-top:2%">
 					<c:if test="${ collection == 'Cart' }">
 						<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"
 							onclick="location.href='auth/removefromcart?productID=${product.id}'" >&#10006</button>

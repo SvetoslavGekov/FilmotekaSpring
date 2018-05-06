@@ -66,7 +66,7 @@ a:hover {
 	<div class="w3-panel w3-padding-large w3-border-theme-theme w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-round-xxlarge w3-light-grey">
 	  	<div class="w3-row-padding">	
 		<p class="w3-panel w3-center w3-text-theme w3-xxlarge"><b>My Orders</b></p>
-		<div id ="contents" class="w3-container menus" style="width:100%; margin-right:15% ; margin-left:20%">
+		<div id ="contents" class="w3-container menus w3-animate-zoom" style="width:100%; margin-right:15% ; margin-left:20%">
 		<table>
 		  <tr>
 		    <th>ORDER ID</th>

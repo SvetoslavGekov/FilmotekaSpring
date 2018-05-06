@@ -50,7 +50,7 @@
 					<c:if test="${not empty validity }">
 						<c:set var = "price" value = "${product.rentCost }"></c:set>
 					</c:if>
-				<div class="w3-display-container w3-border w3-round-xxlarge w3-white" style="margin-top:2%">
+				<div class="w3-display-container w3-border w3-round-xxlarge w3-white w3-animate-left" style="margin-top:2%">
 					<c:if test="${ collection == 'Cart' }">
 						<button class="w3-display-topright w3-border w3-red w3-display-hover w3-round-xxlarge w3-hover-grayscale"
 							onclick="location.href='auth/removefromcart?productID=${product.id}'" >&#10006</button>
