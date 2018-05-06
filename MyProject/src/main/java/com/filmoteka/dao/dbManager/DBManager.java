@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.springframework.stereotype.Component;
-
 public class DBManager {
 	//Constants
 	private static final String DB_HOST = "localhost";

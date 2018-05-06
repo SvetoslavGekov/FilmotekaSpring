@@ -1,13 +1,10 @@
 package com.filmoteka.controller;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +12,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.FilenameUtils;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -135,13 +130,12 @@ public class AdministratorController {
 		catch (SQLException | InvalidProductDataException | InvalidGenreDataException e) {
 			throw new Exception(dbError, e);
 		}
-		
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.GET)
 	public String showFormForNewProduct(Model m,
 			@PathVariable("category") Integer category,
-			HttpServletRequest request) throws SQLException, InvalidProductDataException{
+			HttpServletRequest request) throws Exception{
 
 		try {		
 			//Set the category in the request
@@ -170,7 +164,7 @@ public class AdministratorController {
 		catch (SQLException | InvalidProductCategoryDataException | InvalidGenreDataException e) {
 			//Error when readin data from the DB
 			throw new SQLException(dbError,e);
-		}
+		}		
 	}
 	
 	@RequestMapping(value = "/adm/newProduct/{category}", method = RequestMethod.POST)
@@ -230,9 +224,6 @@ public class AdministratorController {
 		}
 		catch (SQLException | InvalidGenreDataException | InvalidProductCategoryDataException e ) {
 			throw new SQLException(dbError, e);
-		}
-		catch (NumberFormatException e) {
-			throw new Exception("Invalid form data entered. Please follow the form hints.", e);
 		}
 	}
 	
@@ -418,4 +409,6 @@ public class AdministratorController {
 		product = SimpleProductFactory.createProductStub(category);
 		return product;
 	}
+	
+
 }
