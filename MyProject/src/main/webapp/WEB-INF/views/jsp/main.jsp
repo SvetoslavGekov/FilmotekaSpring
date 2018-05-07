@@ -44,11 +44,11 @@
 			  					<img src="getPic?pic=${product.poster}" class="w3-hover-opacity" style="width:100%; height:250px;">
 			  						<div class="w3-display-middle w3-display-hover">
 			  							<button class="w3-button w3-indigo w3-tiny w3-round-xxlarge w3-hover-vivid-greenish-blue" 
-			  								onclick="location.href='product/${product.id}'">More Info</button>
+			  								onclick="location.href='product/${product.id}'"><b>More Info</b></button>
 			  						</div>
 			  						<div class="w3-display-bottomleft w3-display-hover " style="margin-bottom:1%; margin-left:2%;">
 			  							<button class="w3-button w3-indigo w3-tiny w3-round-xxlarge"
-			  								 onClick="addProductToCart(${product.id},true)">Buy</button>
+			  								 onClick="addProductToCart(${product.id},true)"><b>Buy</b></button>
 										<p class="w3-tiny w3-text-white w3-highway-green w3-round-xxlarge w3-center w3-align-right" title="Price">
 											<b>
 											<fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/>
@@ -58,7 +58,7 @@
 			  						</div>
 			  						<div class="w3-display-bottomright w3-display-hover " style="margin-bottom:1%; margin-right:2%;" title="Rent cost">
 			  							<button class="w3-button w3-indigo w3-tiny w3-round-xxlarge" 
-			  								onClick="addProductToCart(${product.id},false)">Rent</button>
+			  								onClick="addProductToCart(${product.id},false)"><b>Rent</b></button>
 			  							<p class=" w3-tiny w3-text-white w3-highway-green w3-round-xxlarge w3-center w3-align-right">
 											<b>
 											<fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/>
@@ -69,7 +69,7 @@
 			  						<div class="w3-display-topright w3-display-hover w3-small" style="margin-top:2%; margin-right:2%;" title="PG Rating">
 			  							<div class="w3-tag w3-round w3-green" style="padding:3px">
 										  <div class="w3-tag w3-round w3-green w3-border w3-border-white">
-												${product.pgRating}
+												<b>${product.pgRating}</b>
 										  </div>
 										</div>
 			  						</div>
@@ -77,7 +77,7 @@
 			  							<div class="w3-tag w3-round w3-vivid-reddish-purple" style="padding:3px">
 										  <i class="fa fa-star-o"></i>
 										  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
-												<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
+												<b><fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/></b>
 										  </div>
 										</div>
 			  						</div>

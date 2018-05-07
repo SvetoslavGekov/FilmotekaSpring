@@ -20,7 +20,7 @@ public class ApplicationStartup {
 	private ExpiringProductsNotifier expProductsNotifier;
 	@Autowired
 	private ExpiredProductsDeleter expProductsDeleter;
-	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(16).withMinute(52).withSecond(10);
+	private static final LocalTime TASKS_STARTING_TIME = LocalTime.now().withHour(17).withMinute(49).withSecond(10);
 	private static final List<CustomTaskExecutor> TASKS = new ArrayList<CustomTaskExecutor>();
 	
 	@EventListener()
