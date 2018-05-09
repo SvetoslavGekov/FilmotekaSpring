@@ -41,7 +41,7 @@
 	                </div>
 	                <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
 	                    <div class="container" >
-	                      <h2>${ sessionScope.USER.firstName } ${ sessionScope.USER.lastName }</h2>
+	                      <h2><c:out value="${ sessionScope.USER.firstName } "></c:out><c:out value="${ sessionScope.USER.lastName }"></c:out></h2>
 	                      <p>Date Of Joining: <b>
 	                      	${ sessionScope.USER.registrationDate.dayOfMonth} 
 		                    ${ sessionScope.USER.registrationDate.month} 
@@ -52,10 +52,10 @@
 	                    </div>
 	                     <hr>
 	                    <ul class="container details  w3-text-theme" >
-	                      <li><p><span class="glyphicon glyphicon-user one" style="width:50px;"></span>${ sessionScope.USER.username }</p></li>
-	                      <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span>${ sessionScope.USER.email }</p></li>
-	                      <li><p><span class="glyphicon glyphicon-phone one" style="width:50px;"></span>${ sessionScope.USER.phone } </p></li>
-	                      <li><p><span class="glyphicon glyphicon-euro one" style="width:50px;"></span>${ sessionScope.USER.money }</p></li>
+	                      <li><p><span class="glyphicon glyphicon-user one" style="width:50px;"></span><c:out value="${ sessionScope.USER.username }"></c:out></p></li>
+	                      <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span><c:out value="${ sessionScope.USER.email }"></c:out></p></li>
+	                      <li><p><span class="glyphicon glyphicon-phone one" style="width:50px;"></span><c:out value="${ sessionScope.USER.phone } "></c:out></p></li>
+	                      <li><p><span class="glyphicon glyphicon-euro one" style="width:50px;"></span><c:out value="${ sessionScope.USER.money }"></c:out></p></li>
 	                    </ul>
 	                    <hr>
 	                    <div class="col-sm-5 col-xs-6 tital" >last login: 

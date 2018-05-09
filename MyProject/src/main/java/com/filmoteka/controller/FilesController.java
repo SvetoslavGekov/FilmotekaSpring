@@ -81,6 +81,7 @@ public class FilesController {
 
 			//Copy multipart file data into the new file
 			Files.copy(uploadedFile.getInputStream(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
 			return newFile.getName();
 		}
 		catch (IOException e) {

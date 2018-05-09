@@ -33,7 +33,7 @@
 <div class="w3-display-container" style="margin-top:5%">
 <!-- Filters Section -->
 
-<div id="filters" class="w3-container w3-white w3-round-xxlarge menus w3-left w3-animate-top" style="margin-left:2%; width:20%">
+<div id="filters" class="w3-container w3-white w3-round-xxlarge menus w3-left w3-animate-opacity" style="margin-left:2%; width:20%">
 	<form:form commandName="newFilter">
 	
 	<!--Ordering-->
@@ -141,7 +141,7 @@
 <div id ="contents" class="w3-container menus w3-right" style="width:70%; margin-right:4%">
 	<h1>Filtered products</h1>
 	<c:forEach var="product" items="${products}">
-	<div class="w3-container w3-border w3-round-xxlarge w3-white w3-animate-opacity" style="margin-top:2%">
+	<div class="w3-container w3-border w3-round-xxlarge w3-white w3-animate-top" style="margin-top:2%">
 		<div class="w3-row-padding">
 			<div class="w3-col w3-container w3-margin" style="width:25%;">
 				<div class="w3-container w3-padding">
@@ -153,7 +153,7 @@
 	        	<div class="w3-col w3-container w3-margin" style="width:45%;">
 	            	<div class="w3-container">
 	                  <a href="product/${product.id}">
-	                  	<span class="w3-large w3-text-highway-blue"><b>${product.name}</b></span><br><br>
+	                  	<span class="w3-large w3-text-highway-blue"><b><c:out value="${product.name}"></c:out></b></span><br><br>
 	                  </a>
 	                  
 	                  <span class="w3-medium w3-text-theme " ><b>Product type:</b>

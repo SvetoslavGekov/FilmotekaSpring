@@ -17,7 +17,7 @@
 	<!-- Navbar -->
 	<div id="navigation" class="w3-top">
 	  <div id="barItems" class="w3-bar w3-2017-lapis-blue w3-card-4">
-	  	<img alt="User Pic"  src="img/logo.png" id="profile-image1" class="w3-bar-item w3-animate-fading"  height="42" onclick="location.href='main'">
+	  	<img alt="FolmotekaBG Logo"  src="img/logo.png" id="profile-image1" class="w3-bar-item w3-animate-fading"  height="42" onclick="location.href='main'">
 		<button class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='main'"><b>Home</b></button>
 		<button class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='browse'"><b>Browse products</b></button>
 		
@@ -43,7 +43,7 @@
 		<c:choose>
     		<c:when test="${ sessionScope.USER != null }">
        		 	<div class="w3-dropdown-hover w3-right" style="margin-right:1%">
-				  	<button class=" w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/account'" title="More"><b>${ sessionScope.USER.firstName} ${ sessionScope.USER.lastName}</b></button>     
+				  	<button class=" w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/account'" title="More"><b><c:out value=" ${ sessionScope.USER.firstName} ${ sessionScope.USER.lastName}"></c:out></b></button>     
 				 	 <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-vivid-white">
 						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/myproducts'"><b>My Products</b></a>
 						<a class="w3-bar-item w3-button w3-hover-teal w3-round-large" onclick="location.href='auth/favourites'"><b>My Favorites</b></a>
