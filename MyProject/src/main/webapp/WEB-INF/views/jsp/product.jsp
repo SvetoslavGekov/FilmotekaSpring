@@ -60,14 +60,14 @@
 								<span class="w3-tag w3-round-large w3-red"><del>${product.originalBuyCost }  <i class="fa fa-euro"></i></del></span>
 								</c:if>
 								<span class="w3-tag w3-round-large w3-green"><fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
-								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},true)">Buy</span>
+								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},true)"><b>Buy</b></span>
 								<br>
 								<span class="">Renting price:<br></span>
 								<c:if test="${product.originalBuyCost != product.buyCost }">
 								<span class="w3-tag w3-round-large w3-red"><del>${product.originalRentCost }  <i class="fa fa-euro"></i></del></span>
 								</c:if>
 								<span class="w3-tag w3-round-large w3-green"><fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
-								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},false)">Rent</span>
+								<span class="w3-button w3-small w3-round w3-theme w3-right" onclick="addProductToCart(${product.id},false)"><b>Rent</b></span>
 								<br>
 								
 								<c:if test="${product.originalBuyCost != product.buyCost }">
@@ -158,31 +158,31 @@
 							
 							<div class="w3-container" style="margin-top:10px">
 								<!-- Writers -->
-								<div class="w3-container w3-small  w3-theme w3-text-vivid-white">Writers: </div>
+								<div class="w3-container w3-small  w3-theme w3-text-vivid-white"><b>Writers: </b></div>
 								<span class="w3-medium"><b><c:out value="${product.writers}"></c:out></b></span><br>
 								
 								<!-- Actors -->
-								<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Actors: </div>
+								<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px"><b>Actors: </b></div>
 								<span class="w3-medium"><b><c:out value="${product.actors}"></c:out></b></span><br>
 								
 								<!-- Category specific info -->
 								<c:choose>
 									<c:when test="${product.productCategory.id == 1}">
 										<!-- Director-->
-										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Director: </div>
+										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px"><b>Director: </b></div>
 										<span class="w3-medium"><b><c:out value="${product.director}"></c:out></b></span>
 									</c:when>
 									<c:when test="${product.productCategory.id == 2}">
 										<!-- Season-->
-										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Season: </div>
+										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px"><b>Season: </b></div>
 										<span class="w3-medium"><b> ${product.season}</b></span><br>
 										<!-- Finished airing-->
-										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px">Finished airing: </div>
+										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px"><b>Finished airing: </b></div>
 										<span class="w3-medium"><b> ${product.finishedAiring}</b></span>
 									</c:when>
 								</c:choose>
 								
-								<div class="w3-container w3-theme w3-text-vivid-white" style="margin-top: 15px;">Description:
+								<div class="w3-container w3-theme w3-text-vivid-white" style="margin-top: 15px;"><b>Description:</b>
 								</div>
 								<div class="w3-container w3-border" style="margin-bottom:10px">
 									<span class="w3-small w3-vivid-white w3-text-black"><c:out value="${product.description}"></c:out></span>

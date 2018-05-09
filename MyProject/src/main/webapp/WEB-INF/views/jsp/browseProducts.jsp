@@ -157,15 +157,15 @@
 	                  </a>
 	                  
 	                  <span class="w3-medium w3-text-theme " ><b>Product type:</b>
-	                  	<span class="w3-small w3-text-black ">${product.productCategory.value}</span>
+	                  	<span class="w3-small w3-text-black "><b>${product.productCategory.value}</b></span>
 	                  </span><br>
 					  <span class="w3-medium w3-text-theme "><b>Released:</b>
-					  	<span class="w3-small w3-text-black ">${product.releaseDate.year}</span>
+					  	<span class="w3-small w3-text-black "><b>${product.releaseDate.year}</b></span>
 					  </span><br>
 					  <span class="w3-medium w3-text-theme "><b>Pg Rating:</b>
 					  	<div class="w3-tag w3-round w3-green w3-tiny" style="padding:3px">
 							<div class="w3-tag w3-round w3-green w3-border w3-border-white">
-								${product.pgRating}
+								<b>${product.pgRating}</b>
 							</div>
 						</div>
 					  </span><br>
@@ -173,18 +173,18 @@
 						<div class="w3-tag w3-round w3-vivid-reddish-purple w3-tiny" style="padding:3px">
 						  <i class="fa fa-star-o"></i>
 						  <div class="w3-tag w3-round w3-vivid-reddish-purple w3-border w3-border-white">
-								<fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/>
+								<b><fmt:formatNumber value="${product.viewerRating}" maxFractionDigits="2"/></b>
 						  </div>
 						</div>
 					  </span><br>
 					  <span class="w3-medium w3-text-theme "><b>Duration:</b>
-					  	<span class="w3-small w3-text-black ">${product.duration} minutes</span>
+					  	<span class="w3-small w3-text-black "><b>${product.duration} minutes</b></span>
 					  </span><br>
 					  <span class="w3-medium w3-text-theme "><b>Genres:</b><br>
 					  	<c:forEach var="genre" items="${product.genres}">
 				  			<div class="w3-tag w3-round w3-food-blueberry w3-tiny" style="padding:3px">
 								<div class="w3-tag w3-round w3-food-blueberry w3-border w3-border-white">
-									${genre.value}
+									<b>${genre.value}</b>
 								</div>
 							</div>
 					  	</c:forEach>
@@ -194,32 +194,32 @@
 	              </div>
 	          </div>
 	          <div class="w3-rest w3-container w3-margin">
-	          	<span class="w3-medium w3-text-theme w3-text-black" > Pricing
+	          	<span class="w3-large w3-text-theme w3-text-black" > <b>Pricing</b>
 	          	<br><br>
 	          	<!-- Buying price -->
 	          	<span class="w3-medium w3-text-black" >Buying</span>
 				<c:choose>
 				<c:when test="${product.originalBuyCost != product.buyCost }">
-	          		<br><span class="w3-small w3-text-red">Old price: <del><fmt:formatNumber value="${product.originalBuyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></del></span><br>
-	          		<span class="w3-medium">New price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          		<br><span class="w3-small w3-text-red"><b>Old price: <del><fmt:formatNumber value="${product.originalBuyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></del></b></span><br>
+	          		<span class="w3-medium"><b>New price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></b></span>
 	          	</c:when>
 	          	<c:otherwise>
-	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          		<br><span class="w3-medium"><b>Price: <fmt:formatNumber value="${product.buyCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></b></span>
 	          	</c:otherwise>
 				</c:choose>
 				
 				<!-- Renting price -->
 				<br><br>
-				<span class="w3-medium w3-text-black">Renting</span>
+				<span class="w3-medium w3-text-black"><b>Renting</b></span>
 				<c:choose>
 				<c:when test="${product.originalBuyCost != product.buyCost }">
-	          		<br><span class="w3-small w3-text-red">Old price: <del><fmt:formatNumber value="${product.originalRentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></del></span><br>
-	          		<span class="w3-medium">New price: <fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          		<br><span class="w3-small w3-text-red"><b>Old price: <del><fmt:formatNumber value="${product.originalRentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></del></b></span><br>
+	          		<span class="w3-medium"><b>New price: <fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></b></span>
 	          		<br><br>
-	          		<span class="w3-medium">Save ${product.salePercent}% now!</span>
+	          		<span class="w3-medium"><b>Save ${product.salePercent}% now!</b></span>
 	          	</c:when>
 	          	<c:otherwise>
-	          		<br><span class="w3-medium">Price: <fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></span>
+	          		<br><span class="w3-medium"><b>Price: <fmt:formatNumber value="${product.rentCost}" maxFractionDigits="2"/> <i class="fa fa-euro"></i></b></span>
 	          	</c:otherwise>
 				</c:choose>
 	          	</span>
