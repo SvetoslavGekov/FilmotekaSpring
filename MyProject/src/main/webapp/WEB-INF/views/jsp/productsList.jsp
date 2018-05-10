@@ -58,7 +58,7 @@
 	        	<div class="w3-col w3-container w3-margin" style="width:45%;">
 	            	<div class="w3-container">
 	                  <a href="product/${product.id}">
-	                  	<span class="w3-large w3-text-highway-blue"><b>${product.name}</b></span><br><br>
+	                  	<span class="w3-large w3-text-highway-blue"><b><c:out value="${product.name}"></c:out></b></span><br><br>
 	                  </a>
 	                  
 	                  <span class="w3-medium w3-text-theme " ><b>Product type:</b>

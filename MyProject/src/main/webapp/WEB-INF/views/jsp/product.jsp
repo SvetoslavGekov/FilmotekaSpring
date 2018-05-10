@@ -29,7 +29,7 @@
 
 <!-- Style rating stars and review table -->
 <link href="../css/product.css" rel="stylesheet" type="text/css">
-<title>${product.name }</title>
+<title><c:out value="${product.name }"></c:out></title>
 
 <base href="http://localhost:8080/FilmotekaSpring/">
 </head>
@@ -85,7 +85,7 @@
 							
 							<div class="w3-container w3-text-theme">
 								<!-- Name -->
-								<span class="w3-wide w3-xxlarge"><b>${product.name}</b></span><br><span class = ghost>|</span>
+								<span class="w3-wide w3-xxlarge"><b><c:out value="${product.name}"></c:out></b></span><br><span class = ghost>|</span>
 														
 								<!-- Year -->
 						  		<span class="w3-large w3-wide"><b>(${product.releaseDate.year})</b></span><span class = ghost>|</span>
@@ -159,18 +159,18 @@
 							<div class="w3-container" style="margin-top:10px">
 								<!-- Writers -->
 								<div class="w3-container w3-small  w3-theme w3-text-vivid-white"><b>Writers: </b></div>
-								<span class="w3-medium"><b>${product.writers}</b></span><br>
+								<span class="w3-medium"><b><c:out value="${product.writers}"></c:out></b></span><br>
 								
 								<!-- Actors -->
 								<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px"><b>Actors: </b></div>
-								<span class="w3-medium"><b>${product.actors}</b></span><br>
+								<span class="w3-medium"><b><c:out value="${product.actors}"></c:out></b></span><br>
 								
 								<!-- Category specific info -->
 								<c:choose>
 									<c:when test="${product.productCategory.id == 1}">
 										<!-- Director-->
 										<div class="w3-container w3-small  w3-theme w3-text-vivid-white" style="margin-top:10px"><b>Director: </b></div>
-										<span class="w3-medium"><b> ${product.director}</b></span>
+										<span class="w3-medium"><b><c:out value="${product.director}"></c:out></b></span>
 									</c:when>
 									<c:when test="${product.productCategory.id == 2}">
 										<!-- Season-->
@@ -185,7 +185,7 @@
 								<div class="w3-container w3-theme w3-text-vivid-white" style="margin-top: 15px;"><b>Description:</b>
 								</div>
 								<div class="w3-container w3-border" style="margin-bottom:10px">
-									<span class="w3-small w3-vivid-white w3-text-black"> ${product.description}</span>
+									<span class="w3-small w3-vivid-white w3-text-black"><c:out value="${product.description}"></c:out></span>
 								</div>
 								<div class="w3-container w3-left" style="margin-bottom:10px">
 									<div class="w3-button w3-small w3-theme w3-round-large" id="addreviewbtn" onclick="showOrHideContent('addreview')">Write a review</div>
@@ -224,7 +224,7 @@
 								<br><iframe class="w3-border w3-animate-zoom" style="width:100%; height:500px;" src="${ product.trailer }"></iframe>
 							</c:when>
 							<c:otherwise>
-								<br><video class="w3-border w3-animate-zoom" style="width:100%; height:500px;" controls  
+								<br><video class="w3-border w3-animate-zoom" style="width:100%; height:500px;" controls  controlsList="nodownload"
 											onclick="this.paused? this.play() : this.pause()">
 								 		 <source src="getTrailer?trailer=${ product.trailer }" type="video/mp4">
 								  	</video>
@@ -244,7 +244,7 @@
 										<tr><th>${ review.username }</th></tr>
 									</thead>
 									<tbody>
-										<tr><td>${ review.content }</td></tr>
+										<tr><td><c:out value="${ review.content }"></c:out></td></tr>
 									</tbody>
 									<tfoot>
 										<tr>
